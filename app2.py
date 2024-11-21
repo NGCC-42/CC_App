@@ -15,9 +15,9 @@ st.set_page_config(page_title='Club Cannon Database',
                   layout='centered')
 
 ### SET HEADER IMAGE
-image = Image.open('club-cannon-logo-bbb.png')
-st.image(image, 
-        use_column_width=True)
+#image = Image.open('club-cannon-logo-bbb.png')
+#st.image(image, 
+        #use_column_width=True)
 
 st.divider()
 ### LOAD FILES
