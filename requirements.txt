@@ -6,5 +6,5 @@ altair
 matplotlib
 datetime
 openpyxl
-PIL
+Pillow
 
