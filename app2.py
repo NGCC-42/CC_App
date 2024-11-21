@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-import plotly.express as px
+#import plotly.express as px
 from PIL import Image
 import numpy as np
 from collections import ChainMap, defaultdict
