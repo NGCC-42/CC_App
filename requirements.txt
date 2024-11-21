@@ -2,7 +2,6 @@ pandas
 streamlit
 plotly
 numpy
-difflib
 altair
 matplotlib
 operator
