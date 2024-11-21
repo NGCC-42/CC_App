@@ -16,8 +16,8 @@ st.set_page_config(page_title='Club Cannon Database',
                   layout='centered')
 
 ### SET HEADER IMAGE
-image = 'club-cannon-logo-bbb.png'
-st.image(image, 
+#image = 'club-cannon-logo-bbb.png'
+st.image('club-cannon-logo-bbb.png', 
          use_column_width=True)
 
 st.divider()
