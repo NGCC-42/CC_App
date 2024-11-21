@@ -528,7 +528,7 @@ def num_to_month(month_num):
 
 
 ### SALES CHANNEL TRACKING ###
-
+@st.cache_data
 def sales_channel(year, month=['All']):
 
     website_rev_23 = 0
