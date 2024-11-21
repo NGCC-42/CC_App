@@ -95,8 +95,14 @@ def gen_product_df_from_excel(ss, sheet_name, cols=None):
 	return df_product_year
 
 
-df_csv = pd.read_csv(sales_sum_csv,
-                    usecols=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+### READ IN SALES SUMMARY CSV ###
+@st.cache_data
+def create_dataframe_csv(file):
+	df = pd.read_csv(file, 
+			 usecols=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+	return df
+
+df_csv = create_dataframe_csv(sales_sum_csv)
 
 
 df_acc_2024 = gen_product_df_from_excel(prod_sales, acc_2024, cols='a:m')
