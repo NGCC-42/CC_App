@@ -6,5 +6,4 @@ altair
 matplotlib
 datetime
 openpyxl
-PIL
-operator
+
