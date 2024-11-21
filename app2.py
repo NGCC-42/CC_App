@@ -15,7 +15,7 @@ st.set_page_config(page_title='Club Cannon Database',
                   layout='centered')
 
 ### SET HEADER IMAGE
-image = Image.open('Images/club-cannon-logo-bbb.png')
+image = Image.open('club-cannon-logo-bbb.png')
 st.image(image, 
         use_column_width=True)
 
