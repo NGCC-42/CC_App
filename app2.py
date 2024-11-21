@@ -1,12 +1,12 @@
 import pandas as pd
 import streamlit as st
-#import plotly.express as px
+import plotly.express as px
 from PIL import Image
 import numpy as np
 from collections import ChainMap, defaultdict
 import difflib
 import altair as alt
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from operator import itemgetter
 from datetime import datetime
 
@@ -15,9 +15,9 @@ st.set_page_config(page_title='Club Cannon Database',
                   layout='centered')
 
 ### SET HEADER IMAGE
-#image = Image.open('club-cannon-logo-bbb.png')
-#st.image(image, 
-        #use_column_width=True)
+image = Image.open('club-cannon-logo-bbb.png')
+st.image(image, 
+        use_column_width=True)
 
 st.divider()
 ### LOAD FILES
