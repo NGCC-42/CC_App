@@ -330,51 +330,72 @@ def get_sales_orders(customer, dataFrame):
 product_types = ['Jets', 'Controllers', 'Hoses', 'Accessories', 'Handhelds']
 
 
+### DEFINE FUNCTIONS TO CLEAN DATAFRAME FOR PROCESSING ###
+
+@st.cache_data
+def clean_df_std(df, row1, row2):
+
+	clean_df = df[row1:row2].fillna(0)
+
+	return clean_df
+
+@st.cache_data
+def clean_df_prof(df, row1, row2):
+
+	clean_df = df[row1:row2].fillna(0).rename({'March': 'Cost', 'April': 'Avg Price', 'May': 'Net Profit / Unit', 'June': 'Total Net Profit'}, axis=1).drop(['January', 'February', 'July', 'August', 'September', 'October', 'November', 'December'], axis=1).reset_index()
+
+	return clean_df
+
+
 ### SEPARATE SALES AND REVENUE ###
 
-df_jet2023_unt = df_jet_2023[0:4].fillna(0)
-df_jet2023_rev = df_jet_2023[13:17].fillna(0)
-df_jet2023_prof = df_jet_2023[20:24].fillna(0).rename({'March': 'Cost', 'April': 'Avg Price', 'May': 'Net Profit / Unit', 'June': 'Total Net Profit'}, axis=1).drop(['January', 'February', 'July', 'August', 'September', 'October', 'November', 'December'], axis=1).reset_index()
+df_jet2023_unt = clean_df_std(df_jet_2023, 0, 4)
+df_jet2023_rev = clean_df_std(df_jet_2023, 13, 17)
+df_jet2023_prof = clean_df_prof(df_jet_2023, 20, 24)
 
-df_cntl23_unt = df_cntl_2023[0:3].fillna(0)
-df_cntl23_rev = df_cntl_2023[11:14].fillna(0)
-df_cntl23_prof = df_cntl_2023[17:20].fillna(0).rename({'March': 'Cost', 'April': 'Avg Price', 'May': 'Net Profit / Unit', 'June': 'Total Net Profit'}, axis=1).drop(['January', 'February', 'July', 'August', 'September', 'October', 'November', 'December'], axis=1).reset_index()
+df_cntl23_unt = clean_df_std(df_cntl_2023, 0, 3)
+df_cntl23_rev = clean_df_std(df_cntl_2023, 11, 14)
+df_cntl23_prof = clean_df_prof(df_cntl_2023, 17, 20)
 
-df_h23_unt = df_hose_2023[0:22].fillna(0)
-df_h23_rev = df_hose_2023[48:70].fillna(0)
+df_h23_unt = clean_df_std(df_hose_2023, 0, 22)
+df_h23_rev = clean_df_std(df_hose_2023, 48, 70)
 
-df_ac23_unt = df_acc_2023[0:30].fillna(0)
-df_ac23_rev = df_acc_2023[58:85].fillna(0)
+df_ac23_unt = clean_df_std(df_acc_2023, 0, 30)
+df_ac23_rev = clean_df_std(df_acc_2023, 58, 85)
 
-df_hh23_unt = df_hh_2023[0:4].fillna(0)
-df_hh23_rev = df_hh_2023[13:17].fillna(0)
+df_hh23_unt = clean_df_std(df_hh_2023, 0, 4)
+df_hh23_rev = clean_df_std(df_hh_2023, 13, 17)
 
-df_jet2024_unt = df_jet_2024[0:4].fillna(0)
-df_jet2024_rev = df_jet_2024[13:17].fillna(0)
-df_jet2024_prof = df_jet_2024[20:24].fillna(0).rename({'March': 'Cost', 'April': 'Avg Price', 'May': 'Net Profit / Unit', 'June': 'Total Net Profit'}, axis=1).drop(['January', 'February', 'July', 'August', 'September', 'October', 'November', 'December'], axis=1).reset_index()
+df_jet2024_unt = clean_df_std(df_jet_2024, 0, 4)
+df_jet2024_rev = clean_df_std(df_jet_2024, 13, 17)
+df_jet2024_prof = clean_df_prof(df_jet_2024, 20, 24)
 
-df_cntl24_unt = df_cntl_2024[0:3].fillna(0)
-df_cntl24_rev = df_cntl_2024[11:14].fillna(0)
-df_cntl24_prof = df_cntl_2024[17:20].fillna(0).rename({'March': 'Cost', 'April': 'Avg Price', 'May': 'Net Profit / Unit', 'June': 'Total Net Profit'}, axis=1).drop(['January', 'February', 'July', 'August', 'September', 'October', 'November', 'December'], axis=1).reset_index()
+df_cntl24_unt = clean_df_std(df_cntl_2024, 0, 3)
+df_cntl24_rev = clean_df_std(df_cntl_2024, 11, 14)
+df_cntl24_prof = clean_df_prof(df_cntl_2024, 17, 20)
                                         
-df_h24_unt = df_hose_2024[0:22].fillna(0)
-df_h24_rev = df_hose_2024[48:70].fillna(0)
+df_h24_unt = clean_df_std(df_hose_2024, 0, 22)
+df_h24_rev = clean_df_std(df_hose_2024, 48, 70)
 
-df_ac24_unt = df_acc_2024[0:30].fillna(0)
-df_ac24_rev = df_acc_2024[59:86].fillna(0)
-#st.write(df_ac24_rev)
+df_ac24_unt = clean_df_std(df_acc_2024, 0, 30)
+df_ac24_rev = clean_df_std(df_acc_2024, 59, 86)
 
-df_hh24_unt = df_hh_2024[0:4].fillna(0)
-df_hh24_rev = df_hh_2024[13:17].fillna(0)
+df_hh24_unt = clean_df_std(df_hh_2024, 0, 4)
+df_hh24_rev = clean_df_std(df_hh_2024, 13, 17)
 
 
 ### CREATE LISTS OF CATEGORIES FROM DATAFRAME ###
 
-jets = df_jet2023_unt['Product'].unique().tolist()
-controllers = df_cntl23_unt['Product'].unique().tolist()
-hoses = df_h23_unt['Product'].unique().tolist()
-acc = df_ac23_unt['Product'].unique().tolist()
-hh = df_hh23_unt['Product'].unique().tolist()
+@st.cache_data
+def create_product_list(df):
+	prod_list = df['Product'].unique().tolist()
+	return prod_list
+
+jets = create_product_list(df_jet2023_unt)
+controllers = create_product_list(df_cntl23_unt)
+hoses = create_product_list(df_h23_unt)
+acc = create_product_list(df_ac23_unt)
+hh = create_product_list(df_hh23_unt)
 
 
 ### STRIP UNUSED COLUMN ###
