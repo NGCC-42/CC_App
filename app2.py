@@ -8,6 +8,7 @@ import numpy as np
 import altair as alt
 import matplotlib.pyplot as plt
 from datetime import datetime
+import openpyxl
 
 ### SET WEB APP CONFIGURATIONS
 st.set_page_config(page_title='Club Cannon Database', 
