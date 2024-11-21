@@ -4,5 +4,4 @@ plotly
 numpy
 altair
 matplotlib
-operator
 datetime
