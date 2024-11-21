@@ -54,24 +54,23 @@ total_sum = 'Total Summary'
 
 ### LOAD DATAFRAME(S) (RETAIN FORMATTING IN XLSX)
 
-df = pd.read_excel(sod_ss,
-                   dtype=object,
-                   header=0)
+@st.cache_data
+def create_dataframe(ss):
 
-df_quotes = pd.read_excel(quote_ss, 
-                          dtype=object,
-                          header=0)
+	df = pd.read_excel(ss,
+			   dtype=object,
+			   header=0)
+	return df
 
-df_shipstat_24 = pd.read_excel(shipstat_ss_24, 
-                               dtype=object,
-                               header=0)
-df_shipstat_23 = pd.read_excel(shipstat_ss_23,
-                               dtype=object,
-                               header=0)
+df = create_dataframe(sod_ss)
 
-df_hsd = pd.read_excel(hsd_ss,
-                       dtype=object,
-                       header=0)
+df_quotes = create_dataframe(quote_ss)
+
+df_shipstat_24 = create_dataframe(shipstat_ss_24)
+
+df_shipstat_23 = create_dataframe(shipstat_ss_23)
+
+df_hsd = create_dataframe(hsd_ss)
 
 
 ### DEFINE FUNCTION TO CREATE PRODUCT DATAFRAME FROM EXCEL SPREADSHEET ###
