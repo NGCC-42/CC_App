@@ -1833,7 +1833,7 @@ def sort_top_20(dict, number):
             leaderboard_list.append((key, value))
     
 
-    sorted_leaderboard = sorted(leaderboard_list, key=itemgetter(1), reverse=True)
+    sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
 
     return sorted_leaderboard[:number]
 
