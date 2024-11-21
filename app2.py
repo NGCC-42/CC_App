@@ -75,82 +75,50 @@ df_hsd = pd.read_excel(hsd_ss,
 
 
 ### DEFINE FUNCTION TO CREATE PRODUCT DATAFRAME FROM EXCEL SPREADSHEET ###
-
+@st.cache_data
 def gen_product_df_from_excel(ss, sheet_name, cols=None):
 
-    df_product_year = pd.read_excel(ss,
-                                   usecols=cols,
-                                   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-                                   sheet_name=sheet_name,
-                                    dtype=object,
-                                    header=1)
-    return df_product_year
+	if cols == None:
+		
+	    df_product_year = pd.read_excel(ss,
+					   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
+					   sheet_name=sheet_name,
+					   dtype=object,
+					   header=1)
+	else:
+		
+		df_product_year = pd.read_excel(ss,
+					   usecols=cols,
+					   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
+					   sheet_name=sheet_name,
+					   dtype=object,
+					   header=1)
+	return df_product_year
 
 
 df_csv = pd.read_csv(sales_sum_csv,
                     usecols=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
 
 
-df_acc_2024 = pd.read_excel(prod_sales,
-                   usecols='a:m',
-                   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-                   sheet_name=acc_2024,
-                   dtype=object,
-                   header=1)
-df_cntl_2024 = pd.read_excel(prod_sales,
-                   usecols='a:m',
-                   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-                   sheet_name=cntl_2024,
-                   dtype=object,
-                   header=1)
-df_jet_2024 = pd.read_excel(prod_sales,
-                   usecols='a:m',
-                   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-                   sheet_name=jet_2024,
-                   dtype=object,
-                   header=1)
-df_hh_2024 = pd.read_excel(prod_sales,
-                   usecols='a:m',
-                   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-                   sheet_name=hh_2024,
-                   dtype=object,
-                   header=1)
-df_hose_2024 = pd.read_excel(prod_sales,
-                   usecols='a:m',
-                   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-                   sheet_name=hose_2024,
-                   dtype=object,
-                   header=1)
+df_acc_2024 = gen_product_df_from_excel(prod_sales, acc_2024, cols='a:m')
 
-df_acc_2023 = pd.read_excel(prod_sales,
-                   usecols='a:m',
-                   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-                   sheet_name=acc_2023,
-                   dtype=object,
-                   header=1)
-df_cntl_2023 = pd.read_excel(prod_sales,
-                   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-                   sheet_name=cntl_2023,
-                   dtype=object,
-                   header=1)
-df_jet_2023 = pd.read_excel(prod_sales,
-                   usecols='a:m',
-                   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-                   sheet_name=jet_2023,
-                   dtype=object,
-                   header=1)
-df_hh_2023 = pd.read_excel(prod_sales,
-                   usecols='a:m',
-                   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-                   sheet_name=hh_2023,
-                   dtype=object,
-                   header=1)
-df_hose_2023 = pd.read_excel(prod_sales,
-                   usecols='a:m',
-                   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-                   sheet_name=hose_2023,
-                   dtype=object,
-                   header=1)
+df_cntl_2024 = gen_product_df_from_excel(prod_sales, cntl_2024, cols='a:m')
+
+df_jet_2024 = gen_product_df_from_excel(prod_sales, jet_2024, cols='a:m')
+
+df_hh_2024 = gen_product_df_from_excel(prod_sales, hh_2024, cols='a:m')
+
+df_hose_2024 = gen_product_df_from_excel(prod_sales, hose_2024, cols='a:m')
+
+df_acc_2023 = gen_product_df_from_excel(prod_sales, acc_2023, cols='a:m')
+
+df_cntl_2023 = gen_product_df_from_excel(prod_sales, cntl_2023, cols='a:m')
+
+df_jet_2023 = gen_product_df_from_excel(prod_sales, jet_2023, cols='a:m')
+
+df_hh_2023 = gen_product_df_from_excel(prod_sales, hh_2023, cols='a:m')
+
+df_hose_2023 = gen_product_df_from_excel(prod_sales, hose_2023, cols='a:m')
 
 
 ### CREATE DATE LISTS ###
