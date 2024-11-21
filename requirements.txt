@@ -1,0 +1,11 @@
+pandas
+streamlit
+plotly
+PIL
+numpy
+collections
+difflib
+altair
+matplotlib
+operator
+datetime
