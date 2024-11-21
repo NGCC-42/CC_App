@@ -4,7 +4,7 @@ import plotly.express as px
 #from PIL import Image
 import numpy as np
 #from collections import ChainMap, defaultdict
-import difflib
+#import difflib
 import altair as alt
 import matplotlib.pyplot as plt
 from operator import itemgetter
