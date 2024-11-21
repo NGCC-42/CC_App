@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 import plotly.express as px
-from PIL import Image
+#from PIL import Image
 import numpy as np
 from collections import ChainMap, defaultdict
 import difflib
@@ -15,9 +15,9 @@ st.set_page_config(page_title='Club Cannon Database',
                   layout='centered')
 
 ### SET HEADER IMAGE
-image = Image.open('club-cannon-logo-bbb.png')
-st.image(image, 
-        use_column_width=True)
+#image = Image.open('club-cannon-logo-bbb.png')
+#st.image(image, 
+        #use_column_width=True)
 
 st.divider()
 ### LOAD FILES
