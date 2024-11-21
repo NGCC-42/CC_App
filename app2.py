@@ -7,7 +7,6 @@ import numpy as np
 #import difflib
 import altair as alt
 import matplotlib.pyplot as plt
-from operator import itemgetter
 from datetime import datetime
 
 ### SET WEB APP CONFIGURATIONS
