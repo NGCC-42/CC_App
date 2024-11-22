@@ -714,7 +714,7 @@ if task_select == 'Monthly Sales':
             month_sales = sales[0] + sales[1]
             woo = percent_of_sales(sales[0], sales[1])
             fulcrum = percent_of_sales(sales[1], sales[0])
-            st.write('{}: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)'.format(month, month_sales, woo, fulcrum))
+            st.write('**{}: ${:,.2f}**  \n({:.2f}% Web, {:.2f}% Fulcrum)'.format(month, month_sales, woo, fulcrum))
     
         return None
         
@@ -816,11 +816,11 @@ if task_select == 'Monthly Sales':
             if year_select == 2023:
                 display_monthly_sales(get_monthly_sales(df, 2023))
                 total_sales, web_percent, fulcrum_percent, avg_month = calc_monthly_totals(get_monthly_sales(df, year_select))
-                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n${:,.2f} / Month'.format(year_select, total_sales, web_percent, fulcrum_percent, avg_month))
+                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n**${:,.2f} / Month**'.format(year_select, total_sales, web_percent, fulcrum_percent, avg_month))
             elif year_select == 2024:
                 display_monthly_sales(get_monthly_sales(df, 2024))
                 total_sales, web_percent, fulcrum_percent, avg_month = calc_monthly_totals(get_monthly_sales(df, year_select))
-                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n${:,.2f} / Month'.format(year_select, total_sales, web_percent, fulcrum_percent, avg_month))
+                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n**${:,.2f} / Month**'.format(year_select, total_sales, web_percent, fulcrum_percent, avg_month))
             
         with col21:
             year_select_2 = st.selectbox('Select Year', 
@@ -829,11 +829,11 @@ if task_select == 'Monthly Sales':
             if year_select_2 == 2023:
                 display_monthly_sales(get_monthly_sales(df, 2023))
                 total_sales, web_percent, fulcrum_percent, avg_month = calc_monthly_totals(get_monthly_sales(df, year_select_2))
-                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n${:,.2f} / Month'.format(year_select_2, total_sales, web_percent, fulcrum_percent, avg_month))
+                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n**${:,.2f} / Month**'.format(year_select_2, total_sales, web_percent, fulcrum_percent, avg_month))
             elif year_select_2 == 2024:
                 display_monthly_sales(get_monthly_sales(df, 2024))
                 total_sales, web_percent, fulcrum_percent, avg_month = calc_monthly_totals(get_monthly_sales(df, year_select_2))
-                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n${:,.2f} / Month'.format(year_select_2, total_sales, web_percent, fulcrum_percent, avg_month))
+                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n**${:,.2f} / Month**'.format(year_select_2, total_sales, web_percent, fulcrum_percent, avg_month))
 
 
         
