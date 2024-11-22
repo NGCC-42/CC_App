@@ -13,7 +13,8 @@ import openpyxl
 
 ### SET WEB APP CONFIGURATIONS
 st.set_page_config(page_title='Club Cannon Database', 
-                  layout='centered')
+		   page_icon='club-cannon-icon-black.png',
+                   layout='wide')
 
 ### SET HEADER IMAGE
 #image = 'club-cannon-logo-bbb.png'
