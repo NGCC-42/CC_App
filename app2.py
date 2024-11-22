@@ -1,4 +1,4 @@
-import pandas as pd
+teredimport pandas as pd
 import streamlit as st
 import plotly.express as px
 #from PIL import Image
@@ -14,7 +14,7 @@ import openpyxl
 ### SET WEB APP CONFIGURATIONS
 st.set_page_config(page_title='Club Cannon Database', 
 		   page_icon='club-cannon-icon-black.png',
-                   layout='wide')
+                   layout='centered')
 
 ### SET HEADER IMAGE
 #image = 'club-cannon-logo-bbb.png'
