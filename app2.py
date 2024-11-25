@@ -32,7 +32,7 @@ hsd_ss = 'HSD 11.8.24.xlsx'
 
 quote_ss = 'Quote Report 10.23.24.xlsx'
 
-sales_sum_csv = 'Fulcrum Sales Summary/Total Summary-2022 - Present.csv'
+sales_sum_csv = 'Total Summary-2022 - Present.csv'
 
 shipstat_ss_24 = '2024 SR 11.01.24.xlsx'
 shipstat_ss_23 = '2023 SR.xlsx'
