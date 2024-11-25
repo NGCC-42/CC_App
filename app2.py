@@ -1281,20 +1281,23 @@ elif task_choice == 'Customer Details':
         
 ### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS ###
 	with col3:
-	    if spend_total_2023 + spend_total_2024 > 0:
-	        ui.metric_card(title='2023 Spending', content='${:,.2f}'.format(spend_total_2023), description=None)
-	        #st.subheader('2023 Spending:')
-	        #st.write('${:,.2f}'.format(spend_total_2023))
+		if spend_total_2023 + spend_total_2024 > 0:
+			ui.metric_card(title='2023 Spending', content='${:,.2f}'.format(spend_total_2023), description=None)
+			#st.subheader('2023 Spending:')
+			#st.write('${:,.2f}'.format(spend_total_2023))
 	with col4:
-	    if spend_total_2023 + spend_total_2024 > 0:
-	        perc_change = percent_of_change(spend_total_2023, spend_total_2024)
-	        ui.metric_card(title='2024 Spending', content='${:,.2f}'.format(spend_total_2024), description=perc_change)
-	        #st.subheader('2024 Spending:')
-	        #st.write('${:,.2f}'.format(spend_total_2024))
+		if spend_total_2023 + spend_total_2024 > 0:
+			perc_change = percent_of_change(spend_total_2023, spend_total_2024)
+			ui.metric_card(title='2024 Spending', content='${:,.2f}'.format(spend_total_2024), description=perc_change)
+			#st.subheader('2024 Spending:')
+			#st.write('${:,.2f}'.format(spend_total_2024))
 	with col5:
-	    if spend_total_2023 + spend_total_2024 > 0:
-	        total_spending = spend_total_2023 + spend_total_2024
-	        ui.metric_card(title='Total Spending', content='${:,.2f}'.format(total_spending), description=None)
+		if spend_total_2023 + spend_total_2024 > 0:
+			total_spending = spend_total_2023 + spend_total_2024
+			ui.metric_card(title='Total Spending', content='${:,.2f}'.format(total_spending), description=None)
+			#st.subheader('Total Spending:')
+			#total_spending = spend_total_2023 + spend_total_2024
+			#st.write('${:,.2f}'.format(total_spending))
 	        
 	### DISPLAY PRODUCT PURCHASE SUMMARIES FOR SELECTED CUSTOMER ###
 	if len(text_input) > 1:
