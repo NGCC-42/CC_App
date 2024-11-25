@@ -16,7 +16,7 @@ import streamlit_shadcn_ui as ui
 st.set_page_config(page_title='Club Cannon Database', 
 		   page_icon='club-cannon-icon-black.png',
                    layout='centered',
-		   initial_sidebar_state='auto')
+		   initial_sidebar_state='collapsed')
 
 ### SET HEADER IMAGE
 #image = 'club-cannon-logo-bbb.png'
