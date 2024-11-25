@@ -447,6 +447,22 @@ df_hsd.rename(columns={
     'Shipped By': 'channel'},
      inplace=True)
 
+### DEFINE A FUNCTION TO CALCULATE AND DISPLAY CHANGE IN CUSTOMER SPENDING ###
+
+def percent_of_change(num1, num2):
+    
+    delta = num2 - num1
+    if num1 == 0:
+        perc_change = 100
+    else:
+        perc_change = (delta / num1) * 100
+    if delta > 0:
+        v = '+'
+    else:
+        v = ''
+
+    return '{}{:,.2f}% from last year'.format(v, perc_change)
+
 ### DEFINE A FUNCTION TO CALCULATE PERCENTAGE OF A TOTAL ###
 def percent_of_sales(type1, type2):
 
@@ -1188,7 +1204,7 @@ elif task_choice == 'Customer Details':
         
                 ### LOCATE ALL ITEMS FROM SOLD TO SELECTED CUSTOMER AND ADD TO LISTS ###
                 if df.iloc[idx].item_sku[:5] == 'CC-QJ' or df.iloc[idx].item_sku[:5] == 'CC-PR' or df.iloc[idx].item_sku[:5] == 'CC-MJ' or df.iloc[idx].item_sku[:6] == 'CC-CC2':
-                    jet_list.append('|    {}    |     ({}x)    {}  --  {}'.format(
+                    jet_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                         df.iloc[idx].sales_order, 
                         df.iloc[idx].quantity,
                         df.iloc[idx].item_sku,
@@ -1202,7 +1218,7 @@ elif task_choice == 'Customer Details':
                     elif df.iloc[idx].item_sku[:6] == 'CC-CC2':
                         jet_totals_cust['Cryo Clamp'] += df.iloc[idx].quantity
                 elif df.iloc[idx].item_sku[:5] == 'CC-TB' or df.iloc[idx].item_sku[:5] == 'CC-SS' or df.iloc[idx].item_sku[:5] == 'CC-SM':
-                    controller_list.append('|    {}    |     ({}x)    {}  --  {}'.format(
+                    controller_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                         df.iloc[idx].sales_order, 
                         df.iloc[idx].quantity,
                         df.iloc[idx].item_sku,
@@ -1214,19 +1230,19 @@ elif task_choice == 'Customer Details':
                     elif df.iloc[idx].item_sku[:5] == 'CC-SM':
                         controller_totals_cust['Shomaster'] += df.iloc[idx].quantity
                 elif df.iloc[idx].item_sku[:5] == 'Magic' or df.iloc[idx].item_sku[:4] == 'MFX-':
-                    magic_list.append('|    {}    |     ({}x)    {}  --  {}'.format(
+                    magic_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                         df.iloc[idx].sales_order, 
                         df.iloc[idx].quantity,
                         df.iloc[idx].item_sku,
                         df.iloc[idx].line_item))
                 elif df.iloc[idx].item_sku[:5] == 'CC-CH':
-                    hose_list.append('|    {}    |     ({}x)    {}  --  {}'.format(
+                    hose_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                         df.iloc[idx].sales_order, 
                         df.iloc[idx].quantity,
                         df.iloc[idx].item_sku,
                         df.iloc[idx].line_item))
                 elif df.iloc[idx].item_sku[:5] == 'CC-F-' or df.iloc[idx].item_sku[:5] == 'CC-AC' or df.iloc[idx].item_sku[:5] == 'CC-CT' or df.iloc[idx].item_sku[:5] == 'CC-WA':
-                    fittings_accessories_list.append('|    {}    |     ({}x)    {}  --  {}'.format(
+                    fittings_accessories_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                         df.iloc[idx].sales_order, 
                         df.iloc[idx].quantity,
                         df.iloc[idx].item_sku,
@@ -1234,7 +1250,7 @@ elif task_choice == 'Customer Details':
                     if df.iloc[idx].item_sku[:9] == 'CC-AC-LA2':
                         cust_LED_cnt += df.iloc[idx].quantity                    
                 elif df.iloc[idx].item_sku[:6] == 'CC-HCC' or df.iloc[idx].item_sku[:6] == 'Handhe':
-                    handheld_list.append('|    {}    |     ({}x)    {}  --  {}'.format(
+                    handheld_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                         df.iloc[idx].sales_order, 
                         df.iloc[idx].quantity,
                         df.iloc[idx].item_sku,
@@ -1266,38 +1282,47 @@ elif task_choice == 'Customer Details':
         ### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS ###
         with col3:
             if spend_total_2023 + spend_total_2024 > 0:
-                st.subheader('2023 Spending:')
-                st.write('${:,.2f}'.format(spend_total_2023))
+		ui.metric_card(title='2023 Spending', content='${:,.2f}'.format(spend_total_2023), description=None)
+                #st.subheader('2023 Spending:')
+                #st.write('${:,.2f}'.format(spend_total_2023))
         with col4:
             if spend_total_2023 + spend_total_2024 > 0:
-                st.subheader('2024 Spending:')
-                st.write('${:,.2f}'.format(spend_total_2024))
+            	perc_change = percent_of_change(spend_total_2023, spend_total_2024)
+            	ui.metric_card(title='2024 Spending', content='${:,.2f}'.format(spend_total_2024), description=perc_change)
+                #st.subheader('2024 Spending:')
+                #st.write('${:,.2f}'.format(spend_total_2024))
         with col5:
             if spend_total_2023 + spend_total_2024 > 0:
-                st.subheader('Total Spending:')
-                total_spending = spend_total_2023 + spend_total_2024
+            	total_spending = spend_total_2023 + spend_total_2024
+           	ui.metric_card(title='Total Spending', content='${:,.2f}'.format(total_spending), description=None)
+                #st.subheader('Total Spending:')
+                #total_spending = spend_total_2023 + spend_total_2024
                 st.write('${:,.2f}'.format(total_spending))
-        
-        ### DISPLAY PRODUCT PURCHASE SUMMARIES FOR SELECTED CUSTOMER ###
-        if len(text_input) > 1:
-            st.subheader('Product Totals:')
-            col6, col7, col8 = st.columns(3)
-            with col6:
-                for jet, totl in jet_totals_cust.items():
-                    if totl > 0:
-                        st.write(jet + ': ' + str(totl))
-            with col7:
-                for controller, totl in controller_totals_cust.items():
-                    if totl > 0:
-                        st.write(controller + ': ' + str(totl))
-                if cust_handheld_cnt > 0:
-                    st.write('Handhelds: ' + str(cust_handheld_cnt))
-            with col8:
-                if cust_LED_cnt > 0:
-                    st.write('LED Attachment II: ' + str(cust_LED_cnt))
-                if cust_RC_cnt > 0:
-                    st.write('Road Cases: ' + str(cust_RC_cnt))
-        
+	        
+	### DISPLAY PRODUCT PURCHASE SUMMARIES FOR SELECTED CUSTOMER ###
+	if len(text_input) > 1:
+	    st.subheader('Product Totals:')
+	    col6, col7, col8 = st.columns(3)
+	with col6:
+	    for jet, totl in jet_totals_cust.items():
+		if totl > 0:
+		    st.markdown(' - **{}: {}**'.format(jet, totl))
+	with col7:
+	    for controller, totl in controller_totals_cust.items():
+		if totl > 0:
+		    #st.write(controller + ': ' + str(totl))
+		    st.markdown(' - **{}: {}**'.format(controller, totl))
+	    if cust_handheld_cnt > 0:
+		#st.write('Handhelds: ' + str(cust_handheld_cnt))
+		st.markdown(' - **Handhelds: {}**'.format(cust_handheld_cnt))
+	with col8:
+	    if cust_LED_cnt > 0:
+		#st.write('LED Attachment II: ' + str(cust_LED_cnt))
+		st.markdown(' - **LED Attachment II: {}**'.format(cust_LED_cnt))
+	    if cust_RC_cnt > 0:
+		#st.write('Road Cases: ' + str(cust_RC_cnt))
+		st.markdown(' - **Road Cases: {}**'.format(cust_RC_cnt))
+	        
         ### DISPLAY CATEGORIES OF PRODUCTS PURCHASED BY SELECTED CUSTOMER ###
         if len(jet_list) >= 1:
             st.subheader('Stationary Jets:')
