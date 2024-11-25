@@ -23,6 +23,8 @@ st.set_page_config(page_title='Club Cannon Database',
 st.image('logo.png', use_column_width=True)
 
 st.divider()
+
+
 ### LOAD FILES
 sod_ss = 'SOD 11.18.24.xlsx'
 
@@ -30,7 +32,7 @@ hsd_ss = 'HSD 11.8.24.xlsx'
 
 quote_ss = 'Quote Report 10.23.24.xlsx'
 
-sales_sum_csv = 'Total Summary-2022 - Present.csv'
+sales_sum_csv = 'Fulcrum Sales Summary/Total Summary-2022 - Present.csv'
 
 shipstat_ss_24 = '2024 SR 11.01.24.xlsx'
 shipstat_ss_23 = '2023 SR.xlsx'
@@ -61,9 +63,10 @@ total_sum = 'Total Summary'
 def create_dataframe(ss):
 
 	df = pd.read_excel(ss,
-			   dtype=object,
-			   header=0)
+					  dtype=object,
+					  header=0)
 	return df
+
 
 df = create_dataframe(sod_ss)
 
@@ -75,37 +78,102 @@ df_shipstat_23 = create_dataframe(shipstat_ss_23)
 
 df_hsd = create_dataframe(hsd_ss)
 
+### STRIP UNUSED COLUMN ###
+
+df = df.drop(['Ordered Week', 'Customer Item Name'], axis=1)
+
+### RENAME DF COLUMNS FOR SIMPLICITY ###
+
+df_quotes.rename(columns={
+    'Number': 'number',
+    'Customer': 'customer',
+    'CustomerContact': 'contact',
+    'TotalInPrimaryCurrency': 'total',
+    'CreatedUtc': 'date_created',
+    'Status': 'status',
+    'ClosedDate': 'closed_date'}, 
+    inplace=True)
+
+
+quote_cust_list = df_quotes['customer'].unique().tolist()
+
+df.rename(columns={
+    'Sales Order': 'sales_order',
+    'Customer': 'customer',
+    'Sales Person': 'channel',
+    'Ordered Date': 'order_date',
+    'Ordered Month': 'order_month',
+    'Sales Order Status': 'status',
+    'Line Item Name': 'item_sku',
+    'Line Item': 'line_item',
+    'Order Quantity': 'quantity',
+    'Total Line Item $': 'total_line_item_spend',
+    'Ordered Year': 'ordered_year'},
+    inplace=True)
+
+df.order_date = pd.to_datetime(df.order_date).dt.date
+
+df_hsd.rename(columns={
+    'Sales Order': 'sales_order',
+    'Customer PO': 'po',
+    'Customer': 'customer',
+    'Item Name': 'item',
+    'Item Description': 'description',
+    'Quantity Ordered': 'quantity',
+    'Value Shipped': 'value',
+    'Shipped Date': 'date',
+    'Shipped By': 'channel'},
+     inplace=True)
+
+df_shipstat_24.rename(columns={
+                    'Ship Date':'shipdate',
+                    'Recipient':'customer',
+                    'Order #':'order_number',
+                    'Provider':'provider',
+                    'Service':'service',
+                    'Items':'items',
+                    'Paid':'cust_cost',
+                    'oz':'weight',
+                    '+/-':'variance'},
+                    inplace=True)
+
+df_shipstat_23.rename(columns={
+                    'Ship Date':'shipdate',
+                    'Recipient':'customer',
+                    'Order #':'order_number',
+                    'Provider':'provider',
+                    'Service':'service',
+                    'Items':'items',
+                    'Paid':'cust_cost',
+                    'oz':'weight',
+                    '+/-':'variance'},
+                    inplace=True)  
+
+### CREATE A LIST OF UNIQUE CUSTOMERS ###
+unique_customer_list = df.customer.unique().tolist()
 
 ### DEFINE FUNCTION TO CREATE PRODUCT DATAFRAME FROM EXCEL SPREADSHEET ###
+
 @st.cache_data
 def gen_product_df_from_excel(ss, sheet_name, cols=None):
 
 	if cols == None:
 		
 	    df_product_year = pd.read_excel(ss,
-					   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-					   sheet_name=sheet_name,
-					   dtype=object,
-					   header=1)
+	                                   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
+	                                   sheet_name=sheet_name,
+		                               dtype=object,
+	                                   header=1)
 	else:
 		
 		df_product_year = pd.read_excel(ss,
-					   usecols=cols,
-					   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
-					   sheet_name=sheet_name,
-					   dtype=object,
-					   header=1)
+									   usecols=cols,
+									   names=['Product', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Total'],
+									   sheet_name=sheet_name,
+									   dtype=object,
+									   header=1)
 	return df_product_year
 
-
-### READ IN SALES SUMMARY CSV ###
-@st.cache_data
-def create_dataframe_csv(file):
-	df = pd.read_csv(file, 
-			 usecols=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
-	return df
-
-df_csv = create_dataframe_csv(sales_sum_csv)
 
 
 df_acc_2024 = gen_product_df_from_excel(prod_sales, acc_2024, cols='a:m')
@@ -128,6 +196,14 @@ df_hh_2023 = gen_product_df_from_excel(prod_sales, hh_2023, cols='a:m')
 
 df_hose_2023 = gen_product_df_from_excel(prod_sales, hose_2023, cols='a:m')
 
+### READ IN SALES SUMMARY CSV ###
+@st.cache_data
+def create_dataframe_csv(file):
+	df = pd.read_csv(file, 
+					usecols=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+	return df
+
+df_csv = create_dataframe_csv(sales_sum_csv)
 
 ### CREATE DATE LISTS ###
 
@@ -327,6 +403,22 @@ def get_sales_orders(customer, dataFrame):
 
     return temp_dict
 
+### DEFINE A FUNCTION TO CALCULATE AND DISPLAY CHANGE IN CUSTOMER SPENDING ###
+
+def percent_of_change(num1, num2):
+    
+    delta = num2 - num1
+    if num1 == 0:
+        perc_change = 100
+    else:
+        perc_change = (delta / num1) * 100
+    if delta > 0:
+        v = '+'
+    else:
+        v = ''
+
+    return '{}{:,.2f}% from last year'.format(v, perc_change)
+
 ### MAKE LIST OF PRODUCT TYPES ###
 
 product_types = ['Jets', 'Controllers', 'Hoses', 'Accessories', 'Handhelds']
@@ -399,69 +491,6 @@ hoses = create_product_list(df_h23_unt)
 acc = create_product_list(df_ac23_unt)
 hh = create_product_list(df_hh23_unt)
 
-
-### STRIP UNUSED COLUMN ###
-
-df = df.drop(['Ordered Week', 'Customer Item Name'], axis=1)
-
-### RENAME DF COLUMNS FOR SIMPLICITY ###
-
-df_quotes.rename(columns={
-    'Number': 'number',
-    'Customer': 'customer',
-    'CustomerContact': 'contact',
-    'TotalInPrimaryCurrency': 'total',
-    'CreatedUtc': 'date_created',
-    'Status': 'status',
-    'ClosedDate': 'closed_date'}, 
-    inplace=True)
-
-
-quote_cust_list = df_quotes['customer'].unique().tolist()
-
-df.rename(columns={
-    'Sales Order': 'sales_order',
-    'Customer': 'customer',
-    'Sales Person': 'channel',
-    'Ordered Date': 'order_date',
-    'Ordered Month': 'order_month',
-    'Sales Order Status': 'status',
-    'Line Item Name': 'item_sku',
-    'Line Item': 'line_item',
-    'Order Quantity': 'quantity',
-    'Total Line Item $': 'total_line_item_spend',
-    'Ordered Year': 'ordered_year'},
-    inplace=True)
-
-df.order_date = pd.to_datetime(df.order_date).dt.date
-
-df_hsd.rename(columns={
-    'Sales Order': 'sales_order',
-    'Customer PO': 'po',
-    'Customer': 'customer',
-    'Item Name': 'item',
-    'Item Description': 'description',
-    'Quantity Ordered': 'quantity',
-    'Value Shipped': 'value',
-    'Shipped Date': 'date',
-    'Shipped By': 'channel'},
-     inplace=True)
-
-### DEFINE A FUNCTION TO CALCULATE AND DISPLAY CHANGE IN CUSTOMER SPENDING ###
-
-def percent_of_change(num1, num2):
-    
-    delta = num2 - num1
-    if num1 == 0:
-        perc_change = 100
-    else:
-        perc_change = (delta / num1) * 100
-    if delta > 0:
-        v = '+'
-    else:
-        v = ''
-
-    return '{}{:,.2f}% from last year'.format(v, perc_change)
 
 ### DEFINE A FUNCTION TO CALCULATE PERCENTAGE OF A TOTAL ###
 def percent_of_sales(type1, type2):
@@ -611,210 +640,210 @@ def sales_channel(year, month=['All']):
     else:
         return None
 
-#st.write(website_rev_dict_23)
-#st.write(website_rev_dict_24)
-#st.write(fulcrum_rev_dict_23)
-#st.write(fulcrum_rev_dict_24)
-
-#st.subheader('Woocommerce 2023: ' + '(${:,.2f})'.format(website_rev_23) + ' in revenue, ' + percent_of_sales(website_rev_23, fulcrum_rev_23))
-#st.subheader('Fulcrum 2023: ' + '(${:,.2f})'.format(fulcrum_rev_23) + ' in revenue, ' + percent_of_sales(fulcrum_rev_23, website_rev_23))
-#st.subheader('Woocommerce 2024: ' + '(${:,.2f})'.format(website_rev_24) + ' in revenue, ' + percent_of_sales(website_rev_24, fulcrum_rev_24))
-#st.subheader('Fulcrum 2024: ' + '(${:,.2f})'.format(fulcrum_rev_24) + ' in revenue, ' + percent_of_sales(fulcrum_rev_24, website_rev_24))
-
 
 ### MAKE DICTIONARIES OF PRODUCT SALES FOR CHARTING ###
 
-jet_dict_2023 = {'Pro Jet': 0,
-                'Quad Jet': 0,
-                'Micro Jet': 0,
-                'Cryo Clamp': 0}
-jet_dict_2024 = {'Pro Jet': 0,
-                'Quad Jet': 0,
-                'Micro Jet': 0,
-                'Cryo Clamp': 0}
-control_dict_2023 = {'The Button': 0,
-                     'Shostarter': 0,
-                     'Shomaster': 0}
-control_dict_2024 = {'The Button': 0,
-                     'Shostarter': 0,
-                     'Shomaster': 0}
-handheld_dict_2023 = {'8FT - No Case': 0,
-                     '8FT - Travel Case': 0,
-                     '15FT - No Case': 0,
-                     '15FT - Travel Case': 0}
-handheld_dict_2024 = {'8FT - No Case': 0,
-                     '8FT - Travel Case': 0,
-                     '15FT - No Case': 0,
-                     '15FT - Travel Case': 0}
+#jet_dict_2023 = {'Pro Jet': 0,
+#                'Quad Jet': 0,
+#               'Micro Jet': 0,
+#               'Cryo Clamp': 0}
+#jet_dict_2024 = {'Pro Jet': 0,
+#                'Quad Jet': 0,
+#                'Micro Jet': 0,
+#                'Cryo Clamp': 0}
+#control_dict_2023 = {'The Button': 0,
+#                     'Shostarter': 0,
+#                     'Shomaster': 0}
+#control_dict_2024 = {'The Button': 0,
+#                     'Shostarter': 0,
+#                     'Shomaster': 0}
+#handheld_dict_2023 = {'8FT - No Case': 0,
+#                     '8FT - Travel Case': 0,
+#                     '15FT - No Case': 0,
+#                     '15FT - Travel Case': 0}
+#handheld_dict_2024 = {'8FT - No Case': 0,
+#                     '8FT - Travel Case': 0,
+#                     '15FT - No Case': 0,
+#                     '15FT - Travel Case': 0}
 
-idx = 0
-for line_item in df.line_item:
-    if line_item[:6] == 'CC-PRO':
-        if df.iloc[idx].ordered_year == '2023':
-            jet_dict_2023['Pro Jet'] += df.iloc[idx].quantity
-        elif df.iloc[idx].ordered_year == '2024':
-            jet_dict_2024['Pro Jet'] += df.iloc[idx].quantity
-        else:
-            pass
-    idx += 1
-
-
-
-### CREATE A LIST OF UNIQUE CUSTOMERS ###
-unique_customer_list = df.customer.unique().tolist()
-
-df_shipstat_24.rename(columns={
-                    'Ship Date':'shipdate',
-                    'Recipient':'customer',
-                    'Order #':'order_number',
-                    'Provider':'provider',
-                    'Service':'service',
-                    'Items':'items',
-                    'Paid':'cust_cost',
-                    'oz':'weight',
-                    '+/-':'variance'},
-                    inplace=True)
-
-df_shipstat_23.rename(columns={
-                    'Ship Date':'shipdate',
-                    'Recipient':'customer',
-                    'Order #':'order_number',
-                    'Provider':'provider',
-                    'Service':'service',
-                    'Items':'items',
-                    'Paid':'cust_cost',
-                    'oz':'weight',
-                    '+/-':'variance'},
-                    inplace=True)  
+#idx = 0
+#for line_item in df.line_item:
+#    if line_item[:6] == 'CC-PRO':
+#        if df.iloc[idx].ordered_year == '2023':
+#            jet_dict_2023['Pro Jet'] += df.iloc[idx].quantity
+#        elif df.iloc[idx].ordered_year == '2024':
+#            jet_dict_2024['Pro Jet'] += df.iloc[idx].quantity
+#        else:
+#            pass
+#    idx += 1
 
 
-#task_select = st.selectbox('Choose Widget Task', 
-                          #options=[' - Choose an Option - ', 'Customer Details', 'Customer Spending Leaders', 'Product Sales', 'Monthly Sales', 'Customer Quote Reports', 'Shipping Reports'])
+### GENERATE SIDEBAR MENU ###
 task_select = ''
+#task_choice = ''
 with st.sidebar:
-	task_choice = st.radio('**Select Task**', options=['Customer Details', 'Product Sales Reports', 'Sales Summary', 'Shipping Reports', 'Quote Reports', 'Leaderboards'])
-	#customer_details = st.button('Customer Details')
-	#customer_spending_leaders = st.button('Customer Leaderboards')
-	#customer_quote_reports = st.button('Customer Quote Reports')
-	#product_sales_reports = st.button('Product Sales Reports')
-	#sales_summary = st.button('Sales Summary')
-	#shipping_reports = st.button('Shipping Reports')
-
-#st.divider()
+    task_choice = st.radio('**Select Task**', options=['Customer Details', 'Product Sales Reports', 'Sales Summary', 'Shipping Reports', 'Quote Reports', 'Leaderboards'])
+	#customer_details = ui.button('Customer Details')
+	#customer_spending_leaders = ui.button('Customer Leaderboards')
+	#customer_quote_reports = ui.button('Customer Quote Reports')
+	#product_sales_reports = ui.button('Product Sales Reports')
+	#sales_summary = ui.button('Sales Summary')
+	#shipping_reports = ui.button('Shipping Reports')
 
 
+### TESTING ###
 
+bom_cost_jet = {'Pro Jet': 290.86, 'Micro Jet': 243.57, 'Quad Jet': 630.43, 'Quad Jet WP': 651.80, 'Cryo Clamp': 166.05}
+bom_cost_control = {'The Button': 141.07, 'ShoStarter': 339.42, 'ShoMaster': 667.12}
+bom_cost_hh = {'8FT NC': 143.62, '8FT TC': 219.06, '15FT NC': 153.84, '15FT TC': 231.01}
+bom_cost_hose = {'2FT MFD': 20.08, '3.5FT MFD': 22.50, '5FT MFD': 24.25, '5FT STD': 31.94, '5FT DSY': 31.84, '5FT EXT': 33.24, '8FT STD': 32.42, '8FT DSY': 34.52, '8FT EXT': 34.82, '15FT STD': 43.55, '15FT DSY': 46.47, '15FT EXT': 46.77, '25FT STD': 59.22, '25FT DSY': 61.87, '25FT EXT': 62.17, '35FT STD': 79.22, '35FT DSY': 81.32, '35FT EXT': 81.62, '50FT STD': 103.57, '50FT EXT': 105.97, '100FT STD': 183.39}
+bom_cost_acc = {'CC-AC-CCL': 29.17, 'CC-AC-CTS': 6.70, 'CC-F-DCHA': 7.15, 'CC-F-HEA': 6.86, 'CC-AC-RAA': 11.94, 'CC-AC-4PM': 48.12, 'CC-F-MFDCGAJIC': 7.83, 'CC-AC-CGAJIC-SET': 5.16, 'CC-AC-CTC-20': 10.92, 'CC-AC-CTC-50': 19.36, 'CC-AC-TC': 89.46, 'CC-VV-KIT': 29.28, 
+                'CC-RC-2430': 847, 'CC-AC-LA2': 248.10}
+
+### DEFINE A FUNCTION TO CALCULATE TOTAL ITEM SALES ANNUALLY ###
+
+def product_totals(dict, product, months=['All']):
+
+    total = 0
+
+    if months == ['All']:
+        for m, prod in dict.items():
+            total += prod[product]
+        
+    else:
+        for month in months:
+            total += dict[month][product]
+
+    return total
+
+### DEFINE A FUNCTION TO DISPLAY PRODUCT TOTALS AND MONTHLY BREAKDOWN ###
+
+def display_category_totals(dict):
+    
+    for key, val in dict.items():
+        st.subheader('{}:  \n'.format(key, val))
+        for k, v in val.items():
+            st.markdown(' - {} - {}  \n'.format(k, v))
+            
+    return None
+
+### DEFINE FUNCTION TO GATHER MONTHLY SALES INTO DICTIONARY FROM DATAFRAME ###    
+def get_monthly_sales(df, year):
+
+	sales_dict = {'January': [0, 0], 'February': [0, 0], 'March': [0, 0], 'April': [0, 0], 'May': [0, 0], 'June': [0, 0], 'July': [0, 0], 'August': [0, 0], 'September': [0, 0], 'October': [0, 0], 'November': [0, 0], 'December': [0, 0]}
+
+	idx = 0
+
+	for sale in df.sales_order:
+		
+		month = num_to_month(df.iloc[idx].order_date.month)
+
+		if df.iloc[idx].order_date.year == year:
+			
+			if df.iloc[idx].channel[0] == 'F':
+				sales_dict[month][0] += df.iloc[idx].total_line_item_spend
+			else:
+				sales_dict[month][1] += df.iloc[idx].total_line_item_spend            
+
+		idx += 1
+	
+	return sales_dict
+
+
+### DEFINE FUNCTION TO DISPLAY MONTHLY SALES FOR ALL MONTHS ###
+def display_monthly_sales(sales_dict):
+
+	for month, sales in sales_dict.items():
+		month_sales = sales[0] + sales[1]
+		woo = percent_of_sales(sales[0], sales[1])
+		fulcrum = percent_of_sales(sales[1], sales[0])
+		st.write('**{}: ${:,.2f}**  \n({:.2f}% Web, {:.2f}% Fulcrum)'.format(month, month_sales, woo, fulcrum))
+
+	return None
+	
+### DEFINE FUNTION TO CALCULATE TOTALS AND PERCENT BY CHANNEL ###
+def calc_monthly_totals(sales_dict, months=['All']):
+
+	total_sales = 0
+	total_web = 0
+	total_fulcrum = 0
+	num_months = 0
+	
+	for month, sales in sales_dict.items():
+		if months == ['All']:
+			total_sales += (sales[0] + sales[1])
+			total_web += sales[0]
+			total_fulcrum += sales[1]
+			if sales[0] + sales[1] < 100:
+				pass
+			else:
+				num_months += 1
+			
+		else:
+			for mnth in months:
+				if month == mnth:
+					total_sales += (sales[0] + sales[1])
+					total_web += sales[0]
+					total_fulcrum += sales[1]
+				if sales[0] + sales [1] < 100:
+					pass
+				else:
+					num_months += 1
+						
+	avg_month = total_sales / num_months                
+	total_web_perc = percent_of_sales(total_web, total_fulcrum)
+	total_fulcrum_perc = percent_of_sales(total_fulcrum, total_web)
+	
+	return total_sales, total_web_perc, total_fulcrum_perc, avg_month
+
+### FUNCTIONS FOR PLOTTING CHARTS ###
+def format_for_chart_ms(dict):
+	
+	temp_dict = {'Months': months_x,
+				'Total Sales': []}
+	
+	for month, sales in dict.items():
+		if len(temp_dict['Total Sales']) >= 12:
+			pass
+		else:
+			temp_dict['Total Sales'].append(sales[0] + sales[1])
+	df = pd.DataFrame(temp_dict)
+	
+	return df
+
+def plot_bar_chart_ms(df):
+	st.write(alt.Chart(df).mark_bar().encode(
+		x=alt.X('Months', sort=None).title('Month'),
+		y='Total Sales',
+	).properties(height=500, width=750).configure_mark(
+		color='limegreen'
+	))
+
+def plot_bar_chart_ms_comp(df):
+	st.write(alt.Chart(df).mark_bar().encode(
+		x=alt.X('Months', sort=None).title('Month'),
+		y='Total Sales',
+	).properties(height=500, width=350).configure_mark(
+		color='limegreen'
+	))
 
 ### REVISED MONTHLY SALES REPORTING ###
 
 if task_choice == 'Sales Summary':
 
     st.header('Sales Summary')
-
-
-### DEFINE FUNCTION TO GATHER MONTHLY SALES INTO DICTIONARY FROM DATAFRAME ###    
-    def get_monthly_sales(df, year):
-    
-        sales_dict = {'January': [0, 0], 'February': [0, 0], 'March': [0, 0], 'April': [0, 0], 'May': [0, 0], 'June': [0, 0], 'July': [0, 0], 'August': [0, 0], 'September': [0, 0], 'October': [0, 0], 'November': [0, 0], 'December': [0, 0]}
-    
-        idx = 0
-    
-        for sale in df.sales_order:
-            
-            month = num_to_month(df.iloc[idx].order_date.month)
-    
-            if df.iloc[idx].order_date.year == year:
-                
-                if df.iloc[idx].channel[0] == 'F':
-                    sales_dict[month][0] += df.iloc[idx].total_line_item_spend
-                else:
-                    sales_dict[month][1] += df.iloc[idx].total_line_item_spend            
-    
-            idx += 1
-        
-        return sales_dict
-
-
-### DEFINE FUNCTION TO DISPLAY MONTHLY SALES FOR ALL MONTHS ###
-    def display_monthly_sales(sales_dict):
-    
-        for month, sales in sales_dict.items():
-            month_sales = sales[0] + sales[1]
-            woo = percent_of_sales(sales[0], sales[1])
-            fulcrum = percent_of_sales(sales[1], sales[0])
-            st.write('**{}: ${:,.2f}**  \n({:.2f}% Web, {:.2f}% Fulcrum)'.format(month, month_sales, woo, fulcrum))
-    
-        return None
-        
-### DEFINE FUNTION TO CALCULATE TOTALS AND PERCENT BY CHANNEL ###
-    def calc_monthly_totals(sales_dict, months=['All']):
-
-        total_sales = 0
-        total_web = 0
-        total_fulcrum = 0
-        num_months = 0
-        
-        for month, sales in sales_dict.items():
-            if months == ['All']:
-                total_sales += (sales[0] + sales[1])
-                total_web += sales[0]
-                total_fulcrum += sales[1]
-                if sales[0] + sales[1] < 100:
-                    pass
-                else:
-                    num_months += 1
-                
-            else:
-                for mnth in months:
-                    if month == mnth:
-                        total_sales += (sales[0] + sales[1])
-                        total_web += sales[0]
-                        total_fulcrum += sales[1]
-                    if sales[0] + sales [1] < 100:
-                        pass
-                    else:
-                        num_months += 1
-                            
-        avg_month = total_sales / num_months                
-        total_web_perc = percent_of_sales(total_web, total_fulcrum)
-        total_fulcrum_perc = percent_of_sales(total_fulcrum, total_web)
-        
-        return total_sales, total_web_perc, total_fulcrum_perc, avg_month
-
-### FUNCTIONS FOR PLOTTING CHARTS ###
-    def format_for_chart_ms(dict):
-        
-        temp_dict = {'Months': months_x,
-                    'Total Sales': []}
-        
-        for month, sales in dict.items():
-            if len(temp_dict['Total Sales']) >= 12:
-                pass
-            else:
-                temp_dict['Total Sales'].append(sales[0] + sales[1])
-        df = pd.DataFrame(temp_dict)
-        
-        return df
-    
-    def plot_bar_chart_ms(df):
-        st.write(alt.Chart(df).mark_bar().encode(
-            x=alt.X('Months', sort=None).title('Month'),
-            y='Total Sales',
-        ).properties(height=500, width=750).configure_mark(
-            color='limegreen'
-        ))
-    
-    def plot_bar_chart_ms_comp(df):
-        st.write(alt.Chart(df).mark_bar().encode(
-            x=alt.X('Months', sort=None).title('Month'),
-            y='Total Sales',
-        ).properties(height=500, width=350).configure_mark(
-            color='limegreen'
-        ))
-
-    
+	
+	#cols_x = st.columns(3)
+	#with cols_x[0]:
+		#ui.metric_card(title="Total Revenue", content="$45,231.89", description="+20.1% from last month", key="card1")
+	#with cols_x[1]:
+		#ui.metric_card(title="Total Revenue", content="$45,231.89", description="+20.1% from last month", key="card2")
+	#with cols_x[2]:
+		#ui.metric_card(title="Total Revenue", content="$45,231.89", description="+20.1% from last month", key="card3")
+		
     comp_col = st.checkbox('Comparison Column')
 
+		
     ### DISPLAY SALES REPORTS ###
     if comp_col == False:
   
@@ -844,11 +873,11 @@ if task_choice == 'Sales Summary':
             if year_select == 2023:
                 display_monthly_sales(get_monthly_sales(df, 2023))
                 total_sales, web_percent, fulcrum_percent, avg_month = calc_monthly_totals(get_monthly_sales(df, year_select))
-                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n**${:,.2f} / Month**'.format(year_select, total_sales, web_percent, fulcrum_percent, avg_month))
+                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n${:,.2f} / Month'.format(year_select, total_sales, web_percent, fulcrum_percent, avg_month))
             elif year_select == 2024:
                 display_monthly_sales(get_monthly_sales(df, 2024))
                 total_sales, web_percent, fulcrum_percent, avg_month = calc_monthly_totals(get_monthly_sales(df, year_select))
-                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n**${:,.2f} / Month**'.format(year_select, total_sales, web_percent, fulcrum_percent, avg_month))
+                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n${:,.2f} / Month'.format(year_select, total_sales, web_percent, fulcrum_percent, avg_month))
             
         with col21:
             year_select_2 = st.selectbox('Select Year', 
@@ -857,11 +886,11 @@ if task_choice == 'Sales Summary':
             if year_select_2 == 2023:
                 display_monthly_sales(get_monthly_sales(df, 2023))
                 total_sales, web_percent, fulcrum_percent, avg_month = calc_monthly_totals(get_monthly_sales(df, year_select_2))
-                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n**${:,.2f} / Month**'.format(year_select_2, total_sales, web_percent, fulcrum_percent, avg_month))
+                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n${:,.2f} / Month'.format(year_select_2, total_sales, web_percent, fulcrum_percent, avg_month))
             elif year_select_2 == 2024:
                 display_monthly_sales(get_monthly_sales(df, 2024))
                 total_sales, web_percent, fulcrum_percent, avg_month = calc_monthly_totals(get_monthly_sales(df, year_select_2))
-                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n**${:,.2f} / Month**'.format(year_select_2, total_sales, web_percent, fulcrum_percent, avg_month))
+                st.subheader('{} Total: ${:,.2f}  \n({:.2f}% Web, {:.2f}% Fulcrum)  \n${:,.2f} / Month'.format(year_select_2, total_sales, web_percent, fulcrum_percent, avg_month))
 
 
         
@@ -869,7 +898,7 @@ if task_choice == 'Sales Summary':
     
 if task_choice == 'Shipping Reports':
 
-
+	
     def get_month_ship_payments(df, month):
 
         return df[month].iloc[26]
@@ -1033,7 +1062,6 @@ if task_choice == 'Shipping Reports':
             st.write('Payments: ${:,.2f}'.format(val[1]))
             st.write('FedEx Charges: ${:,.2f}'.format(val[2]))
             st.write('UPS Charges: ${:,.2f}'.format(val[3]))
-
     
     
     #st.write('{:.2f}%'.format(shipping_balance_calc(total_ship_cost, total_ship_pmnts)))
@@ -1042,7 +1070,7 @@ if task_choice == 'Shipping Reports':
     #st.write(df_ac24_rev['January'].iloc[26])
 
 
-if task_choice == 'Quote Reports':
+if task_choice == 'Customer Quote Reports':
 
     st.header('Quote Reports')
     
@@ -1118,243 +1146,243 @@ if task_choice == 'Quote Reports':
 
 elif task_choice == 'Customer Details':
     
-    with st.container():
-        st.header('Customer Details')
-        #text_input = st.text_input('Search Customers')
-        text_input = st.multiselect('Search Customers', 
-                                   options=unique_customer_list, 
-                                   max_selections=1,
-                                   placeholder='Start Typing Customer Name')
-        
-        if len(text_input) >= 1:
-            text_input = text_input[0]
-        else:
-            text_input = ''
-    
-        
-        #st.write(text_input)
-        #text_input = text_input.lower()
-    
-        #if text_input.upper() not in df.customer.str.upper() and len(text_input) > 1:
-            #possible_cust = []
-        
-            #for cust in df.customer:
-                #if cust[:9].upper() == text_input[:9].upper() and cust[:10].upper() == text_input[:10].upper():
-                    #text_input = cust
-                    #break
-                #if cust[:1].upper() == text_input[:1].upper() or cust[:2].lower() == text_input[:2].lower():
-                    #if cust in possible_cust:
-                        #pass
-                    #else:
-                        #possible_cust.append(cust)
-            #if text_input == cust:
-                #pass
-            #else:
-                #possible_cust = sort_by_match(possible_cust, text_input)
-                #for custs in possible_cust:
-                    #if custs[:2] == text_input[:2]:
-                        #possible_cust.remove(custs)
-                        #possible_cust.insert(0, custs)
-                #for customer in possible_cust[:14]:
-                    #st.write('Are you searching for - {} - ?'.format(customer))
-        #st.write(text_input)
-        
-        ### PRODUCT CATEGORY LISTS ###
-        sales_order_list = []
-        jet_list = []
-        controller_list = []
-        misc_list = []
-        magic_list = []
-        hose_list = []
-        fittings_accessories_list = []
-        handheld_list = []
-        
-        ### PRODUCT TOTALS SUMMARY DICTS ###
-        jet_totals_cust = {'Quad Jet': 0, 
-                          'Pro Jet': 0, 
-                          'Micro Jet MKII': 0,
-                          'Cryo Clamp': 0}
-        controller_totals_cust = {'The Button': 0,
-                                 'Shostarter': 0,
-                                 'Shomaster': 0}
-        cust_handheld_cnt = 0
-        cust_LED_cnt = 0
-        cust_RC_cnt = 0
-        
-        ### LISTS OF HISTORICAL SALES FOR CUSTOMER ###
-        spend_total = {2023: None, 2024: None}
-        spend_total_2023 = 0.0
-        spend_total_2024 = 0.0
-        sales_order_list = []
-        
-        idx = 0
-        
-        for customer in df.customer:
-            
-            if customer.upper() == text_input.upper():
-                #sales_order_list.append(df.iloc[idx].sales_order)
-                
-                ### LOCATE AND PULL SPEND TOTALS FOR SELECTED CUSTOMER AND ADD TO LISTS ###
-                if df.iloc[idx].ordered_year == '2023':
-                    spend_total_2023 += df.iloc[idx].total_line_item_spend
-                elif df.iloc[idx].ordered_year == '2024':
-                    spend_total_2024 += df.iloc[idx].total_line_item_spend
-        
-        
-        
-                ### LOCATE ALL ITEMS FROM SOLD TO SELECTED CUSTOMER AND ADD TO LISTS ###
-                if df.iloc[idx].item_sku[:5] == 'CC-QJ' or df.iloc[idx].item_sku[:5] == 'CC-PR' or df.iloc[idx].item_sku[:5] == 'CC-MJ' or df.iloc[idx].item_sku[:6] == 'CC-CC2':
-                    jet_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
-                        df.iloc[idx].sales_order, 
-                        df.iloc[idx].quantity,
-                        df.iloc[idx].item_sku,
-                        df.iloc[idx].line_item))
-                    if df.iloc[idx].item_sku[:5] == 'CC-QJ':
-                        jet_totals_cust['Quad Jet'] += df.iloc[idx].quantity
-                    elif df.iloc[idx].item_sku[:5] == 'CC-PR':
-                        jet_totals_cust['Pro Jet'] += df.iloc[idx].quantity
-                    elif df.iloc[idx].item_sku[:5] == 'CC-MJ':
-                        jet_totals_cust['Micro Jet MKII'] += df.iloc[idx].quantity
-                    elif df.iloc[idx].item_sku[:6] == 'CC-CC2':
-                        jet_totals_cust['Cryo Clamp'] += df.iloc[idx].quantity
-                elif df.iloc[idx].item_sku[:5] == 'CC-TB' or df.iloc[idx].item_sku[:5] == 'CC-SS' or df.iloc[idx].item_sku[:5] == 'CC-SM':
-                    controller_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
-                        df.iloc[idx].sales_order, 
-                        df.iloc[idx].quantity,
-                        df.iloc[idx].item_sku,
-                        df.iloc[idx].line_item))
-                    if df.iloc[idx].item_sku[:5] == 'CC-TB':
-                        controller_totals_cust['The Button'] += df.iloc[idx].quantity
-                    elif df.iloc[idx].item_sku[:5] == 'CC-SS':
-                        controller_totals_cust['Shostarter'] += df.iloc[idx].quantity
-                    elif df.iloc[idx].item_sku[:5] == 'CC-SM':
-                        controller_totals_cust['Shomaster'] += df.iloc[idx].quantity
-                elif df.iloc[idx].item_sku[:5] == 'Magic' or df.iloc[idx].item_sku[:4] == 'MFX-':
-                    magic_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
-                        df.iloc[idx].sales_order, 
-                        df.iloc[idx].quantity,
-                        df.iloc[idx].item_sku,
-                        df.iloc[idx].line_item))
-                elif df.iloc[idx].item_sku[:5] == 'CC-CH':
-                    hose_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
-                        df.iloc[idx].sales_order, 
-                        df.iloc[idx].quantity,
-                        df.iloc[idx].item_sku,
-                        df.iloc[idx].line_item))
-                elif df.iloc[idx].item_sku[:5] == 'CC-F-' or df.iloc[idx].item_sku[:5] == 'CC-AC' or df.iloc[idx].item_sku[:5] == 'CC-CT' or df.iloc[idx].item_sku[:5] == 'CC-WA':
-                    fittings_accessories_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
-                        df.iloc[idx].sales_order, 
-                        df.iloc[idx].quantity,
-                        df.iloc[idx].item_sku,
-                        df.iloc[idx].line_item))
-                    if df.iloc[idx].item_sku[:9] == 'CC-AC-LA2':
-                        cust_LED_cnt += df.iloc[idx].quantity                    
-                elif df.iloc[idx].item_sku[:6] == 'CC-HCC' or df.iloc[idx].item_sku[:6] == 'Handhe':
-                    handheld_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
-                        df.iloc[idx].sales_order, 
-                        df.iloc[idx].quantity,
-                        df.iloc[idx].item_sku,
-                        df.iloc[idx].line_item))
-                    cust_handheld_cnt += df.iloc[idx].quantity
-                elif df.iloc[idx].item_sku[:5] == 'Shipp' or df.iloc[idx].item_sku[:5] == 'Overn' or df.iloc[idx].item_sku[:5] == 'CC-NP':
-                    pass
-                else:
-                    misc_list.append('|    {}    |     ({}x)     {}  --  {}'.format(
-                        df.iloc[idx].sales_order, 
-                        df.iloc[idx].quantity,
-                        df.iloc[idx].item_sku,
-                        df.iloc[idx].line_item))
-                    if df.iloc[idx].item_sku == 'CC-RC-2430':
-                        cust_RC_cnt += df.iloc[idx].quantity
 
-                if df.iloc[idx].sales_order in sales_order_list:
-                    pass
-                else:
-                    sales_order_list.append(df.iloc[idx].sales_order)
-            idx += 1
-            
-        #st.write(sales_order_list)
-        st.header('')
-        st.subheader('')
-        st.subheader('')
-        col3, col4, col5 = st.columns(3)
+    st.header('Customer Details')
+    #text_input = st.text_input('Search Customers')
+    text_input = st.multiselect('Search Customers', 
+                               options=unique_customer_list, 
+                               max_selections=1,
+                               placeholder='Start Typing Customer Name')
+    
+    if len(text_input) >= 1:
+        text_input = text_input[0]
+    else:
+        text_input = ''
+
+    
+    #st.write(text_input)
+    #text_input = text_input.lower()
+
+    #if text_input.upper() not in df.customer.str.upper() and len(text_input) > 1:
+        #possible_cust = []
+    
+        #for cust in df.customer:
+            #if cust[:9].upper() == text_input[:9].upper() and cust[:10].upper() == text_input[:10].upper():
+                #text_input = cust
+                #break
+            #if cust[:1].upper() == text_input[:1].upper() or cust[:2].lower() == text_input[:2].lower():
+                #if cust in possible_cust:
+                    #pass
+                #else:
+                    #possible_cust.append(cust)
+        #if text_input == cust:
+            #pass
+        #else:
+            #possible_cust = sort_by_match(possible_cust, text_input)
+            #for custs in possible_cust:
+                #if custs[:2] == text_input[:2]:
+                    #possible_cust.remove(custs)
+                    #possible_cust.insert(0, custs)
+            #for customer in possible_cust[:14]:
+                #st.write('Are you searching for - {} - ?'.format(customer))
+    #st.write(text_input)
+    
+    ### PRODUCT CATEGORY LISTS ###
+    sales_order_list = []
+    jet_list = []
+    controller_list = []
+    misc_list = []
+    magic_list = []
+    hose_list = []
+    fittings_accessories_list = []
+    handheld_list = []
+    
+    ### PRODUCT TOTALS SUMMARY DICTS ###
+    jet_totals_cust = {'Quad Jet': 0, 
+                      'Pro Jet': 0, 
+                      'Micro Jet MKII': 0,
+                      'Cryo Clamp': 0}
+    controller_totals_cust = {'The Button': 0,
+                             'Shostarter': 0,
+                             'Shomaster': 0}
+    cust_handheld_cnt = 0
+    cust_LED_cnt = 0
+    cust_RC_cnt = 0
+    
+    ### LISTS OF HISTORICAL SALES FOR CUSTOMER ###
+    spend_total = {2023: None, 2024: None}
+    spend_total_2023 = 0.0
+    spend_total_2024 = 0.0
+    sales_order_list = []
+    
+    idx = 0
+    
+    for customer in df.customer:
         
-### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS ###
-	with col3:
-		if spend_total_2023 + spend_total_2024 > 0:
-			ui.metric_card(title='2023 Spending', content='${:,.2f}'.format(spend_total_2023), description=None)
-			#st.subheader('2023 Spending:')
-			#st.write('${:,.2f}'.format(spend_total_2023))
-	with col4:
-		if spend_total_2023 + spend_total_2024 > 0:
-			perc_change = percent_of_change(spend_total_2023, spend_total_2024)
-			ui.metric_card(title='2024 Spending', content='${:,.2f}'.format(spend_total_2024), description=perc_change)
-			#st.subheader('2024 Spending:')
-			#st.write('${:,.2f}'.format(spend_total_2024))
-	with col5:
-		if spend_total_2023 + spend_total_2024 > 0:
-			total_spending = spend_total_2023 + spend_total_2024
-			ui.metric_card(title='Total Spending', content='${:,.2f}'.format(total_spending), description=None)
-			#st.subheader('Total Spending:')
-			#total_spending = spend_total_2023 + spend_total_2024
-			#st.write('${:,.2f}'.format(total_spending))
-	        
-	### DISPLAY PRODUCT PURCHASE SUMMARIES FOR SELECTED CUSTOMER ###
-	if len(text_input) > 1:
-	    st.subheader('Product Totals:')
-	    col6, col7, col8 = st.columns(3)
-	with col6:
-	    for jet, totl in jet_totals_cust.items():
-		if totl > 0:
-		    st.markdown(' - **{}: {}**'.format(jet, totl))
-	with col7:
-	    for controller, totl in controller_totals_cust.items():
-		if totl > 0:
-		    #st.write(controller + ': ' + str(totl))
-		    st.markdown(' - **{}: {}**'.format(controller, totl))
-	    if cust_handheld_cnt > 0:
-		#st.write('Handhelds: ' + str(cust_handheld_cnt))
-		st.markdown(' - **Handhelds: {}**'.format(cust_handheld_cnt))
-	with col8:
-	    if cust_LED_cnt > 0:
-		#st.write('LED Attachment II: ' + str(cust_LED_cnt))
-		st.markdown(' - **LED Attachment II: {}**'.format(cust_LED_cnt))
-	    if cust_RC_cnt > 0:
-		#st.write('Road Cases: ' + str(cust_RC_cnt))
-		st.markdown(' - **Road Cases: {}**'.format(cust_RC_cnt))
-	        
-        ### DISPLAY CATEGORIES OF PRODUCTS PURCHASED BY SELECTED CUSTOMER ###
-        if len(jet_list) >= 1:
-            st.subheader('Stationary Jets:')
-            for item in jet_list:
-                st.write(item)
-        if len(controller_list) >= 1:
-            st.subheader('Controllers:')
-            for item in controller_list:
-                st.write(item)
-        if len(handheld_list) >= 1:
-            st.subheader('Handhelds:')
-            for item in handheld_list:
-                st.write(item)
-        if len(hose_list) >= 1:
-            st.subheader('Hoses:')
-            for item in hose_list:
-                st.write(item)
-        if len(fittings_accessories_list) >= 1:
-            st.subheader('Fittings & Accessories:')
-            for item in fittings_accessories_list:
-                st.write(item)
-        if len(misc_list) >= 1:
-            st.subheader('Misc:')
-            for item in misc_list:
-                st.write(item)
-        if len(magic_list):
-            st.subheader('Magic FX:')
-            for item in magic_list:
-                st.write(item)
+        if customer.upper() == text_input.upper():
+            #sales_order_list.append(df.iloc[idx].sales_order)
+            
+            ### LOCATE AND PULL SPEND TOTALS FOR SELECTED CUSTOMER AND ADD TO LISTS ###
+            if df.iloc[idx].ordered_year == '2023':
+                spend_total_2023 += df.iloc[idx].total_line_item_spend
+            elif df.iloc[idx].ordered_year == '2024':
+                spend_total_2024 += df.iloc[idx].total_line_item_spend
     
     
     
+            ### LOCATE ALL ITEMS FROM SOLD TO SELECTED CUSTOMER AND ADD TO LISTS ###
+            if df.iloc[idx].item_sku[:5] == 'CC-QJ' or df.iloc[idx].item_sku[:5] == 'CC-PR' or df.iloc[idx].item_sku[:5] == 'CC-MJ' or df.iloc[idx].item_sku[:6] == 'CC-CC2':
+                jet_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
+                    df.iloc[idx].sales_order, 
+                    df.iloc[idx].quantity,
+                    df.iloc[idx].item_sku,
+                    df.iloc[idx].line_item))
+                if df.iloc[idx].item_sku[:5] == 'CC-QJ':
+                    jet_totals_cust['Quad Jet'] += df.iloc[idx].quantity
+                elif df.iloc[idx].item_sku[:5] == 'CC-PR':
+                    jet_totals_cust['Pro Jet'] += df.iloc[idx].quantity
+                elif df.iloc[idx].item_sku[:5] == 'CC-MJ':
+                    jet_totals_cust['Micro Jet MKII'] += df.iloc[idx].quantity
+                elif df.iloc[idx].item_sku[:6] == 'CC-CC2':
+                    jet_totals_cust['Cryo Clamp'] += df.iloc[idx].quantity
+            elif df.iloc[idx].item_sku[:5] == 'CC-TB' or df.iloc[idx].item_sku[:5] == 'CC-SS' or df.iloc[idx].item_sku[:5] == 'CC-SM':
+                controller_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
+                    df.iloc[idx].sales_order, 
+                    df.iloc[idx].quantity,
+                    df.iloc[idx].item_sku,
+                    df.iloc[idx].line_item))
+                if df.iloc[idx].item_sku[:5] == 'CC-TB':
+                    controller_totals_cust['The Button'] += df.iloc[idx].quantity
+                elif df.iloc[idx].item_sku[:5] == 'CC-SS':
+                    controller_totals_cust['Shostarter'] += df.iloc[idx].quantity
+                elif df.iloc[idx].item_sku[:5] == 'CC-SM':
+                    controller_totals_cust['Shomaster'] += df.iloc[idx].quantity
+            elif df.iloc[idx].item_sku[:5] == 'Magic' or df.iloc[idx].item_sku[:4] == 'MFX-':
+                magic_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
+                    df.iloc[idx].sales_order, 
+                    df.iloc[idx].quantity,
+                    df.iloc[idx].item_sku,
+                    df.iloc[idx].line_item))
+            elif df.iloc[idx].item_sku[:5] == 'CC-CH':
+                hose_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
+                    df.iloc[idx].sales_order, 
+                    df.iloc[idx].quantity,
+                    df.iloc[idx].item_sku,
+                    df.iloc[idx].line_item))
+            elif df.iloc[idx].item_sku[:5] == 'CC-F-' or df.iloc[idx].item_sku[:5] == 'CC-AC' or df.iloc[idx].item_sku[:5] == 'CC-CT' or df.iloc[idx].item_sku[:5] == 'CC-WA':
+                fittings_accessories_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
+                    df.iloc[idx].sales_order, 
+                    df.iloc[idx].quantity,
+                    df.iloc[idx].item_sku,
+                    df.iloc[idx].line_item))
+                if df.iloc[idx].item_sku[:9] == 'CC-AC-LA2':
+                    cust_LED_cnt += df.iloc[idx].quantity                    
+            elif df.iloc[idx].item_sku[:6] == 'CC-HCC' or df.iloc[idx].item_sku[:6] == 'Handhe':
+                handheld_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
+                    df.iloc[idx].sales_order, 
+                    df.iloc[idx].quantity,
+                    df.iloc[idx].item_sku,
+                    df.iloc[idx].line_item))
+                cust_handheld_cnt += df.iloc[idx].quantity
+            elif df.iloc[idx].item_sku[:5] == 'Shipp' or df.iloc[idx].item_sku[:5] == 'Overn' or df.iloc[idx].item_sku[:5] == 'CC-NP':
+                pass
+            else:
+                misc_list.append('|    {}    |     ( {}x )     {}  --  {}'.format(
+                    df.iloc[idx].sales_order, 
+                    df.iloc[idx].quantity,
+                    df.iloc[idx].item_sku,
+                    df.iloc[idx].line_item))
+                if df.iloc[idx].item_sku == 'CC-RC-2430':
+                    cust_RC_cnt += df.iloc[idx].quantity
+
+            if df.iloc[idx].sales_order in sales_order_list:
+                pass
+            else:
+                sales_order_list.append(df.iloc[idx].sales_order)
+        idx += 1
+        
+    #st.write(sales_order_list)
+    st.header('')
+    st.subheader('')
+    st.subheader('')
+    col3, col4, col5 = st.columns(3)
+    
+    ### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS ###
+    with col3:
+        if spend_total_2023 + spend_total_2024 > 0:
+            ui.metric_card(title='2023 Spending', content='${:,.2f}'.format(spend_total_2023), description=None)
+            #st.subheader('2023 Spending:')
+            #st.write('${:,.2f}'.format(spend_total_2023))
+    with col4:
+        if spend_total_2023 + spend_total_2024 > 0:
+            perc_change = percent_of_change(spend_total_2023, spend_total_2024)
+            ui.metric_card(title='2024 Spending', content='${:,.2f}'.format(spend_total_2024), description=perc_change)
+            #st.subheader('2024 Spending:')
+            #st.write('${:,.2f}'.format(spend_total_2024))
+    with col5:
+        if spend_total_2023 + spend_total_2024 > 0:
+            total_spending = spend_total_2023 + spend_total_2024
+            ui.metric_card(title='Total Spending', content='${:,.2f}'.format(total_spending), description=None)
+            #st.subheader('Total Spending:')
+            #total_spending = spend_total_2023 + spend_total_2024
+            #st.write('${:,.2f}'.format(total_spending))
+    
+    ### DISPLAY PRODUCT PURCHASE SUMMARIES FOR SELECTED CUSTOMER ###
+    if len(text_input) > 1:
+        st.subheader('Product Totals:')
+        col6, col7, col8 = st.columns(3)
+        with col6:
+            for jet, totl in jet_totals_cust.items():
+                if totl > 0:
+                    st.markdown(' - **{}: {}**'.format(jet, totl))
+        with col7:
+            for controller, totl in controller_totals_cust.items():
+                if totl > 0:
+                    #st.write(controller + ': ' + str(totl))
+                    st.markdown(' - **{}: {}**'.format(controller, totl))
+            if cust_handheld_cnt > 0:
+                #st.write('Handhelds: ' + str(cust_handheld_cnt))
+                st.markdown(' - **Handhelds: {}**'.format(cust_handheld_cnt))
+        with col8:
+            if cust_LED_cnt > 0:
+                #st.write('LED Attachment II: ' + str(cust_LED_cnt))
+                st.markdown(' - **LED Attachment II: {}**'.format(cust_LED_cnt))
+            if cust_RC_cnt > 0:
+                #st.write('Road Cases: ' + str(cust_RC_cnt))
+                st.markdown(' - **Road Cases: {}**'.format(cust_RC_cnt))
+    
+    ### DISPLAY CATEGORIES OF PRODUCTS PURCHASED BY SELECTED CUSTOMER ###
+    if len(jet_list) >= 1:
+        st.subheader('Stationary Jets:')
+        for item in jet_list:
+            st.markdown(item)
+    if len(controller_list) >= 1:
+        st.subheader('Controllers:')
+        for item in controller_list:
+            st.markdown(item)
+    if len(handheld_list) >= 1:
+        st.subheader('Handhelds:')
+        for item in handheld_list:
+            st.markdown(item)
+    if len(hose_list) >= 1:
+        st.subheader('Hoses:')
+        for item in hose_list:
+            st.markdown(item)
+    if len(fittings_accessories_list) >= 1:
+        st.subheader('Fittings & Accessories:')
+        for item in fittings_accessories_list:
+            st.markdown(item)
+    if len(misc_list) >= 1:
+        st.subheader('Misc:')
+        for item in misc_list:
+            st.markdown(item)
+    if len(magic_list):
+        st.subheader('Magic FX:')
+        for item in magic_list:
+            st.markdown(item)
+
+
+
     st.divider()
     
     ### CREATE LISTS OF CATEGORIES FROM DATAFRAME ###
@@ -1372,7 +1400,7 @@ elif task_choice == 'Customer Details':
     months = ['All', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     months_x = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     years = ['2022', '2023', '2024']
-    
+        
     
     
 
@@ -1867,15 +1895,14 @@ def sort_top_20(dict, number):
     for key, value in dict.items():
         if value >= 2500:
             leaderboard_list.append((key, value))
-    
 
     sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
 
     return sorted_leaderboard[:number]
 
 
-if task_choice == 'Leaderboards':
-    st.header('Leaderboards')
+if task_choice == 'Customer Leaderboards':
+    st.header('Customer Leaderboards')
     
     spend_year = st.selectbox('Choose Year', 
                              ['2023', '2024'])
@@ -1921,6 +1948,15 @@ if task_choice == 'Leaderboards':
     
     
   
+
+
+
+
+
+
+
+
+
 
 
 
