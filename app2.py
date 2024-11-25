@@ -675,12 +675,13 @@ df_shipstat_23.rename(columns={
                           #options=[' - Choose an Option - ', 'Customer Details', 'Customer Spending Leaders', 'Product Sales', 'Monthly Sales', 'Customer Quote Reports', 'Shipping Reports'])
 task_select = ''
 with st.sidebar:
-	customer_details = st.button('Customer Details')
-	customer_spending_leaders = st.button('Customer Leaderboards')
-	customer_quote_reports = st.button('Customer Quote Reports')
-	product_sales_reports = st.button('Product Sales Reports')
-	sales_summary = st.button('Sales Summary')
-	shipping_reports = st.button('Shipping Reports')
+	task_choice = st.radio('**Select Task**', options=['Customer Details', 'Product Sales Reports', 'Sales Summary', 'Shipping Reports', 'Quote Reports', 'Leaderboards'])
+	#customer_details = st.button('Customer Details')
+	#customer_spending_leaders = st.button('Customer Leaderboards')
+	#customer_quote_reports = st.button('Customer Quote Reports')
+	#product_sales_reports = st.button('Product Sales Reports')
+	#sales_summary = st.button('Sales Summary')
+	#shipping_reports = st.button('Shipping Reports')
 
 #st.divider()
 
@@ -689,9 +690,9 @@ with st.sidebar:
 
 ### REVISED MONTHLY SALES REPORTING ###
 
-if sales_summary == True:
+if task_choice == 'Sales Summary':
 
-    st.header('Monthly Sales')
+    st.header('Sales Summary')
 
 
 ### DEFINE FUNCTION TO GATHER MONTHLY SALES INTO DICTIONARY FROM DATAFRAME ###    
@@ -849,7 +850,7 @@ if sales_summary == True:
         
 ### SHIPPING REPORTS ###  
     
-if shipping_reports == True:
+if task_choice == 'Shipping Reports':
 
 
     def get_month_ship_payments(df, month):
@@ -1024,7 +1025,7 @@ if shipping_reports == True:
     #st.write(df_ac24_rev['January'].iloc[26])
 
 
-if customer_quote_reports == True:
+if task_choice == 'Quote Reports':
 
     st.header('Quote Reports')
     
@@ -1098,7 +1099,7 @@ if customer_quote_reports == True:
             st.write(quote)
 
 
-elif customer_details == True:
+elif task_choice == 'Customer Details':
     
     with st.container():
         st.header('Customer Details')
@@ -1353,7 +1354,7 @@ elif customer_details == True:
 ######################################################################### PRODUCT SALES DATABASE ###########################################################################
 
 
-elif product_sales_reports == True:
+elif task_choice == 'Product Sales Reports':
     st.header('Product Sales')
     
     
@@ -1847,8 +1848,8 @@ def sort_top_20(dict, number):
     return sorted_leaderboard[:number]
 
 
-if customer_spending_leaders == True:
-    st.header('Customer Leaderboards')
+if task_choice == 'Leaderboards':
+    st.header('Leaderboards')
     
     spend_year = st.selectbox('Choose Year', 
                              ['2023', '2024'])
