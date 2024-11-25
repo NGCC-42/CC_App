@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 #from operator import itemgetter
 from datetime import datetime
 import openpyxl
+import streamlit_shadcn_ui as ui
 
 ### SET WEB APP CONFIGURATIONS
 st.set_page_config(page_title='Club Cannon Database', 
