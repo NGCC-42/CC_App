@@ -14,7 +14,8 @@ import openpyxl
 ### SET WEB APP CONFIGURATIONS
 st.set_page_config(page_title='Club Cannon Database', 
 		   page_icon='club-cannon-icon-black.png',
-                   layout='centered')
+                   layout='centered',
+		   initial_sidebar_state='auto')
 
 ### SET HEADER IMAGE
 #image = 'club-cannon-logo-bbb.png'
@@ -670,17 +671,25 @@ df_shipstat_23.rename(columns={
                     inplace=True)  
 
 
-task_select = st.selectbox('Choose Widget Task', 
-                          options=[' - Choose an Option - ', 'Customer Details', 'Customer Spending Leaders', 'Product Sales', 'Monthly Sales', 'Customer Quote Reports', 'Shipping Reports'])
+#task_select = st.selectbox('Choose Widget Task', 
+                          #options=[' - Choose an Option - ', 'Customer Details', 'Customer Spending Leaders', 'Product Sales', 'Monthly Sales', 'Customer Quote Reports', 'Shipping Reports'])
+task_select = ''
+with st.sidebar:
+	customer_details = st.button('Customer Details')
+	customer_spending_leaders = st.button('Customer Leaderboards')
+	customer_quote_reports = st.button('Customer Quote Reports')
+	product_sales_reports = st.button('Product Sales Reports')
+	sales_summary = st.button('Sales Summary')
+	shipping_reports = st.button('Shipping Reports')
 
-st.divider()
+#st.divider()
 
 
 
 
 ### REVISED MONTHLY SALES REPORTING ###
 
-if task_select == 'Monthly Sales':
+if sales_summary == True:
 
     st.header('Monthly Sales')
 
@@ -840,7 +849,7 @@ if task_select == 'Monthly Sales':
         
 ### SHIPPING REPORTS ###  
     
-if task_select == 'Shipping Reports':
+if shipping_reports == True:
 
 
     def get_month_ship_payments(df, month):
@@ -1015,7 +1024,7 @@ if task_select == 'Shipping Reports':
     #st.write(df_ac24_rev['January'].iloc[26])
 
 
-if task_select == 'Customer Quote Reports':
+if customer_quote_reports == True:
 
     st.header('Quote Reports')
     
@@ -1089,7 +1098,7 @@ if task_select == 'Customer Quote Reports':
             st.write(quote)
 
 
-elif task_select == 'Customer Details':
+elif customer_details == True:
     
     with st.container():
         st.header('Customer Details')
@@ -1344,7 +1353,7 @@ elif task_select == 'Customer Details':
 ######################################################################### PRODUCT SALES DATABASE ###########################################################################
 
 
-elif task_select == 'Product Sales':
+elif product_sales_reports == True:
     st.header('Product Sales')
     
     
@@ -1838,8 +1847,8 @@ def sort_top_20(dict, number):
     return sorted_leaderboard[:number]
 
 
-if task_select == 'Customer Spending Leaders':
-    st.header('Customer Spending Leaderboards')
+if customer_spending_leaders == True:
+    st.header('Customer Leaderboards')
     
     spend_year = st.selectbox('Choose Year', 
                              ['2023', '2024'])
