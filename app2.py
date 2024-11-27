@@ -213,7 +213,7 @@ years = ['2022', '2023', '2024']
     
     
 ### DEFINE FUNCTION TO RENAME COLUMNS FOR CHART AXIS SORTING ###
-
+@st.cache_data
 def ordered_months(df):
     
     idx = 1
@@ -306,7 +306,7 @@ def revenue_calculator(prod_df):
 
 
 ### DEFINE FUNCTION TO FIND PRODUCT REVENUE PERCENTAGE OF TOTAL TYPE FROM DICTIONARY ###
-
+@st.cache_data
 def product_revenue_share(dict, total):
 
     percentage_dict = {}
@@ -341,7 +341,7 @@ def dataframe_from_dict(dict):
     return df
 
 ### DEFINE A FUNCTION TO COMBINE MULTIPLE YEARS OF PRODUCT REVENUE DATA ###
-
+@st.cache_data
 def multiyear_product_revenue(list_of_dfs):
 
     product_revenue_totals = {}
@@ -388,7 +388,7 @@ def sort_by_match(lst, target_string):
 
     return sorted(lst, key=lambda x: difflib.SequenceMatcher(None, x.lower(), target_string.lower()).ratio(), reverse=True)
 
-
+@st.cache_data
 def get_sales_orders(customer, dataFrame):
 
     temp_list = []
@@ -404,7 +404,7 @@ def get_sales_orders(customer, dataFrame):
     return temp_dict
 
 ### DEFINE A FUNCTION TO CALCULATE AND DISPLAY CHANGE IN CUSTOMER SPENDING ###
-
+@st.cache_data
 def percent_of_change(num1, num2):
     
     delta = num2 - num1
@@ -701,7 +701,7 @@ bom_cost_acc = {'CC-AC-CCL': 29.17, 'CC-AC-CTS': 6.70, 'CC-F-DCHA': 7.15, 'CC-F-
                 'CC-RC-2430': 847, 'CC-AC-LA2': 248.10}
 
 ### DEFINE A FUNCTION TO CALCULATE TOTAL ITEM SALES ANNUALLY ###
-
+@st.cache_data
 def product_totals(dict, product, months=['All']):
 
     total = 0
@@ -728,6 +728,7 @@ def display_category_totals(dict):
     return None
 
 ### DEFINE FUNCTION TO GATHER MONTHLY SALES INTO DICTIONARY FROM DATAFRAME ###    
+@st.cache_data
 def get_monthly_sales(df, year):
 
 	sales_dict = {'January': [0, 0], 'February': [0, 0], 'March': [0, 0], 'April': [0, 0], 'May': [0, 0], 'June': [0, 0], 'July': [0, 0], 'August': [0, 0], 'September': [0, 0], 'October': [0, 0], 'November': [0, 0], 'December': [0, 0]}
@@ -779,6 +780,7 @@ def get_monthly_sales_v2(df, year):
         idx += 1
     
     return sales_dict
+	
 @st.cache_data
 def calc_monthly_totals_v2(sales_dict, months=['All']):
 
