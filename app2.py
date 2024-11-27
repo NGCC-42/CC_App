@@ -2058,10 +2058,10 @@ elif task_choice == 'Leaderboards':
 			if value >= 2500:
 				leaderboard_list.append((key, value))
 	
-	    sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
-	
-	    return sorted_leaderboard[:number]
-	
+		sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
+		
+		return sorted_leaderboard[:number]
+		
 
 	st.header('Customer Leaderboards')
 	
