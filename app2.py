@@ -2044,10 +2044,11 @@ elif task_choice == 'Product Sales Reports':
 
     
 
-######################################################### CUSTOMER SPEND RANKINGS #######################################################################
+	
 
-### DEFINE A FUNCTION TO MAKE A LIST OF TUPLES OF A CUSTOMER AND THEIR SPENDING, LIMIT TO TOP 20 ###
-def sort_top_20(dict, number):
+elif task_choice == 'Leaderboards':
+	
+	def sort_top_20(dict, number):
 
 	leaderboard_list = []
     
@@ -2058,9 +2059,6 @@ def sort_top_20(dict, number):
 	sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
 	
 	return sorted_leaderboard[:number]
-	
-
-elif task_choice == 'Leaderboards':    
 	
 		
 	st.header('Customer Leaderboards')
