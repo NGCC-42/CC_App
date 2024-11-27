@@ -2102,7 +2102,7 @@ elif task_choice == 'Leaderboards':
 		for leader in result:
 			st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
 		
-		    rank += 1
+			rank += 1
 	    
 	    
     
