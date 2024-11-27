@@ -2075,37 +2075,37 @@ elif task_choice == 'Leaderboards':
 	
 	
 	for cust in unique_customer_list:
-	cust_spend_dict_2023[cust] = 0
-	cust_spend_dict_2024[cust] = 0
+		cust_spend_dict_2023[cust] = 0
+		cust_spend_dict_2024[cust] = 0
 	
 	idx = 0
 	
 	for customer in df.customer:
 	
-	if df.iloc[idx].ordered_year == '2023':
-	    cust_spend_dict_2023[customer] += float(df.iloc[idx].total_line_item_spend)
-	elif df.iloc[idx].ordered_year == '2024':
-	    cust_spend_dict_2024[customer] += float(df.iloc[idx].total_line_item_spend)
-	idx += 1
+		if df.iloc[idx].ordered_year == '2023':
+			cust_spend_dict_2023[customer] += float(df.iloc[idx].total_line_item_spend)
+		elif df.iloc[idx].ordered_year == '2024':
+			cust_spend_dict_2024[customer] += float(df.iloc[idx].total_line_item_spend)
+		idx += 1
 	
 	rank = 1
 	if spend_year == '2023':
 	
-	result = sort_top_20(cust_spend_dict_2023, ranking_number)
-	for leader in result:
-	    st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
-	    
-	    rank += 1
-	    
+		result = sort_top_20(cust_spend_dict_2023, ranking_number)
+		for leader in result:
+			st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
+		    
+		    	rank += 1
+		    
 	elif spend_year == '2024':
 	
-	result = sort_top_20(cust_spend_dict_2024, ranking_number)
-	for leader in result:
-	    st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
-	
-	    rank += 1
-    
-    
+		result = sort_top_20(cust_spend_dict_2024, ranking_number)
+		for leader in result:
+		    st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
+		
+		    rank += 1
+	    
+	    
     
   
 
