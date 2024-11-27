@@ -1156,7 +1156,7 @@ if task_choice == 'Dashboard':
         focus = st.selectbox('', options=months, key='Focus24')
 
         if focus == 'Overview':
-            display_month_data_x(sales_dict_24, sales_dict_23)
+            display_month_data_x(sales_dict_24)
         elif focus == 'January':
             display_metrics(sales_dict_24, sales_dict_23, 'January')
         elif focus == 'February':
