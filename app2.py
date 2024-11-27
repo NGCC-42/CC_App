@@ -1241,7 +1241,7 @@ if task_choice == 'Dashboard':
         
 ### SHIPPING REPORTS ###  
     
-if task_choice == 'Shipping Reports':
+elif task_choice == 'Shipping Reports':
 
 	
     def get_month_ship_payments(df, month):
@@ -1414,8 +1414,8 @@ if task_choice == 'Shipping Reports':
     #st.write(df_ac24_rev)
     #st.write(df_ac24_rev['January'].iloc[26])
 
-
-if task_choice == 'Customer Quote Reports':
+### QUOTE REPORTS ###
+elif task_choice == 'Customer Quote Reports':
 
     st.header('Quote Reports')
     
@@ -2042,254 +2042,70 @@ elif task_choice == 'Product Sales Reports':
     
     st.divider()
 
-
-###################################################################### MONTHLY SALES REPORTS ##############################################################################
-
-elif task_select == 'Monthly Sales - V1':
-    st.header('Monthly Sales')    
-    mbd_display_sales = st.checkbox('Display Sales by Month')
-    comp_display = st.checkbox('Show Comparison Column')
-            
-    ### REPLACE NULL VALUES WITH ZERO ###
-        
-    df_csv = df_csv.fillna(0)
-    #st.write(df_csv)
-    
-    ### DEFINE A FUNCTION TO FORMAT MONTHLY SALES FOR CHART PLOTTING ###
-    def format_for_chart_ms(dict):
-        
-        temp_dict = {'Months': months_x,
-                    'Total Sales': []}
-        
-        for month, sales in dict.items():
-            if len(temp_dict['Total Sales']) >= 12:
-                pass
-            else:
-                temp_dict['Total Sales'].append(sales)
-        df = pd.DataFrame(temp_dict)
-        
-        return df
-    
-    #st.write(format_for_chart(df_cntl23_unt.iloc[0]))
-    
-    
-    ### SCRIPT TO PLOT BAR GRAPH FOR MONTHLY SALES ###
-    
-    def plot_bar_chart_ms(df):
-        st.write(alt.Chart(df).mark_bar().encode(
-            x=alt.X('Months', sort=None).title('Month'),
-            y='Total Sales',
-        ).properties(height=500, width=750).configure_mark(
-            color='limegreen'
-        ))
-    
-    def plot_bar_chart_ms_comp(df):
-        st.write(alt.Chart(df).mark_bar().encode(
-            x=alt.X('Months', sort=None).title('Month'),
-            y='Total Sales',
-        ).properties(height=500, width=350).configure_mark(
-            color='limegreen'
-        ))
-    
-    
-    col1, col2 = st.columns(2)
-    
-    ### CREATE YEAR SELECTION ###
-    with col1:
-        year_select = st.selectbox('Select Year:',
-                         placeholder='Select Year',
-                         options=['2023', '2024'])
-    
-    ### CREATE MONTHLY MULTISELECT ###
-    
-        month_range_sales = st.multiselect('Month Select:',
-                                   placeholder='Select Months',
-                                   options=months)
-    
-        #mbd_display_sales = st.checkbox('Display Sales by Month')
-        
-            
-    ### CREATE LIST OF SELECTIONS ###
-    
-        df_csv_ts = df_csv.drop([1, 2, 4, 5, 7, 8])
-        df_csv_ts = df_csv_ts.rename(index={0: '2022', 3: '2023', 6: '2024'})
-        #st.write(df_csv_ts)
-        #st.write(df_csv_ts['January'].iloc[2])
-    
-        idx_select = 0
-        if year_select == '2023':
-            idx_select += 1
-        elif year_select == '2024':
-            idx_select += 2
-            
-        s_tot = 0
-    
-        if month_range_sales == ['All']:
-            month_range_sales = months_x
-        avg_sales_per_month = {}
-        for month in month_range_sales:
-            try:
-                avg_sales_per_month[month] = float(df_csv_ts[month].iloc[idx_select].strip('$'))
-                #st.write(float(df_csv_ts[month].iloc[idx_select].strip('$')))
-            except:
-                avg_sales_per_month[month] = 0.0
-            if df_csv_ts.at[year_select, month] == 0:
-                pass
-            else:
-                if mbd_display_sales == True:
-                    web_sales, web_percent, fulcrum_sales, fulcrum_percent = sales_channel(year_select, [month])
-                    st.write(month + ': ' + '$' + '{:,.2f} - ({:.2f}% vs {:.2f}%)'.format(float(df_csv_ts.at[year_select, month].strip('$')), web_percent, fulcrum_percent))
-                    
-                s_tot += float(df_csv_ts.at[year_select, month].strip('$'))
-        if len(month_range_sales) >= 1:
-            s_tot_st = '{:,.2f}'.format(s_tot)
-
-            
-            if len(month_range_sales) > 1:
-                web_sales, web_percent, fulcrum_sales, fulcrum_percent = sales_channel(year_select, month_range_sales)
-                st.write('( - {:.2f}% Woocommerce vs {:.2f}% Fulcrum - )'.format(web_percent, fulcrum_percent))
-                st.write('( - Average per month: ' + '$' + '{:,.2f}'.format(avg_month(avg_sales_per_month)) + ' - )')
-            st.subheader('$' + s_tot_st)
-            
-            
-            if month_range_sales == months_x:
-                sales_per_month = format_for_chart_ms(avg_sales_per_month)
-                if comp_display == False:
-                    plot_bar_chart_ms(sales_per_month)
-                else:
-                    plot_bar_chart_ms_comp(sales_per_month)
-    
-        #s_tot_st = '{:,.2f}'.format(s_tot)
-        
-        #st.subheader('$' + s_tot_st)
-        
-    if comp_display == True:
-        with col2:
-        ### DUPLICATE SALES REPORTER FOR COMPARISON ###
-        
-            year_select_x = st.selectbox('Select Years:',
-                             placeholder='Select Year',
-                             options=years)
-        
-        ### CREATE MONTHLY MULTISELECT
-        
-            month_range_sales_x = st.multiselect('Month Selection:',
-                                       placeholder='Select Months',
-                                       options=months)
-        
-            #mbd_display_sales_x = st.checkbox('Display Sales by Months')
-            
-                
-        ### CREATE LIST OF SELECTIONS ###
-        
-            df_csv_ts = df_csv.drop([1, 2, 4, 5, 7, 8])
-            df_csv_ts = df_csv_ts.rename(index={0: '2022', 3: '2023', 6: '2024'})
-        
-            idx_select = 0
-            if year_select_x == '2023':
-                idx_select += 1
-            elif year_select_x == '2024':
-                idx_select += 2
-                
-            s_tot = 0
-        
-            if month_range_sales_x == ['All']:
-                month_range_sales_x = months_x
-            avg_sales_per_month = {}
-            for month in month_range_sales_x:
-                try:
-                    avg_sales_per_month[month] = float(df_csv_ts[month].iloc[idx_select].strip('$'))
-                    #st.write(float(df_csv_ts[month].iloc[idx_select].strip('$')))
-                except:
-                    avg_sales_per_month[month] = 0.0
-    
-                if df_csv_ts.at[year_select_x, month] == 0:
-                    pass
-                else:
-                    if mbd_display_sales == True:
-                        web_sales, web_percent, fulcrum_sales, fulcrum_percent = sales_channel(year_select_x, [month])
-                        st.write(month + ': ' + '$' + '{:,.2f} - ({:.2f}% vs {:.2f}%)'.format(float(df_csv_ts.at[year_select_x, month].strip('$')), web_percent, fulcrum_percent))
-                    s_tot += float(df_csv_ts.at[year_select_x, month].strip('$'))
-            
-            if len(month_range_sales_x) >= 1:
-                
-                s_tot_st = '{:,.2f}'.format(s_tot)
-                
-                if len(month_range_sales_x) > 1:
-                    web_sales, web_percent, fulcrum_sales, fulcrum_percent = sales_channel(year_select_x, month_range_sales_x)
-                    st.write('( - {:.2f}% Woocommerce vs {:.2f}% Fulcrum - )'.format(web_percent, fulcrum_percent))
-                    st.write('( - Average per month: ' + '$' + '{:,.2f}'.format(avg_month(avg_sales_per_month)) + ' - )')
-                st.subheader('$' + s_tot_st)
-                if month_range_sales_x == months_x:
-                    sales_per_month = format_for_chart_ms(avg_sales_per_month)
-                    plot_bar_chart_ms_comp(sales_per_month)
-                    
-        
-
     
 
 ######################################################### CUSTOMER SPEND RANKINGS #######################################################################
 
 ### DEFINE A FUNCTION TO MAKE A LIST OF TUPLES OF A CUSTOMER AND THEIR SPENDING, LIMIT TO TOP 20 ###
 
-    
-def sort_top_20(dict, number):
-
-    leaderboard_list = []
-    
-    for key, value in dict.items():
-        if value >= 2500:
-            leaderboard_list.append((key, value))
-
-    sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
-
-    return sorted_leaderboard[:number]
-
-
-if task_choice == 'Customer Leaderboards':
-    st.header('Customer Leaderboards')
-    
-    spend_year = st.selectbox('Choose Year', 
-                             ['2023', '2024'])
-    
-    ranking_number = st.selectbox('Choose Leaderboard Length',
-                                 [5, 10, 15, 20, 25, 50])
-    
-    cust_spend_dict_2023 = {}
-    cust_spend_dict_2024 = {}
-    
-    
-    for cust in unique_customer_list:
-        cust_spend_dict_2023[cust] = 0
-        cust_spend_dict_2024[cust] = 0
-        
-    idx = 0
-    
-    for customer in df.customer:
-
-        if df.iloc[idx].ordered_year == '2023':
-            cust_spend_dict_2023[customer] += float(df.iloc[idx].total_line_item_spend)
-        elif df.iloc[idx].ordered_year == '2024':
-            cust_spend_dict_2024[customer] += float(df.iloc[idx].total_line_item_spend)
-        idx += 1
-        
-    rank = 1
-    if spend_year == '2023':
-
-        result = sort_top_20(cust_spend_dict_2023, ranking_number)
-        for leader in result:
-            st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
-            
-            rank += 1
-            
-    elif spend_year == '2024':
-        
-        result = sort_top_20(cust_spend_dict_2024, ranking_number)
-        for leader in result:
-            st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
-        
-            rank += 1
-    
+elif task_choice == 'Leaderboards':    
+	def sort_top_20(dict, number):
+	
+	    leaderboard_list = []
+	    
+	    for key, value in dict.items():
+	        if value >= 2500:
+	            leaderboard_list.append((key, value))
+	
+	    sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
+	
+	    return sorted_leaderboard[:number]
+	
+	
+	if task_choice == 'Customer Leaderboards':
+	    st.header('Customer Leaderboards')
+	    
+	    spend_year = st.selectbox('Choose Year', 
+	                             ['2023', '2024'])
+	    
+	    ranking_number = st.selectbox('Choose Leaderboard Length',
+	                                 [5, 10, 15, 20, 25, 50])
+	    
+	    cust_spend_dict_2023 = {}
+	    cust_spend_dict_2024 = {}
+	    
+	    
+	    for cust in unique_customer_list:
+	        cust_spend_dict_2023[cust] = 0
+	        cust_spend_dict_2024[cust] = 0
+	        
+	    idx = 0
+	    
+	    for customer in df.customer:
+	
+	        if df.iloc[idx].ordered_year == '2023':
+	            cust_spend_dict_2023[customer] += float(df.iloc[idx].total_line_item_spend)
+	        elif df.iloc[idx].ordered_year == '2024':
+	            cust_spend_dict_2024[customer] += float(df.iloc[idx].total_line_item_spend)
+	        idx += 1
+	        
+	    rank = 1
+	    if spend_year == '2023':
+	
+	        result = sort_top_20(cust_spend_dict_2023, ranking_number)
+	        for leader in result:
+	            st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
+	            
+	            rank += 1
+	            
+	    elif spend_year == '2024':
+	        
+	        result = sort_top_20(cust_spend_dict_2024, ranking_number)
+	        for leader in result:
+	            st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
+	        
+	            rank += 1
+	    
     
     
   
