@@ -1010,18 +1010,18 @@ def display_month_data_x(sales_dict1, sales_dict2=None):
                 
             if idx < 3:
                 with dBoard1[idx]:
-                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='{} ${:,.2f} vs. prior year'.format(var, abs(int(diff))))
+                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
             elif idx >=3 and idx < 6:
                 with dBoard2[idx1]:
-                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='{} ${:,.2f} vs. prior year'.format(var, abs(int(diff))))
+                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
                     idx1 += 1
             elif idx >= 6 and idx < 9:
                 with dBoard3[idx2]:
-                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='{} ${:,.2f} vs. prior year'.format(var, abs(int(diff))))
+                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
                     idx2 += 1
             else:
                 with dBoard4[idx3]:
-                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='{} ${:,.2f} vs. prior year'.format(var, abs(int(diff))))
+                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
                     idx3 += 1
     
             idx += 1
