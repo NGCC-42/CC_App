@@ -2101,7 +2101,7 @@ elif task_choice == 'Leaderboards':
 	
 		result = sort_top_20(cust_spend_dict_2024, ranking_number)
 		for leader in result:
-		    st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
+			st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
 		
 		    rank += 1
 	    
