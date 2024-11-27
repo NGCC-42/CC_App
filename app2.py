@@ -750,6 +750,53 @@ def get_monthly_sales(df, year):
 	
 	return sales_dict
 
+
+### DEFINE FUNCTION TO DISPLAY MONTHLY SALES FOR ALL MONTHS ###
+def display_monthly_sales(sales_dict):
+
+	for month, sales in sales_dict.items():
+		month_sales = sales[0] + sales[1]
+		woo = percent_of_sales(sales[0], sales[1])
+		fulcrum = percent_of_sales(sales[1], sales[0])
+		st.write('**{}: ${:,.2f}**  \n({:.2f}% Web, {:.2f}% Fulcrum)'.format(month, month_sales, woo, fulcrum))
+
+	return None
+	
+### DEFINE FUNTION TO CALCULATE TOTALS AND PERCENT BY CHANNEL ###
+def calc_monthly_totals(sales_dict, months=['All']):
+
+	total_sales = 0
+	total_web = 0
+	total_fulcrum = 0
+	num_months = 0
+	
+	for month, sales in sales_dict.items():
+		if months == ['All']:
+			total_sales += (sales[0] + sales[1])
+			total_web += sales[0]
+			total_fulcrum += sales[1]
+			if sales[0] + sales[1] < 100:
+				pass
+			else:
+				num_months += 1
+			
+		else:
+			for mnth in months:
+				if month == mnth:
+					total_sales += (sales[0] + sales[1])
+					total_web += sales[0]
+					total_fulcrum += sales[1]
+				if sales[0] + sales [1] < 100:
+					pass
+				else:
+					num_months += 1
+						
+	avg_month = total_sales / num_months                
+	total_web_perc = percent_of_sales(total_web, total_fulcrum)
+	total_fulcrum_perc = percent_of_sales(total_fulcrum, total_web)
+	
+	return total_sales, total_web_perc, total_fulcrum_perc, avg_month
+	
 ### FOR DASHBOARD ###  
 @st.cache_data
 def get_monthly_sales_v2(df, year):
@@ -860,6 +907,10 @@ def extract_transaction_data(sales_dict, month='All'):
     total_trans_web = 0
     total_trans_fulcrum = 0
 
+    avg_order = 0
+    avg_order_web = 0
+    avg_order_fulcrum = 0
+
     if month == 'All':
         for mnth, sales in sales_dict.items():
             sales_sum += sales[0][0] + sales[1][0]
@@ -876,9 +927,16 @@ def extract_transaction_data(sales_dict, month='All'):
         total_trans_fulcrum = sales_dict[month][1][1]
         total_trans = total_trans_web + total_trans_fulcrum
 
-    avg_order = sales_sum / total_trans
-    avg_order_web = sales_sum_web / total_trans_web
-    avg_order_fulcrum = sales_sum_fulcrum / total_trans_web
+    if total_trans == 0:
+        avg_order = 0
+    elif total_trans_web == 0:
+        avg_order_web = 0
+    elif total_trans_fulcrum == 0:
+        avg_order_fulcrum = 0
+    else:
+        avg_order = sales_sum / total_trans
+        avg_order_web = sales_sum_web / total_trans_web
+        avg_order_fulcrum = sales_sum_fulcrum / total_trans_fulcrum
 
     return [avg_order_web, avg_order_fulcrum, avg_order, sales_sum_web, sales_sum_fulcrum, sales_sum, total_trans_web, total_trans_fulcrum, total_trans]
             
@@ -916,151 +974,178 @@ def display_month_data_x(sales_dict):
 
     return None
 
+def extract_transaction_data(sales_dict, month='All'):
+
+    sales_sum = 0
+    sales_sum_web = 0
+    sales_sum_fulcrum = 0
+    
+    total_trans = 0
+    total_trans_web = 0
+    total_trans_fulcrum = 0
+
+    avg_order = 0
+    avg_order_web = 0
+    avg_order_fulcrum = 0
+
+    if month == 'All':
+        for mnth, sales in sales_dict.items():
+            sales_sum += sales[0][0] + sales[1][0]
+            sales_sum_web += sales[0][0]
+            sales_sum_fulcrum += sales[1][0]
+            total_trans += sales[0][1] + sales[1][1]
+            total_trans_web += sales[0][1]
+            total_trans_fulcrum += sales[1][1]
+    else:
+        sales_sum_web = sales_dict[month][0][0]
+        sales_sum_fulcrum = sales_dict[month][1][0]
+        sales_sum = sales_sum_fulcrum + sales_sum_web
+        total_trans_web = sales_dict[month][0][1]
+        total_trans_fulcrum = sales_dict[month][1][1]
+        total_trans = total_trans_web + total_trans_fulcrum
+
+    if total_trans == 0:
+        avg_order = 0
+    elif total_trans_web == 0:
+        avg_order_web = 0
+    elif total_trans_fulcrum == 0:
+        avg_order_fulcrum = 0
+    else:
+        avg_order = sales_sum / total_trans
+        avg_order_web = sales_sum_web / total_trans_web
+        avg_order_fulcrum = sales_sum_fulcrum / total_trans_fulcrum
+
+    return [avg_order_web, avg_order_fulcrum, avg_order, sales_sum_web, sales_sum_fulcrum, sales_sum, total_trans_web, total_trans_fulcrum, total_trans]
+
 if task_choice == 'Dashboard':
 
-		
 
     ### COMPILE DATA FOR SALES REPORTS ###
     total_22 = 1483458.64
     avg_22 = 147581.12
     trans_22 = 1266
     trans_avg_22 = 126.6
+    sales_dict_22 = {'January': [[0, 1], [0, 1]], 
+                     'February': [[0, 1], [7647.42, 25]], 
+                     'March': [[48547.29, 80], [48457.28, 30]], 
+                     'April': [[69081.04, 86], [69081.05, 30]], 
+                     'May': [[64976.18, 72], [64976.18, 40]], 
+                     'June': [[88817.15, 90], [88817.15, 51]], 
+                     'July': [[104508.24, 86], [104508.24, 30]], 
+                     'August': [[74166.78, 94], [74166.78, 50]], 
+                     'September': [[68018.74, 99], [68018.74, 50]], 
+                     'October': [[86874.13, 126], [86874.13, 40]], 
+                     'November': [[57760.81, 77], [57760.82, 30]], 
+                     'December': [[75155.19, 64], [75155.20, 30]]}
     
     sales_dict_23 = get_monthly_sales_v2(df, 2023)
-    transaction_data_23 = extract_transaction_data(sales_dict_23)
+    #transaction_data_23 = extract_transaction_data(sales_dict_23)
     total_23, web_23, ful_23, avg_23 = calc_monthly_totals_v2(sales_dict_23)
     
     sales_dict_24 = get_monthly_sales_v2(df, 2024)
-    transaction_data_24 = extract_transaction_data(sales_dict_24)
+    #transaction_data_24 = extract_transaction_data(sales_dict_24)
     total_24, web_24, ful_24, avg_24 = calc_monthly_totals_v2(sales_dict_24)
 
     ### SALES CHANNEL BREAKDOWN ###
     web_avg_perc = (web_23 + web_24)/2
     ful_avg_perc = (ful_23 + ful_24)/2
 
-    ### ANNUAL COMPARISONS ###
-    diff_24v23 = total_24 - total_23
-    var_24v23 = percent_of_change(total_23, total_24)
+    year_select = ui.tabs(options=[2024, 2023, 2022], default_value=2024, key='Year')
 
-    diff_23v22 = total_23 - total_22
-    var_23v22 = percent_of_change(total_22, total_23)
-    avg_per_month_var_23v22 = percent_of_change(avg_22, avg_23)
-
-    avg_order_total_var_24v23 = percent_of_change(transaction_data_23[2], transaction_data_24[2])
-    avg_per_month_var_24v23 = percent_of_change(avg_23, avg_24)
-
-    transaction_ct_23v22 = percent_of_change(trans_avg_22, transaction_data_23[7])
-    transaction_ct_24v23 = percent_of_change(transaction_data_23[8], transaction_data_24[8])
-    fulcrum_trans_24v23 = percent_of_change(transaction_data_23[7], transaction_data_24[7])
-    web_trans_24v23 = percent_of_change(transaction_data_23[6], transaction_data_24[6])
     
-    web_sales_var_24v23 = percent_of_change(transaction_data_23[3], transaction_data_24[3])
-    web_avg_sale_24v23 = percent_of_change(transaction_data_23[0], transaction_data_24[0])
-    fulcrum_sales_24v23 = percent_of_change(transaction_data_23[4], transaction_data_24[4])
-    fulcrum_avg_sale_24v23 = percent_of_change(transaction_data_23[1], transaction_data_24[1])
-
-    ### LATEST MONTHS DATA FOR DISPLAY ###
-    nov_24_data = extract_transaction_data(sales_dict_24, 'November')
-    var_current_months = None
-
-    year_select = ui.tabs(options=[2024, 2023], default_value=2024)
-
     ### DISPLAY SALES METRICS ###
 
     if year_select == 2024:
 
-        db1, db2, db3 = st.columns(3)
-
-        db1.metric('**Website Sales**', '${:,.2f}'.format(transaction_data_24[3]), web_sales_var_24v23)
-        db1.metric('**Website Transactions**', '{:,}'.format(transaction_data_24[6]), web_trans_24v23)
-        db1.metric('**Website Average Sale**', '${:,.2f}'.format(transaction_data_24[0]), web_avg_sale_24v23)
-
-        db2.metric('**Total Sales**', '${:,.2f}'.format(total_24), var_24v23)
-        db2.metric('**Monthly Average**', '${:,.2f}'.format(avg_24), avg_per_month_var_24v23)
-        db2.metric('**Total Transactions**', '{:,}'.format(transaction_data_24[8]), transaction_ct_24v23)
-        
-        db3.metric('**Fulcrum Sales**', '${:,.2f}'.format(transaction_data_24[4]), fulcrum_sales_24v23)
-        db3.metric('**Fulcrum Transactions**', '{:,}'.format(transaction_data_24[7]), fulcrum_trans_24v23)
-        db3.metric('**Fulcrum Average Sale**', '${:,.2f}'.format(transaction_data_24[1]), fulcrum_avg_sale_24v23)
+        display_metrics(sales_dict_24, sales_dict_23)
         
         st.header('')
         plot_bar_chart_ms(format_for_chart_ms(sales_dict_24))
+        
         st.divider()
-        display_month_data_x(sales_dict_24)
+        months[0] = 'Overview'
+        focus = st.selectbox('', options=months, key='Focus24')
 
-    
+        if focus == 'Overview':
+            display_month_data_x(sales_dict_24, sales_dict_23)
+        elif focus == 'January':
+            display_metrics(sales_dict_24, sales_dict_23, 'January')
+        elif focus == 'February':
+            display_metrics(sales_dict_24, sales_dict_23, 'February')
+        elif focus == 'March':
+            display_metrics(sales_dict_24, sales_dict_23, 'March')
+        elif focus == 'April':
+            display_metrics(sales_dict_24, sales_dict_23, 'April')
+        elif focus == 'May':
+            display_metrics(sales_dict_24, sales_dict_23, 'May')
+        elif focus == 'June':
+            display_metrics(sales_dict_24, sales_dict_23, 'June')
+        elif focus == 'July':
+            display_metrics(sales_dict_24, sales_dict_23, 'July')
+        elif focus == 'August':
+            display_metrics(sales_dict_24, sales_dict_23, 'August')
+        elif focus == 'September':
+            display_metrics(sales_dict_24, sales_dict_23, 'September')
+        elif focus == 'October':
+            display_metrics(sales_dict_24, sales_dict_23, 'October')
+        elif focus == 'November':
+            display_metrics(sales_dict_24, sales_dict_23, 'November')
+        else:
+            display_metrics(sales_dict_24, sales_dict_23, 'December')
 
-    
-    st.divider()
 
         
     if year_select == 2023:
 
-        db1, db2, db3 = st.columns(3)
-        
-        db1.metric('**Website Sales**', '${:,.2f}'.format(transaction_data_23[3]))
-        db1.metric('**Website Transactions**', '{:,.2f}'.format(transaction_data_23[6]))
-        db1.metric('**Website Average Sale**', '${:,.2f}'.format(transaction_data_23[0]))
-
-        db2.metric('**Total Sales**', '${:,.2f}'.format(total_23), var_23v22)
-        db2.metric('**Monthly Average**', '${:,.2f}'.format(avg_23), avg_per_month_var_23v22)
-        db2.metric('**Total Transactions**', '{:,}'.format(transaction_data_23[8]), transaction_ct_23v22)
-        
-        db3.metric('**Fulcrum Sales**', '${:,.2f}'.format(transaction_data_23[4]))
-        db3.metric('**Fulcrum Transactions**', '{:,.2f}'.format(transaction_data_23[7]))
-        db3.metric('**Fulcrum Average Sale**', '${:,.2f}'.format(transaction_data_23[1]))
+        display_metrics(sales_dict_23, sales_dict_22)
 
         st.header('')
         plot_bar_chart_ms(format_for_chart_ms(sales_dict_23))
+        
         st.divider()
-        display_month_data_x(sales_dict_23)
+        months[0] = 'Overview'
+        focus = st.selectbox('', options=months, key='Focus23')
+        
+        st.divider()
 
+        if focus == 'Overview':
+            display_month_data_x(sales_dict_23)
+        elif focus == 'January':
+            display_metrics(sales_dict_23, sales_dict_22, 'January')
+        elif focus == 'February':
+            display_metrics(sales_dict_23, sales_dict_22, 'February')
+        elif focus == 'March':
+            display_metrics(sales_dict_23, sales_dict_22, 'March')
+        elif focus == 'April':
+            display_metrics(sales_dict_23, sales_dict_22, 'April')
+        elif focus == 'May':
+            display_metrics(sales_dict_23, sales_dict_22, 'May')
+        elif focus == 'June':
+            display_metrics(sales_dict_23, sales_dict_22, 'June')
+        elif focus == 'July':
+            display_metrics(sales_dict_23, sales_dict_22, 'July')
+        elif focus == 'August':
+            display_metrics(sales_dict_23, sales_dict_22, 'August')
+        elif focus == 'September':
+            display_metrics(sales_dict_23, sales_dict_22, 'September')
+        elif focus == 'October':
+            display_metrics(sales_dict_23, sales_dict_22, 'October')
+        elif focus == 'November':
+            display_metrics(sales_dict_23, sales_dict_22, 'November')
+        else:
+            display_metrics(sales_dict_23, sales_dict_22, 'December')
+            
 
-### DEFINE FUNCTION TO DISPLAY MONTHLY SALES FOR ALL MONTHS ###
-def display_monthly_sales(sales_dict):
+    if year_select == 2022:
 
-	for month, sales in sales_dict.items():
-		month_sales = sales[0] + sales[1]
-		woo = percent_of_sales(sales[0], sales[1])
-		fulcrum = percent_of_sales(sales[1], sales[0])
-		st.write('**{}: ${:,.2f}**  \n({:.2f}% Web, {:.2f}% Fulcrum)'.format(month, month_sales, woo, fulcrum))
+        display_metrics(sales_dict_22)
 
-	return None
-	
-### DEFINE FUNTION TO CALCULATE TOTALS AND PERCENT BY CHANNEL ###
-def calc_monthly_totals(sales_dict, months=['All']):
+        st.header('')
+        plot_bar_chart_ms(format_for_chart_ms(sales_dict_22))
 
-	total_sales = 0
-	total_web = 0
-	total_fulcrum = 0
-	num_months = 0
-	
-	for month, sales in sales_dict.items():
-		if months == ['All']:
-			total_sales += (sales[0] + sales[1])
-			total_web += sales[0]
-			total_fulcrum += sales[1]
-			if sales[0] + sales[1] < 100:
-				pass
-			else:
-				num_months += 1
-			
-		else:
-			for mnth in months:
-				if month == mnth:
-					total_sales += (sales[0] + sales[1])
-					total_web += sales[0]
-					total_fulcrum += sales[1]
-				if sales[0] + sales [1] < 100:
-					pass
-				else:
-					num_months += 1
-						
-	avg_month = total_sales / num_months                
-	total_web_perc = percent_of_sales(total_web, total_fulcrum)
-	total_fulcrum_perc = percent_of_sales(total_fulcrum, total_web)
-	
-	return total_sales, total_web_perc, total_fulcrum_perc, avg_month
+        st.divider()
+
+        display_month_data_x(sales_dict_22)
 
 
 
