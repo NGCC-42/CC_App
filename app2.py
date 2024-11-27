@@ -326,7 +326,7 @@ def percentage_of_revenue(prod_df):
 
 
 ### DEFINE A FUNCTION TO CREATE A DATAFRAME FROM DICTIONARY OF REVENUE PERCENTAGES ###
-
+@st.cache_data
 def dataframe_from_dict(dict):
 
     dict_of_lists = {'Products': [], 
@@ -749,7 +749,8 @@ def get_monthly_sales(df, year):
 	
 	return sales_dict
 
-### FOR DASHBOARD ###    
+### FOR DASHBOARD ###  
+@st.cache_data
 def get_monthly_sales_v2(df, year):
 
     unique_sales_orders = []
@@ -778,7 +779,7 @@ def get_monthly_sales_v2(df, year):
         idx += 1
     
     return sales_dict
-
+@st.cache_data
 def calc_monthly_totals_v2(sales_dict, months=['All']):
 
     total_sales = 0
