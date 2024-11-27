@@ -1017,6 +1017,95 @@ def extract_transaction_data(sales_dict, month='All'):
 
     return [avg_order_web, avg_order_fulcrum, avg_order, sales_sum_web, sales_sum_fulcrum, sales_sum, total_trans_web, total_trans_fulcrum, total_trans]
 
+
+def display_metrics(sales_dict1, sales_dict2=None, month='All'):
+
+
+    if sales_dict2 == None:
+        
+        data = extract_transaction_data(sales_dict1)
+        total_sales, total_web_perc, total_fulcrum_perc, avg_month = calc_monthly_totals_v2(sales_dict1)
+        
+        db1, db2, db3 = st.columns(3)
+        
+        db1.metric('**Website Sales**', '${:,.2f}'.format(data[3]))
+        db1.metric('**Website Transactions**', '{:,}'.format(data[6]))
+        db1.metric('**Website Average Sale**', '${:,.2f}'.format(data[0]))
+    
+        db2.metric('**Total Sales**', '${:,.2f}'.format(data[5]))
+        db2.metric('**Monthly Average**', '${:,.2f}'.format(avg_month))
+        db2.metric('**Total Transactions**', '{:,}'.format(data[8]))
+        
+        db3.metric('**Fulcrum Sales**', '${:,.2f}'.format(data[4]))
+        db3.metric('**Fulcrum Transactions**', '{:,}'.format(data[7]))
+        db3.metric('**Fulcrum Average Sale**', '${:,.2f}'.format(data[1]))
+        
+    
+    elif month == 'All':
+
+        total_sales1, total_web_perc1, total_fulcrum_perc1, avg_month1 = calc_monthly_totals_v2(sales_dict1)
+        total_sales2, total_web_perc2, total_fulcrum_perc2, avg_month2 = calc_monthly_totals_v2(sales_dict2)
+
+        data1 = extract_transaction_data(sales_dict1)
+        data2 = extract_transaction_data(sales_dict2)
+        web_sales = percent_of_change(data2[3], data1[3])
+        web_trans = percent_of_change(data2[6], data1[6])
+        web_avg_sale = percent_of_change(data2[0], data1[0])
+        var = percent_of_change(data2[5], data1[5])
+        avg_sale = percent_of_change(data2[2], data1[2])
+        transaction_ct = percent_of_change(data2[8], data1[8])
+        fulcrum_sales = percent_of_change(data2[4], data1[4])
+        fulcrum_trans = percent_of_change(data2[7], data1[7])
+        fulcrum_avg_sale = percent_of_change(data2[1], data1[1])
+        avg_per_month = percent_of_change(avg_month2, avg_month1)
+        
+        db1, db2, db3 = st.columns(3)
+    
+        db1.metric('**Website Sales**', '${:,.2f}'.format(data1[3]), web_sales)
+        db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
+        db1.metric('**Website Average Sale**', '${:,.2f}'.format(data1[0]), web_avg_sale)
+    
+        db2.metric('**Total Sales**', '${:,.2f}'.format(data1[5]), var)
+        db2.metric('**Monthly Average**', '${:,.2f}'.format(avg_month1), avg_per_month)
+        db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
+        
+        db3.metric('**Fulcrum Sales**', '${:,.2f}'.format(data1[4]), fulcrum_sales)
+        db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
+        db3.metric('**Fulcrum Average Sale**', '${:,.2f}'.format(data1[1]), fulcrum_avg_sale)
+        
+
+        
+    else:
+
+        data1 = extract_transaction_data(sales_dict1, month)
+        data2 = extract_transaction_data(sales_dict2, month)
+        web_sales = percent_of_change(data2[3], data1[3])
+        web_trans = percent_of_change(data2[6], data1[6])
+        web_avg_sale = percent_of_change(data2[0], data1[0])
+        var = percent_of_change(data2[5], data1[5])
+        avg_sale = percent_of_change(data2[2], data1[2])
+        transaction_ct = percent_of_change(data2[8], data1[8])
+        fulcrum_sales = percent_of_change(data2[4], data1[4])
+        fulcrum_trans = percent_of_change(data2[7], data1[7])
+        fulcrum_avg_sale = percent_of_change(data2[1], data1[1])
+    
+        db1, db2, db3 = st.columns(3)
+    
+        db1.metric('**Website Sales**', '${:,.2f}'.format(data1[3]), web_sales)
+        db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
+        db1.metric('**Website Average Sale**', '${:,.2f}'.format(data1[0]), web_avg_sale)
+    
+        db2.metric('**Total Sales**', '${:,.2f}'.format(data1[5]), var)
+        db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
+        db2.metric('**Average Sale**', '${:,.2f}'.format(data1[2]), avg_sale)
+        
+        db3.metric('**Fulcrum Sales**', '${:,.2f}'.format(data1[4]), fulcrum_sales)
+        db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
+        db3.metric('**Fulcrum Average Sale**', '${:,.2f}'.format(data1[1]), fulcrum_avg_sale)
+
+
+    return None
+
 if task_choice == 'Dashboard':
 
 
