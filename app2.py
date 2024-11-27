@@ -813,6 +813,37 @@ def calc_monthly_totals_v2(sales_dict, months=['All']):
     
     return total_sales, total_web_perc, total_fulcrum_perc, avg_month
 
+### FUNCTIONS FOR PLOTTING CHARTS ###
+def format_for_chart_ms(dict):
+	
+	temp_dict = {'Months': months_x,
+				'Total Sales': []}
+	
+	for month, sales in dict.items():
+		if len(temp_dict['Total Sales']) >= 12:
+			pass
+		else:
+			temp_dict['Total Sales'].append(sales[0] + sales[1])
+	df = pd.DataFrame(temp_dict)
+	
+	return df
+
+def plot_bar_chart_ms(df):
+	st.write(alt.Chart(df).mark_bar().encode(
+		x=alt.X('Months', sort=None).title('Month'),
+		y='Total Sales',
+	).properties(height=500, width=750).configure_mark(
+		color='limegreen'
+	))
+
+def plot_bar_chart_ms_comp(df):
+	st.write(alt.Chart(df).mark_bar().encode(
+		x=alt.X('Months', sort=None).title('Month'),
+		y='Total Sales',
+	).properties(height=500, width=350).configure_mark(
+		color='limegreen'
+	))
+
 ### DEFINE A FUNCTION TO EXTRACT DATA FROM SALES DICTIONARY 
 
 @st.cache_data
@@ -1028,36 +1059,7 @@ def calc_monthly_totals(sales_dict, months=['All']):
 	
 	return total_sales, total_web_perc, total_fulcrum_perc, avg_month
 
-### FUNCTIONS FOR PLOTTING CHARTS ###
-def format_for_chart_ms(dict):
-	
-	temp_dict = {'Months': months_x,
-				'Total Sales': []}
-	
-	for month, sales in dict.items():
-		if len(temp_dict['Total Sales']) >= 12:
-			pass
-		else:
-			temp_dict['Total Sales'].append(sales[0] + sales[1])
-	df = pd.DataFrame(temp_dict)
-	
-	return df
 
-def plot_bar_chart_ms(df):
-	st.write(alt.Chart(df).mark_bar().encode(
-		x=alt.X('Months', sort=None).title('Month'),
-		y='Total Sales',
-	).properties(height=500, width=750).configure_mark(
-		color='limegreen'
-	))
-
-def plot_bar_chart_ms_comp(df):
-	st.write(alt.Chart(df).mark_bar().encode(
-		x=alt.X('Months', sort=None).title('Month'),
-		y='Total Sales',
-	).properties(height=500, width=350).configure_mark(
-		color='limegreen'
-	))
 
 ### REVISED MONTHLY SALES REPORTING ###
 
