@@ -2048,20 +2048,20 @@ elif task_choice == 'Product Sales Reports':
 
 elif task_choice == 'Leaderboards':
 	
+	st.header('Customer Leaderboards')	
+	
 	def sort_top_20(dict, number):
 
-	leaderboard_list = []
-    
-	for key, value in dict.items():
-		if value >= 2500:
-			leaderboard_list.append((key, value))
-
-	sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
+		leaderboard_list = []
+	    
+		for key, value in dict.items():
+			if value >= 2500:
+				leaderboard_list.append((key, value))
 	
-	return sorted_leaderboard[:number]
-	
+		sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
 		
-	st.header('Customer Leaderboards')
+		return sorted_leaderboard[:number]
+	
 	
 	spend_year = st.selectbox('Choose Year', 
 			     ['2023', '2024'])
