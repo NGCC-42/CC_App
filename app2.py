@@ -943,36 +943,7 @@ def extract_transaction_data(sales_dict, month='All'):
             
 
 ### USE METRIC CARDS TO DISPLAY MONTHLY SALES DATA ###
-def display_month_data_x(sales_dict):
-
-    dBoard1 = st.columns(3)
-    dBoard2 = st.columns(3)
-    dBoard3 = st.columns(3)
-    dBoard4 = st.columns(3)
-    idx = 0
-    idx1 = 0
-    idx2 = 0
-    idx3 = 0
-    for x in months_x:
-        if idx < 3:
-            with dBoard1[idx]:
-                ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict[x][0][0] + sales_dict[x][1][0]), description='{:.2f}% (W), {:.2f}% (F)'.format(percent_of_sales(sales_dict[x][0][0], sales_dict[x][1][0]), percent_of_sales(sales_dict[x][1][0], sales_dict[x][0][0])))
-        elif idx >=3 and idx < 6:
-            with dBoard2[idx1]:
-                ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict[x][0][0] + sales_dict[x][1][0]), description='{:.2f}% (W), {:.2f}% (F)'.format(percent_of_sales(sales_dict[x][0][0], sales_dict[x][1][0]), percent_of_sales(sales_dict[x][1][0], sales_dict[x][0][0])))
-                idx1 += 1
-        elif idx >= 6 and idx < 9:
-            with dBoard3[idx2]:
-                ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict[x][0][0] + sales_dict[x][1][0]), description='{:.2f}% (W), {:.2f}% (F)'.format(percent_of_sales(sales_dict[x][0][0], sales_dict[x][1][0]), percent_of_sales(sales_dict[x][1][0], sales_dict[x][0][0])))
-                idx2 += 1
-        else:
-            with dBoard4[idx3]:
-                ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict[x][0][0] + sales_dict[x][1][0]), description='{:.2f}% (W), {:.2f}% (F)'.format(percent_of_sales(sales_dict[x][0][0], sales_dict[x][1][0]), percent_of_sales(sales_dict[x][1][0], sales_dict[x][0][0])))
-                idx3 += 1
-
-        idx += 1
-
-    return None
+description='')
 
 def extract_transaction_data(sales_dict, month='All'):
 
@@ -1156,7 +1127,7 @@ if task_choice == 'Dashboard':
         focus = st.selectbox('', options=months, key='Focus24')
 
         if focus == 'Overview':
-            display_month_data_x(sales_dict_24)
+            display_month_data_x(sales_dict_24, sales_dict_23)
         elif focus == 'January':
             display_metrics(sales_dict_24, sales_dict_23, 'January')
         elif focus == 'February':
@@ -1198,7 +1169,7 @@ if task_choice == 'Dashboard':
         st.divider()
 
         if focus == 'Overview':
-            display_month_data_x(sales_dict_23)
+            display_month_data_x(sales_dict_23, sales_dict_22)
         elif focus == 'January':
             display_metrics(sales_dict_23, sales_dict_22, 'January')
         elif focus == 'February':
