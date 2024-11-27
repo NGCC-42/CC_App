@@ -823,7 +823,7 @@ def format_for_chart_ms(dict):
 		if len(temp_dict['Total Sales']) >= 12:
 			pass
 		else:
-			temp_dict['Total Sales'].append(sales[0] + sales[1])
+			temp_dict['Total Sales'].append(sales[0][0] + sales[1][0])
 	df = pd.DataFrame(temp_dict)
 	
 	return df
