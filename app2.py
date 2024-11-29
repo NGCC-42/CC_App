@@ -1010,18 +1010,18 @@ def display_month_data_x(sales_dict1, sales_dict2=None):
                 
             if idx < 3:
                 with dBoard1[idx]:
-                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
             elif idx >=3 and idx < 6:
                 with dBoard2[idx1]:
-                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
                     idx1 += 1
             elif idx >= 6 and idx < 9:
                 with dBoard3[idx2]:
-                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
                     idx2 += 1
             else:
                 with dBoard4[idx3]:
-                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
                     idx3 += 1
     
             idx += 1
@@ -1030,18 +1030,18 @@ def display_month_data_x(sales_dict1, sales_dict2=None):
             
             if idx < 3:
                 with dBoard1[idx]:
-                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='')
+                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='')
             elif idx >=3 and idx < 6:
                 with dBoard2[idx1]:
-                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='')
+                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='')
                     idx1 += 1
             elif idx >= 6 and idx < 9:
                 with dBoard3[idx2]:
-                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='')
+                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='')
                     idx2 += 1
             else:
                 with dBoard4[idx3]:
-                    ui.metric_card(title=x, content='${:,.2f}'.format(sales_dict1[x][0][0] + sales_dict1[x][1][0]), description='')
+                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='')
                     idx3 += 1
     
             idx += 1
@@ -1059,17 +1059,17 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
         
         db1, db2, db3 = st.columns(3)
         
-        db1.metric('**Website Sales**', '${:,.2f}'.format(data[3]))
+        db1.metric('**Website Sales**', '${:,}'.format(int(data[3])))
         db1.metric('**Website Transactions**', '{:,}'.format(data[6]))
-        db1.metric('**Website Average Sale**', '${:,.2f}'.format(data[0]))
+        db1.metric('**Website Average Sale**', '${:,}'.format(int(data[0])))
     
-        db2.metric('**Total Sales**', '${:,.2f}'.format(data[5]))
-        db2.metric('**Monthly Average**', '${:,.2f}'.format(avg_month))
+        db2.metric('**Total Sales**', '${:,}'.format(int(data[5])))
+        db2.metric('**Monthly Average**', '${:,}'.format(int(avg_month)))
         db2.metric('**Total Transactions**', '{:,}'.format(data[8]))
         
-        db3.metric('**Fulcrum Sales**', '${:,.2f}'.format(data[4]))
+        db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data[4])))
         db3.metric('**Fulcrum Transactions**', '{:,}'.format(data[7]))
-        db3.metric('**Fulcrum Average Sale**', '${:,.2f}'.format(data[1]))
+        db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data[1])))
         
     
     elif month == 'All':
@@ -1092,17 +1092,17 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
         
         db1, db2, db3 = st.columns(3)
     
-        db1.metric('**Website Sales**', '${:,.2f}'.format(data1[3]), web_sales)
+        db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
         db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
-        db1.metric('**Website Average Sale**', '${:,.2f}'.format(data1[0]), web_avg_sale)
+        db1.metric('**Website Average Sale**', '${:,}'.format(int(data1[0])), web_avg_sale)
     
-        db2.metric('**Total Sales**', '${:,.2f}'.format(data1[5]), var)
-        db2.metric('**Monthly Average**', '${:,.2f}'.format(avg_month1), avg_per_month)
+        db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
+        db2.metric('**Monthly Average**', '${:,}'.format(int(avg_month1)), avg_per_month)
         db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
         
-        db3.metric('**Fulcrum Sales**', '${:,.2f}'.format(data1[4]), fulcrum_sales)
+        db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
         db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
-        db3.metric('**Fulcrum Average Sale**', '${:,.2f}'.format(data1[1]), fulcrum_avg_sale)
+        db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
         
 
         
@@ -1122,17 +1122,17 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
     
         db1, db2, db3 = st.columns(3)
     
-        db1.metric('**Website Sales**', '${:,.2f}'.format(data1[3]), web_sales)
+        db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
         db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
-        db1.metric('**Website Average Sale**', '${:,.2f}'.format(data1[0]), web_avg_sale)
+        db1.metric('**Website Average Sale**', '${:,}'.format(int(data1[0])), web_avg_sale)
     
-        db2.metric('**Total Sales**', '${:,.2f}'.format(data1[5]), var)
+        db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
         db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
-        db2.metric('**Average Sale**', '${:,.2f}'.format(data1[2]), avg_sale)
+        db2.metric('**Average Sale**', '${:,}'.format(int(data1[2])), avg_sale)
         
-        db3.metric('**Fulcrum Sales**', '${:,.2f}'.format(data1[4]), fulcrum_sales)
+        db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
         db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
-        db3.metric('**Fulcrum Average Sale**', '${:,.2f}'.format(data1[1]), fulcrum_avg_sale)
+        db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
 
 
     return None
