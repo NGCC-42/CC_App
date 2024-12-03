@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import openpyxl
 import streamlit_shadcn_ui as ui
+from streamlit_extras.metric_cards import style_metric_cards
 
 ### SET WEB APP CONFIGURATIONS
 st.set_page_config(page_title='Club Cannon Database', 
@@ -704,7 +705,47 @@ with st.sidebar:
     task_choice = st.radio('**Select Task**', options=['Dashboard', 'Customer Details', 'Product Sales Reports v2', 'Product Sales Reports v1', 'Shipping Reports', 'Quote Reports', 'Leaderboards'])
 
 
+def style_metric_cards(
+    background_color: str = "#000000",
+    border_size_px: int = 1,
+    border_color: str = "#00FF00",
+    border_radius_px: int = 5,
+    border_left_color: str = "#00FF00",
+    box_shadow: bool = True,
+) -> None:
+    """
+    Applies a custom style to st.metrics in the page
 
+    Args:
+        background_color (str, optional): Background color. Defaults to "#FFF".
+        border_size_px (int, optional): Border size in pixels. Defaults to 1.
+        border_color (str, optional): Border color. Defaults to "#CCC".
+        border_radius_px (int, optional): Border radius in pixels. Defaults to 5.
+        border_left_color (str, optional): Borfer left color. Defaults to "#9AD8E1".
+        box_shadow (bool, optional): Whether a box shadow is applied. Defaults to True.
+    """
+
+    box_shadow_str = (
+        "box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;"
+        if box_shadow
+        else "box-shadow: none !important;"
+    )
+    st.markdown(
+        f"""
+        <style>
+            div[data-testid="stMetric"],
+            div[data-testid="metric-container"] {{
+                background-color: {background_color};
+                border: {border_size_px}px solid {border_color};
+                padding: 5% 5% 5% 10%;
+                border-radius: {border_radius_px}px;
+                border-left: 0.5rem solid {border_left_color} !important;
+                {box_shadow_str}
+            }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 ### TESTING ###
@@ -1086,7 +1127,8 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
         db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data[4])))
         db3.metric('**Fulcrum Transactions**', '{:,}'.format(data[7]))
         db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data[1])))
-        
+
+	style_metric_cards()
     
     elif month == 'All':
 
@@ -1120,7 +1162,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
         db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
         db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
         
-
+	style_metric_cards()
         
     else:
 
@@ -1150,7 +1192,8 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
         db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
         db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
 
-
+	style_metric_cards()
+	
     return None
 
 if task_choice == 'Dashboard':
