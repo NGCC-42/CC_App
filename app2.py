@@ -1787,7 +1787,7 @@ def product_annual_totals(prod_dict_list):
     return totals
 
 ### USE METRIC CARDS TO DISPLAY MONTHLY SALES METRICS ###
-@st.cache_data
+
 def display_month_data_prod(product, sales_dict1, sales_dict2=None, type='Unit'):
 
     dBoard1 = st.columns(3)
@@ -1979,7 +1979,7 @@ def organize_hose_data(dict):
     
     return [count_mfd, count_5ft, count_8ft, count_15ft, count_25ft, count_35ft, count_50ft, count_100ft]
 
-@st.cache_data
+
 def display_hose_data(hose_details1, hose_details2):
 
     col1, col2 = st.columns(2)
