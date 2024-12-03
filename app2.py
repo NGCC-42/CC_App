@@ -1127,9 +1127,9 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
         db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data[4])))
         db3.metric('**Fulcrum Transactions**', '{:,}'.format(data[7]))
         db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data[1])))
+	    
 	style_metric_cards()
 
-    
     elif month == 'All':
 
         total_sales1, total_web_perc1, total_fulcrum_perc1, avg_month1 = calc_monthly_totals_v2(sales_dict1)
