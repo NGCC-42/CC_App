@@ -702,7 +702,7 @@ def sales_channel(year, month=['All']):
 task_select = ''
 #task_choice = ''
 with st.sidebar:
-    task_choice = st.radio('**Select Task**', options=['Dashboard', 'Customer Details', 'Product Sales Reports v2', 'Shipping Reports', 'Quote Reports', 'Leaderboards', 'Product Sales Reports v1'])
+    task_choice = st.radio('**Select Task**', options=['Dashboard', 'Customer Details', 'Product Sales Reports', 'Shipping Reports', 'Quote Reports', 'Leaderboards', 'Product Sales Reports v1'])
 
 
 def style_metric_cards(
@@ -2064,7 +2064,7 @@ def display_hose_data(hose_details1, hose_details2):
         
     return None
 
-if task_choice == 'Product Sales Reports v2':
+if task_choice == 'Product Sales Reports':
 
     st.header('Product Sales')
     #st.subheader('')
