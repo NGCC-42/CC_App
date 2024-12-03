@@ -2314,8 +2314,9 @@ if task_choice == 'Product Sales Reports v2':
         
 ### SHIPPING REPORTS ###  
     
-elif task_choice == 'Shipping Reports':
+if task_choice == 'Shipping Reports':
 
+    st.header('Shipping Records')
 	
     def get_month_ship_payments(df, month):
 
@@ -2344,7 +2345,7 @@ elif task_choice == 'Shipping Reports':
 
 
     ss_year_select = st.selectbox('Select Year',
-                                 options=['2023', '2024'])
+                                 options=['2024', '2023'])
     
     fedex_total = 0
     ups_total = 0
@@ -2354,8 +2355,6 @@ elif task_choice == 'Shipping Reports':
 
 
     if ss_year_select == '2024':
-        
-        st.header('2024 Shipping Record') 
 
         fulcrum_ship_charges += 7356.34
         
@@ -2391,21 +2390,39 @@ elif task_choice == 'Shipping Reports':
             
         total_ship_cost = shipstat_cc_charges + fulcrum_ship_charges
         total_ship_pmnts = shipstat_cust_pmnts + fulcrum_ship_pmnts_24
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            ui.metric_card(title='Total Paid', content='${:,.2f}'.format(total_ship_cost), description='')
+            ui.metric_card(title='FedEx', content='${:,.2f}'.format(fedex_total), description='({:.2f}%)'.format(percent_of_sales(fedex_total, ups_total)))
+        with col2:
+            var = ''
+            balance = total_ship_pmnts - total_ship_cost
+            if balance > 0:
+                var = '+'
+            elif balance < 0:
+                var = '-'
+            ui.metric_card(title='Balance', content='{} ${:,.2f}'.format(var, abs(balance)), description='')
+            
+        with col3:
+            ui.metric_card(title='Total Collected', content='${:,.2f}'.format(total_ship_pmnts), description='')
+            ui.metric_card(title='UPS', content='${:,.2f}'.format(ups_total), description='({:.2f}%)'.format(percent_of_sales(ups_total, fedex_total)))
     
-        st.write('FedEx Charges: ${:,.2f} - '.format(fedex_total) + '({:.2f}%)'.format(percent_of_sales(fedex_total, ups_total)))
+        #st.write('FedEx Charges: ${:,.2f} - '.format(fedex_total) + '({:.2f}%)'.format(percent_of_sales(fedex_total, ups_total)))
         
-        st.write('UPS Charges: ${:,.2f} - '.format(ups_total) + '({:.2f}%)'.format(percent_of_sales(ups_total, fedex_total)))    
+        #st.write('UPS Charges: ${:,.2f} - '.format(ups_total) + '({:.2f}%)'.format(percent_of_sales(ups_total, fedex_total)))    
         
-        st.write('Website Cost: ${:,.2f}'.format(shipstat_cc_charges))
-        st.write('Website Payments: ${:,.2f}'.format(shipstat_cust_pmnts))
+        #st.write('Website Cost: ${:,.2f}'.format(shipstat_cc_charges))
+        #st.write('Website Payments: ${:,.2f}'.format(shipstat_cust_pmnts))
         
-        st.write('Fulcrum Charges: ${:,.2f}'.format(fulcrum_ship_charges))
-        st.write('Fulcrum Payments: ${:,.2f}'.format(fulcrum_ship_pmnts_24))
+        #st.write('Fulcrum Charges: ${:,.2f}'.format(fulcrum_ship_charges))
+        #st.write('Fulcrum Payments: ${:,.2f}'.format(fulcrum_ship_pmnts_24))
 
         st.divider()
         
-        st.subheader('Total Charges: ${:,.2f}'.format(total_ship_cost))
-        st.subheader('Total Payments: ${:,.2f}'.format(total_ship_pmnts))
+        #st.subheader('Total Charges: ${:,.2f}'.format(total_ship_cost))
+        #st.subheader('Total Payments: ${:,.2f}'.format(total_ship_pmnts))
 
         st.divider()
         
@@ -2418,8 +2435,6 @@ elif task_choice == 'Shipping Reports':
 
     
     elif ss_year_select == '2023':
-        
-        st.header('2023 Shipping Record')
 
         fulcrum_ship_charges += 4173.37
         
@@ -2456,21 +2471,39 @@ elif task_choice == 'Shipping Reports':
             
         total_ship_cost = shipstat_cc_charges + fulcrum_ship_charges
         total_ship_pmnts = shipstat_cust_pmnts + fulcrum_ship_pmnts_23
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            ui.metric_card(title='Total Paid', content='${:,.2f}'.format(total_ship_cost), description='')
+            ui.metric_card(title='FedEx', content='${:,.2f}'.format(fedex_total), description='({:.2f}%)'.format(percent_of_sales(fedex_total, ups_total)))
+        with col2:
+            var = ''
+            balance = total_ship_pmnts - total_ship_cost
+            if balance > 0:
+                var = '+'
+            elif balance < 0:
+                var = '-'
+            ui.metric_card(title='Balance', content='{} ${:,.2f}'.format(var, abs(balance)), description='')
+            
+        with col3:
+            ui.metric_card(title='Total Collected', content='${:,.2f}'.format(total_ship_pmnts), description='')
+            ui.metric_card(title='UPS', content='${:,.2f}'.format(ups_total), description='({:.2f}%)'.format(percent_of_sales(ups_total, fedex_total)))
     
-        st.write('FedEx Charges: ${:,.2f} - '.format(fedex_total) + '({:.2f}%)'.format(percent_of_sales(fedex_total, ups_total)))
+        #st.write('FedEx Charges: ${:,.2f} - '.format(fedex_total) + '({:.2f}%)'.format(percent_of_sales(fedex_total, ups_total)))
         
-        st.write('UPS Charges: ${:,.2f} - '.format(ups_total) + '({:.2f}%)'.format(percent_of_sales(ups_total, fedex_total)))    
+        #st.write('UPS Charges: ${:,.2f} - '.format(ups_total) + '({:.2f}%)'.format(percent_of_sales(ups_total, fedex_total)))    
         
-        st.write('Website Cost: ${:,.2f}'.format(shipstat_cc_charges))
-        st.write('Website Payments: ${:,.2f}'.format(shipstat_cust_pmnts))
+        #st.write('Website Cost: ${:,.2f}'.format(shipstat_cc_charges))
+        #st.write('Website Payments: ${:,.2f}'.format(shipstat_cust_pmnts))
         
-        st.write('Fulcrum Charges: ${:,.2f}'.format(fulcrum_ship_charges))
-        st.write('Fulcrum Payments: ${:,.2f}'.format(fulcrum_ship_pmnts_23))
+        #st.write('Fulcrum Charges: ${:,.2f}'.format(fulcrum_ship_charges))
+        #st.write('Fulcrum Payments: ${:,.2f}'.format(fulcrum_ship_pmnts_23))
 
         st.divider()
         
-        st.subheader('Total Charges: ${:,.2f}'.format(total_ship_cost))
-        st.subheader('Total Payments: ${:,.2f}'.format(total_ship_pmnts))
+        #st.subheader('Total Charges: ${:,.2f}'.format(total_ship_cost))
+        #st.subheader('Total Payments: ${:,.2f}'.format(total_ship_pmnts))
 
         st.divider()
         
@@ -2577,33 +2610,6 @@ elif task_choice == 'Customer Details':
     else:
         text_input = ''
 
-    
-    #st.write(text_input)
-    #text_input = text_input.lower()
-
-    #if text_input.upper() not in df.customer.str.upper() and len(text_input) > 1:
-        #possible_cust = []
-    
-        #for cust in df.customer:
-            #if cust[:9].upper() == text_input[:9].upper() and cust[:10].upper() == text_input[:10].upper():
-                #text_input = cust
-                #break
-            #if cust[:1].upper() == text_input[:1].upper() or cust[:2].lower() == text_input[:2].lower():
-                #if cust in possible_cust:
-                    #pass
-                #else:
-                    #possible_cust.append(cust)
-        #if text_input == cust:
-            #pass
-        #else:
-            #possible_cust = sort_by_match(possible_cust, text_input)
-            #for custs in possible_cust:
-                #if custs[:2] == text_input[:2]:
-                    #possible_cust.remove(custs)
-                    #possible_cust.insert(0, custs)
-            #for customer in possible_cust[:14]:
-                #st.write('Are you searching for - {} - ?'.format(customer))
-    #st.write(text_input)
     
     ### PRODUCT CATEGORY LISTS ###
     sales_order_list = []
