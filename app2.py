@@ -707,7 +707,7 @@ with st.sidebar:
 
 def style_metric_cards(
     background_color: str = "#000000",
-    border_size_px: int = 1,
+    border_size_px: int = 2,
     border_color: str = "#00FF00",
     border_radius_px: int = 5,
     border_left_color: str = "#00FF00",
