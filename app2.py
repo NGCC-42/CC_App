@@ -737,7 +737,7 @@ def style_metric_cards(
             div[data-testid="metric-container"] {{
                 background-color: {background_color};
                 border: {border_size_px}px solid {border_color};
-                padding: 5% 5% 5% 10%;
+                padding: 5% 1% 5% 5%;
                 border-radius: {border_radius_px}px;
                 border-left: 0.5rem solid {border_left_color} !important;
                 {box_shadow_str}
@@ -2090,20 +2090,21 @@ if task_choice == 'Product Sales Reports v2':
 
 
             col1, col2, col3, col4 = st.columns(4)
-    
-            col1.subheader(f':green[Pro Jet]')
+
+            col1.subheader('Pro Jet')
+            #display_overview_metric('Pro Jet', 'Jet', 1)
             col1.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[1]['Pro Jet'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[1]['Pro Jet'][0]), annual_product_totals[1]['Pro Jet'][0] - annual_product_totals[0]['Pro Jet'][0])
             #col1.metric('', '${:,}'.format(annual_product_totals[1]['Pro Jet'][1]), percent_of_change(annual_product_totals[0]['Pro Jet'][0], annual_product_totals[1]['Pro Jet'][0]))
-            col2.subheader(f':green[Quad Jet]')
+            col2.subheader('Quad Jet')
             col2.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[1]['Quad Jet'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[1]['Quad Jet'][0]), annual_product_totals[1]['Quad Jet'][0] - annual_product_totals[0]['Quad Jet'][0])
             #col2.metric('', '${:,}'.format(annual_product_totals[1]['Quad Jet'][1]), percent_of_change(annual_product_totals[0]['Quad Jet'][0], annual_product_totals[1]['Quad Jet'][0]))
-            col3.subheader(f':green[Micro Jet]')
+            col3.subheader('Micro Jet')
             col3.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[1]['Micro Jet'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[1]['Micro Jet'][0]), annual_product_totals[1]['Micro Jet'][0] - annual_product_totals[0]['Micro Jet'][0])
             #col3.metric('', '${:,}'.format(annual_product_totals[1]['Micro Jet'][1]), percent_of_change(annual_product_totals[0]['Micro Jet'][0], annual_product_totals[1]['Micro Jet'][0]))
-            col4.subheader(f':green[Cryo Clamp]')
+            col4.subheader('Cryo Clamp')
             col4.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[1]['Cryo Clamp'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[1]['Cryo Clamp'][0]), annual_product_totals[1]['Cryo Clamp'][0] - annual_product_totals[0]['Cryo Clamp'][0])
             #col4.metric('', '${:,}'.format(annual_product_totals[1]['Cryo Clamp'][1]), percent_of_change(annual_product_totals[0]['Cryo Clamp'][0], annual_product_totals[1]['Cryo Clamp'][0]))
-    
+            style_metric_cards()
             st.divider()
             display_pie_chart_comp(annual_product_totals[1])
             #fig1 = px.line(format_for_line_graph(jet24, 'Pro Jet'), x='Months', y='Units Sold')
@@ -2121,10 +2122,10 @@ if task_choice == 'Product Sales Reports v2':
             avg_price = annual_product_totals[1][prod_select][1] / annual_product_totals[1][prod_select][0]
             avg_price_last = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
     
-            col5.metric(f':green[**Revenue**]', '${:,}'.format(int(annual_product_totals[1][prod_select][1])), percent_of_change(annual_product_totals[0][prod_select][0], annual_product_totals[1][prod_select][0]))
-            col6.metric(f':green[**Profit**]', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
-            col7.metric(f':green[**Avg Price**]', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))        
-            col8.metric(f':green[**BOM Cost**]', '${:,.2f}'.format(bom_cost_jet[prod_select]), '')
+            col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[1][prod_select][1])), percent_of_change(annual_product_totals[0][prod_select][0], annual_product_totals[1][prod_select][0]))
+            col6.metric('**Profit**', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+            col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))        
+            col8.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_jet[prod_select]), ' ')
     
             
             display_month_data_prod(prod_select, jet24, jet23)
