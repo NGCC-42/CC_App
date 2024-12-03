@@ -2133,6 +2133,7 @@ if task_choice == 'Product Sales Reports v2':
             
 
     elif prod_cat == 'Controllers':
+		
         if year == 2024:
 
             total_cntl_rev = annual_product_totals[3]['The Button'][1] + annual_product_totals[3]['Shostarter'][1] + annual_product_totals[3]['Shomaster'][1]
@@ -2203,6 +2204,7 @@ if task_choice == 'Product Sales Reports v2':
             
 
     elif prod_cat == 'Handhelds':
+		
         if year == 2024:
 
             total_hh_rev = annual_product_totals[5]['8FT - No Case'][1] + annual_product_totals[5]['8FT - Travel Case'][1] + annual_product_totals[5]['15FT - No Case'][1] + annual_product_totals[5]['15FT - Travel Case'][1]
@@ -2286,12 +2288,12 @@ if task_choice == 'Product Sales Reports v2':
             display_month_data_prod(prod_select, handheld23)
         
     elif prod_cat == 'Hoses':
-		st.header('Hoses')
+
         display_hose_data(hose_detail24, hose_detail23)
         
           
     elif prod_cat == 'Accessories':
-		st.header('Accessories')
+
 
         col1, col2 = st.columns(2)
         col1.subheader('2024')
