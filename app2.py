@@ -149,6 +149,22 @@ df_shipstat_23.rename(columns={
                     '+/-':'variance'},
                     inplace=True)  
 
+### DEFINE A FUNCTION TO CORRECT NAME DISCRPANCIES IN SOD
+
+def fix_names(df):
+
+    df.replace('Tim Doyle', 'Timothy Doyle', inplace=True)
+    df.replace('ESTEFANIA URBAN', 'Estefania Urban', inplace=True)
+    df.replace('estefania urban', 'Estefania Urban', inplace=True)
+    df.replace('JR Torres', 'Jorge Torres', inplace=True)
+    df.replace('Saul Dominguez', 'Coco Bongo', inplace=True)
+    df.replace('Paul Souza', 'Pyro Spectaculars Industries, Inc. ', inplace=True)
+    df.replace('CHRISTOPHER BARTOSIK', 'Christopher Bartosik', inplace=True)
+
+    return df
+
+df = fix_names(df)
+
 ### CREATE A LIST OF UNIQUE CUSTOMERS ###
 unique_customer_list = df.customer.unique().tolist()
 
