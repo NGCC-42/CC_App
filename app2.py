@@ -1127,8 +1127,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
         db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data[4])))
         db3.metric('**Fulcrum Transactions**', '{:,}'.format(data[7]))
         db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data[1])))
-	    
-	style_metric_cards()
+		style_metric_cards()
 
     elif month == 'All':
 
@@ -1161,8 +1160,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
         db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
         db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
         db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
-        
-	style_metric_cards()
+		style_metric_cards()
         
     else:
 
@@ -1191,8 +1189,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
         db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
         db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
         db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
-
-	style_metric_cards()
+	    style_metric_cards()
 	
     return None
 
