@@ -2353,11 +2353,7 @@ if task_choice == 'Product Sales Reports':
 
 
         col1, col2 = st.columns(2)
-        col1.subheader('2024')            col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[4][prod_select][1])), '')
-        col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
-        col6.metric('**Profit**', '${:,}'.format(prod_profit), '')
-        col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), '')
-        col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')      
+        col1.subheader('2024')               
         col2.subheader('2023')
         with col1:
             for item, value in annual_product_totals[-1].items():
