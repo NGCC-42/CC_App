@@ -2115,17 +2115,20 @@ if task_choice == 'Product Sales Reports':
     
     
             ### DISPLAY PRODUCT DETAILS 
-            col5, col6, col7, col8 = st.columns(4)
+            col5, col6, col7 = st.columns(3)
+
+            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, prod_select, 1, bom_cost_jet)
+		
+            #prod_profit = int((annual_product_totals[1][prod_select][1]) - (annual_product_totals[1][prod_select][0] * bom_cost_jet[prod_select]))
+            #prod_profit_last = int((annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select]))
+            #avg_price = annual_product_totals[1][prod_select][1] / annual_product_totals[1][prod_select][0]
+            #avg_price_last = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
     
-            prod_profit = int((annual_product_totals[1][prod_select][1]) - (annual_product_totals[1][prod_select][0] * bom_cost_jet[prod_select]))
-            prod_profit_last = int((annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select]))
-            avg_price = annual_product_totals[1][prod_select][1] / annual_product_totals[1][prod_select][0]
-            avg_price_last = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
-    
-            col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[1][prod_select][1])), percent_of_change(annual_product_totals[0][prod_select][0], annual_product_totals[1][prod_select][0]))
-            col6.metric('**Profit**', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+            col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[1][prod_select][1]), percent_of_change(annual_product_totals[0][prod_select][0], annual_product_totals[1][prod_select][0]))
+            col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
+            col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))        
-            col8.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_jet[prod_select]), ' ')
+            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_jet[prod_select]), '')
     
             
             display_month_data_prod(prod_select, jet24, jet23)
@@ -2158,19 +2161,17 @@ if task_choice == 'Product Sales Reports':
     
     
             ### DISPLAY PRODUCT DETAILS 
-            col5, col6, col7, col8 = st.columns(4)
+            col5, col6, col7 = st.columns(3)
     
             prod_profit = int((annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select]))
-            #prod_profit_last = int((annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select]))
             avg_price = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
-            #avg_price_last = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
+            profit_per_unit = avg_price / annual_product_totals[0][prod_select][0]
     
-    
-            
             col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[0][prod_select][1])), '')
+            col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,}'.format(prod_profit), '')
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), '')        
-            col8.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_jet[prod_select]), '')
+            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_jet[prod_select]), '')
     
             
             display_month_data_prod(prod_select, jet23)            
@@ -2198,17 +2199,20 @@ if task_choice == 'Product Sales Reports':
             prod_select = ui.tabs(options=['The Button', 'Shostarter', 'Shomaster'], default_value='The Button', key='Controllers')
     
             ### DISPLAY PRODUCT DETAILS 
-            col5, col6, col7, col8 = st.columns(4)
+            col5, col6, col7 = st.columns(3)
+            
+            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, prod_select, 3, bom_cost_control)
     
-            prod_profit = int((annual_product_totals[3][prod_select][1]) - (annual_product_totals[3][prod_select][0] * bom_cost_control[prod_select]))
-            prod_profit_last = int((annual_product_totals[2][prod_select][1]) - (annual_product_totals[2][prod_select][0] * bom_cost_control[prod_select]))
-            avg_price = annual_product_totals[3][prod_select][1] / annual_product_totals[3][prod_select][0]
-            avg_price_last = annual_product_totals[2][prod_select][1] / annual_product_totals[2][prod_select][0]
+            #prod_profit = int((annual_product_totals[3][prod_select][1]) - (annual_product_totals[3][prod_select][0] * bom_cost_control[prod_select]))
+            #prod_profit_last = int((annual_product_totals[2][prod_select][1]) - (annual_product_totals[2][prod_select][0] * bom_cost_control[prod_select]))
+            #avg_price = annual_product_totals[3][prod_select][1] / annual_product_totals[3][prod_select][0]
+            #avg_price_last = annual_product_totals[2][prod_select][1] / annual_product_totals[2][prod_select][0]
             
             col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[3][prod_select][1])), percent_of_change(annual_product_totals[2][prod_select][0], annual_product_totals[3][prod_select][0]))
+            col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
-            col8.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_control[prod_select]), '')
+            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_control[prod_select]), '')
 
             style_metric_cards()
     
@@ -2234,17 +2238,17 @@ if task_choice == 'Product Sales Reports':
             prod_select = ui.tabs(options=['The Button', 'Shostarter', 'Shomaster'], default_value='The Button', key='Controllers')
     
             ### DISPLAY PRODUCT DETAILS 
-            col5, col6, col7, col8 = st.columns(4)
+            col5, col6, col7 = st.columns(3)
     
             prod_profit = int((annual_product_totals[2][prod_select][1]) - (annual_product_totals[3][prod_select][0] * bom_cost_control[prod_select]))
-            #prod_profit_last = int((annual_product_totals[2][prod_select][1]) - (annual_product_totals[2][prod_select][0] * bom_cost_control[prod_select]))
             avg_price = annual_product_totals[2][prod_select][1] / annual_product_totals[3][prod_select][0]
-            #avg_price_last = annual_product_totals[2][prod_select][1] / annual_product_totals[2][prod_select][0]
+            profit_per_unit = avg_price / annual_product_totals[2][prod_select][0]
             
             col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[2][prod_select][1])), '')
+            col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,}'.format(prod_profit), '')
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), '')
-            col8.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_control[prod_select]), '')
+            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_control[prod_select]), '')
 
             style_metric_cards()
     
@@ -2279,17 +2283,20 @@ if task_choice == 'Product Sales Reports':
             prod_select = ui.tabs(options=['8FT - No Case', '8FT - Travel Case', '15FT - No Case', '15FT - Travel Case'], default_value='8FT - No Case', key='Handhelds')
     
             ### DISPLAY PRODUCT DETAILS 
-            col5, col6, col7, col8 = st.columns(4)
+            col5, col6, col7 = st.columns(3)
+
+            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, prod_select, 5, bom_cost_hh)
     
-            prod_profit = int((annual_product_totals[5][prod_select][1]) - (annual_product_totals[5][prod_select][0] * bom_cost_hh[prod_select]))
-            prod_profit_last = int((annual_product_totals[4][prod_select][1]) - (annual_product_totals[4][prod_select][0] * bom_cost_hh[prod_select]))
-            avg_price = annual_product_totals[5][prod_select][1] / annual_product_totals[5][prod_select][0]
-            avg_price_last = annual_product_totals[4][prod_select][1] / annual_product_totals[4][prod_select][0]
+            #prod_profit = int((annual_product_totals[5][prod_select][1]) - (annual_product_totals[5][prod_select][0] * bom_cost_hh[prod_select]))
+            #prod_profit_last = int((annual_product_totals[4][prod_select][1]) - (annual_product_totals[4][prod_select][0] * bom_cost_hh[prod_select]))
+            #avg_price = annual_product_totals[5][prod_select][1] / annual_product_totals[5][prod_select][0]
+            #avg_price_last = annual_product_totals[4][prod_select][1] / annual_product_totals[4][prod_select][0]
             
             col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[5][prod_select][1])), percent_of_change(annual_product_totals[4][prod_select][0], annual_product_totals[5][prod_select][0]))
+            col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
-            col8.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')        
+            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')       
 
             style_metric_cards()       
             
@@ -2321,17 +2328,17 @@ if task_choice == 'Product Sales Reports':
             prod_select = ui.tabs(options=['8FT - No Case', '8FT - Travel Case', '15FT - No Case', '15FT - Travel Case'], default_value='8FT - No Case', key='Handhelds')
     
             ### DISPLAY PRODUCT DETAILS 
-            col5, col6, col7, col8 = st.columns(4)
+            col5, col6, col7 = st.columns(3)
     
             prod_profit = int((annual_product_totals[4][prod_select][1]) - (annual_product_totals[4][prod_select][0] * bom_cost_hh[prod_select]))
-            #prod_profit_last = int((annual_product_totals[4][prod_select][1]) - (annual_product_totals[4][prod_select][0] * bom_cost_hh[prod_select]))
             avg_price = annual_product_totals[4][prod_select][1] / annual_product_totals[4][prod_select][0]
-            #avg_price_last = annual_product_totals[4][prod_select][1] / annual_product_totals[4][prod_select][0]
+            profit_per_unit = avg_price / annual_product_totals[4][prod_select][0]
             
             col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[4][prod_select][1])), '')
+            col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,}'.format(prod_profit), '')
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), '')
-            col8.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')        
+            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')             
             
             style_metric_cards()     
             
@@ -2346,7 +2353,11 @@ if task_choice == 'Product Sales Reports':
 
 
         col1, col2 = st.columns(2)
-        col1.subheader('2024')
+        col1.subheader('2024')            col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[4][prod_select][1])), '')
+        col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
+        col6.metric('**Profit**', '${:,}'.format(prod_profit), '')
+        col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), '')
+        col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')      
         col2.subheader('2023')
         with col1:
             for item, value in annual_product_totals[-1].items():
