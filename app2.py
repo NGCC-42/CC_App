@@ -2167,7 +2167,7 @@ if task_choice == 'Product Sales Reports':
     
     
             
-            col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[1][prod_select][1])), '')
+            col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[0][prod_select][1])), '')
             col6.metric('**Profit**', '${:,}'.format(prod_profit), '')
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), '')        
             col8.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_jet[prod_select]), '')
