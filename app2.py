@@ -2803,7 +2803,7 @@ elif task_choice == 'Customer Details':
         st.metric('2023 Spending', '${:,.2f}'.format(spend_total_2023), '')
 
     with col4:
-        st.metric('2024 Spending', '${:,.2f}'.format(spend_total_2024), perc_change)
+        st.metric('2024 Spending', '${:,.2f}'.format(spend_total_2024), perc_change(spend_total_2023, spend_total_2024)
         
     with col5:
         st.metric('Total Spending', '${:,.2f}'.format(spend_total_2023 + spend_total_2024), '')
