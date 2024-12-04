@@ -2868,9 +2868,6 @@ elif task_choice == 'Customer Details':
             for item in magic_list:
                 st.markdown(item)
 
-
-
-    st.divider()
     
     ### CREATE LISTS OF CATEGORIES FROM DATAFRAME ###
     
