@@ -2798,79 +2798,75 @@ elif task_choice == 'Customer Details':
     st.subheader('')
     col3, col4, col5 = st.columns(3)
     
-    ### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS ###
+    ### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS
     with col3:
-        if spend_total_2023 + spend_total_2024 > 0:
-            ui.metric_card(title='2023 Spending', content='${:,.2f}'.format(spend_total_2023), description=None)
-            #st.subheader('2023 Spending:')
-            #st.write('${:,.2f}'.format(spend_total_2023))
+        st.metric('2023 Spending', '${:,.2f}'.format(spend_total_2023), '')
+
     with col4:
-        if spend_total_2023 + spend_total_2024 > 0:
-            perc_change = percent_of_change(spend_total_2023, spend_total_2024)
-            ui.metric_card(title='2024 Spending', content='${:,.2f}'.format(spend_total_2024), description=perc_change)
-            #st.subheader('2024 Spending:')
-            #st.write('${:,.2f}'.format(spend_total_2024))
+        st.metric('2024 Spending', '${:,.2f}'.format(spend_total_2024), perc_change)
+        
     with col5:
-        if spend_total_2023 + spend_total_2024 > 0:
-            total_spending = spend_total_2023 + spend_total_2024
-            ui.metric_card(title='Total Spending', content='${:,.2f}'.format(total_spending), description=None)
-            #st.subheader('Total Spending:')
-            #total_spending = spend_total_2023 + spend_total_2024
-            #st.write('${:,.2f}'.format(total_spending))
+        st.metric('Total Spending', '${:,.2f}'.format(spend_total_2023 + spend_total_2024), '')
+        
+        
+    style_metric_cards()
     
     ### DISPLAY PRODUCT PURCHASE SUMMARIES FOR SELECTED CUSTOMER ###
     if len(text_input) > 1:
         st.subheader('Product Totals:')
         col6, col7, col8 = st.columns(3)
-        with col6:
+        with col6.container(border=True):
             for jet, totl in jet_totals_cust.items():
                 if totl > 0:
-                    st.markdown(' - **{}: {}**'.format(jet, totl))
-        with col7:
+                    col6.markdown(' - **{}: {}**'.format(jet, totl))
+        with col7.container(border=True):
             for controller, totl in controller_totals_cust.items():
                 if totl > 0:
-                    #st.write(controller + ': ' + str(totl))
-                    st.markdown(' - **{}: {}**'.format(controller, totl))
+                    col7.markdown(' - **{}: {}**'.format(controller, totl))
             if cust_handheld_cnt > 0:
-                #st.write('Handhelds: ' + str(cust_handheld_cnt))
                 st.markdown(' - **Handhelds: {}**'.format(cust_handheld_cnt))
-        with col8:
+        with col8.container(border=True):
             if cust_LED_cnt > 0:
-                #st.write('LED Attachment II: ' + str(cust_LED_cnt))
-                st.markdown(' - **LED Attachment II: {}**'.format(cust_LED_cnt))
+                col8.markdown(' - **LED Attachment II: {}**'.format(cust_LED_cnt))
             if cust_RC_cnt > 0:
-                #st.write('Road Cases: ' + str(cust_RC_cnt))
-                st.markdown(' - **Road Cases: {}**'.format(cust_RC_cnt))
+                col8.markdown(' - **Road Cases: {}**'.format(cust_RC_cnt))
     
     ### DISPLAY CATEGORIES OF PRODUCTS PURCHASED BY SELECTED CUSTOMER ###
     if len(jet_list) >= 1:
-        st.subheader('Stationary Jets:')
-        for item in jet_list:
-            st.markdown(item)
+        with st.container(border=True):
+            st.subheader('Stationary Jets:')
+            for item in jet_list:
+                st.markdown(item)
     if len(controller_list) >= 1:
-        st.subheader('Controllers:')
-        for item in controller_list:
-            st.markdown(item)
+        with st.container(border=True):
+            st.subheader('Controllers:')
+            for item in controller_list:
+                st.markdown(item)
     if len(handheld_list) >= 1:
-        st.subheader('Handhelds:')
-        for item in handheld_list:
-            st.markdown(item)
+        with st.container(border=True):
+            st.subheader('Handhelds:')
+            for item in handheld_list:
+                st.markdown(item)
     if len(hose_list) >= 1:
-        st.subheader('Hoses:')
-        for item in hose_list:
-            st.markdown(item)
+        with st.container(border=True):
+            st.subheader('Hoses:')
+            for item in hose_list:
+                st.markdown(item)
     if len(fittings_accessories_list) >= 1:
-        st.subheader('Fittings & Accessories:')
-        for item in fittings_accessories_list:
-            st.markdown(item)
+        with st.container(border=True):
+            st.subheader('Fittings & Accessories:')
+            for item in fittings_accessories_list:
+                st.markdown(item)
     if len(misc_list) >= 1:
-        st.subheader('Misc:')
-        for item in misc_list:
-            st.markdown(item)
+        with st.container(border=True):
+            st.subheader('Misc:')
+            for item in misc_list:
+                st.markdown(item)
     if len(magic_list):
-        st.subheader('Magic FX:')
-        for item in magic_list:
-            st.markdown(item)
+        with st.container(border=True):
+            st.subheader('Magic FX:')
+            for item in magic_list:
+                st.markdown(item)
 
 
 
