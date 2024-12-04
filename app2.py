@@ -2818,18 +2818,18 @@ elif task_choice == 'Customer Details':
         with col6.container(border=True):
             for jet, totl in jet_totals_cust.items():
                 if totl > 0:
-                    col6.markdown(' - **{}: {}**'.format(jet, totl))
+                    st.markdown(' - **{}: {}**'.format(jet, totl))
         with col7.container(border=True):
             for controller, totl in controller_totals_cust.items():
                 if totl > 0:
-                    col7.markdown(' - **{}: {}**'.format(controller, totl))
+                    st.markdown(' - **{}: {}**'.format(controller, totl))
             if cust_handheld_cnt > 0:
                 st.markdown(' - **Handhelds: {}**'.format(cust_handheld_cnt))
         with col8.container(border=True):
             if cust_LED_cnt > 0:
-                col8.markdown(' - **LED Attachment II: {}**'.format(cust_LED_cnt))
+                st.markdown(' - **LED Attachment II: {}**'.format(cust_LED_cnt))
             if cust_RC_cnt > 0:
-                col8.markdown(' - **Road Cases: {}**'.format(cust_RC_cnt))
+                st.markdown(' - **Road Cases: {}**'.format(cust_RC_cnt))
     
     ### DISPLAY CATEGORIES OF PRODUCTS PURCHASED BY SELECTED CUSTOMER ###
     if len(jet_list) >= 1:
