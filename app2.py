@@ -2218,9 +2218,9 @@ if task_choice == 'Product Sales Reports':
             #avg_price = annual_product_totals[3][prod_select][1] / annual_product_totals[3][prod_select][0]
             #avg_price_last = annual_product_totals[2][prod_select][1] / annual_product_totals[2][prod_select][0]
             
-            col5.metric('**Revenue**', '${:,.2f}'.format(int(annual_product_totals[3][prod_select][1])), percent_of_change(annual_product_totals[2][prod_select][0], annual_product_totals[3][prod_select][0]))
+            col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[3][prod_select][1])), percent_of_change(annual_product_totals[2][prod_select][0], annual_product_totals[3][prod_select][0]))
             col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
-            col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+            col6.metric('**Profit**', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
             col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_control[prod_select]), '')
 
@@ -2254,7 +2254,7 @@ if task_choice == 'Product Sales Reports':
             avg_price = annual_product_totals[2][prod_select][1] / annual_product_totals[3][prod_select][0]
             profit_per_unit = avg_price / annual_product_totals[2][prod_select][0]
             
-            col5.metric('**Revenue**', '${:,.2f}'.format(int(annual_product_totals[2][prod_select][1])), '')
+            col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[2][prod_select][1])), '')
             col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), '')
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), '')
