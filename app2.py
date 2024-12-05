@@ -2590,7 +2590,7 @@ if task_choice == 'Shipping Reports':
         #st.subheader('Total Payments: ${:,.2f}'.format(total_ship_pmnts))
 
         st.divider()
-        
+        idx = 0
         for key, val in shipping_2023.items():
             if idx in [0, 3, 6, 9]:
                 col1.subheader(key)
