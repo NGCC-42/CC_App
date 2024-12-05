@@ -2471,7 +2471,7 @@ if task_choice == 'Shipping Reports':
             elif balance < 0:
                 var = '-'
             ui.metric_card(title='Balance', content='{} ${:,.2f}'.format(var, abs(balance)), description='')
-            
+            ui.metric_card(title='Freight', content='$6,539.43', description = '65% Air / 35% Motor')   
         with col3:
             ui.metric_card(title='Total Collected', content='${:,.2f}'.format(total_ship_pmnts), description='')
             ui.metric_card(title='UPS', content='${:,.2f}'.format(ups_total), description='({:.2f}%)'.format(percent_of_sales(ups_total, fedex_total)))
@@ -2486,19 +2486,36 @@ if task_choice == 'Shipping Reports':
         #st.write('Fulcrum Charges: ${:,.2f}'.format(fulcrum_ship_charges))
         #st.write('Fulcrum Payments: ${:,.2f}'.format(fulcrum_ship_pmnts_24))
 
-        st.divider()
+        #st.divider()
         
         #st.subheader('Total Charges: ${:,.2f}'.format(total_ship_cost))
         #st.subheader('Total Payments: ${:,.2f}'.format(total_ship_pmnts))
 
         st.divider()
         
+        idx = 0
+        
         for key, val in shipping_2024.items():
-            st.subheader(key)
-            st.write('Charges: ${:,.2f}'.format(val[0]))
-            st.write('Payments: ${:,.2f}'.format(val[1]))
-            st.write('FedEx Charges: ${:,.2f}'.format(val[2]))
-            st.write('UPS Charges: ${:,.2f}'.format(val[3]))
+            if idx in [0, 3, 6, 9]:
+                col1.subheader(key)
+                col1.markdown(' - Charges: ${:,.2f}'.format(val[0]))
+                col1.markdown(' - Payments: ${:,.2f}'.format(val[1]))
+                col1.markdown(' - FedEx Charges: ${:,.2f}'.format(val[2]))
+                col1.markdown(' - UPS Charges: ${:,.2f}'.format(val[3]))
+            elif idx in [1, 4, 7, 10]:
+                col2.subheader(key)
+                col2.markdown(' - Charges: ${:,.2f}'.format(val[0]))
+                col2.markdown(' - Payments: ${:,.2f}'.format(val[1]))
+                col2.markdown(' - FedEx Charges: ${:,.2f}'.format(val[2]))
+                col2.markdown(' - UPS Charges: ${:,.2f}'.format(val[3]))
+            else:
+                col3.subheader(key)
+                col3.markdown(' - Charges: ${:,.2f}'.format(val[0]))
+                col3.markdown(' - Payments: ${:,.2f}'.format(val[1]))
+                col3.markdown(' - FedEx Charges: ${:,.2f}'.format(val[2]))
+                col3.markdown(' - UPS Charges: ${:,.2f}'.format(val[3]))
+
+            idx += 1
 
     
     elif ss_year_select == '2023':
@@ -2552,7 +2569,7 @@ if task_choice == 'Shipping Reports':
             elif balance < 0:
                 var = '-'
             ui.metric_card(title='Balance', content='{} ${:,.2f}'.format(var, abs(balance)), description='')
-            
+            ui.metric_card(title='Freight', content='$6,539.43', description = '65% Air / 35% Motor')
         with col3:
             ui.metric_card(title='Total Collected', content='${:,.2f}'.format(total_ship_pmnts), description='')
             ui.metric_card(title='UPS', content='${:,.2f}'.format(ups_total), description='({:.2f}%)'.format(percent_of_sales(ups_total, fedex_total)))
@@ -2567,7 +2584,7 @@ if task_choice == 'Shipping Reports':
         #st.write('Fulcrum Charges: ${:,.2f}'.format(fulcrum_ship_charges))
         #st.write('Fulcrum Payments: ${:,.2f}'.format(fulcrum_ship_pmnts_23))
 
-        st.divider()
+        #st.divider()
         
         #st.subheader('Total Charges: ${:,.2f}'.format(total_ship_cost))
         #st.subheader('Total Payments: ${:,.2f}'.format(total_ship_pmnts))
@@ -2575,11 +2592,26 @@ if task_choice == 'Shipping Reports':
         st.divider()
         
         for key, val in shipping_2023.items():
-            st.subheader(key)
-            st.write('Charges: ${:,.2f}'.format(val[0]))
-            st.write('Payments: ${:,.2f}'.format(val[1]))
-            st.write('FedEx Charges: ${:,.2f}'.format(val[2]))
-            st.write('UPS Charges: ${:,.2f}'.format(val[3]))
+            if idx in [0, 3, 6, 9]:
+                col1.subheader(key)
+                col1.markdown(' - Charges: ${:,.2f}'.format(val[0]))
+                col1.markdown(' - Payments: ${:,.2f}'.format(val[1]))
+                col1.markdown(' - FedEx Charges: ${:,.2f}'.format(val[2]))
+                col1.markdown(' - UPS Charges: ${:,.2f}'.format(val[3]))
+            elif idx in [1, 4, 7, 10]:
+                col2.subheader(key)
+                col2.markdown(' - Charges: ${:,.2f}'.format(val[0]))
+                col2.markdown(' - Payments: ${:,.2f}'.format(val[1]))
+                col2.markdown(' - FedEx Charges: ${:,.2f}'.format(val[2]))
+                col2.markdown(' - UPS Charges: ${:,.2f}'.format(val[3]))
+            else:
+                col3.subheader(key)
+                col3.markdown(' - Charges: ${:,.2f}'.format(val[0]))
+                col3.markdown(' - Payments: ${:,.2f}'.format(val[1]))
+                col3.markdown(' - FedEx Charges: ${:,.2f}'.format(val[2]))
+                col3.markdown(' - UPS Charges: ${:,.2f}'.format(val[3]))
+
+            idx += 1
     
     
     #st.write('{:.2f}%'.format(shipping_balance_calc(total_ship_cost, total_ship_pmnts)))
