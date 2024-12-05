@@ -2173,7 +2173,7 @@ if task_choice == 'Product Sales Reports':
             ### DISPLAY PRODUCT DETAILS 
             col5, col6, col7 = st.columns(3)
     
-            prod_profit = int((annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select]))
+            prod_profit = (annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select])
             avg_price = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
             profit_per_unit = avg_price - bom_cost_jet[prod_select]
     
