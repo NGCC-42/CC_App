@@ -2945,21 +2945,25 @@ elif task_choice == 'Customer Details':
     st.subheader('')
     col3, col4, col5 = st.columns(3)
     
-    ### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS
-    with col3:
-        st.metric('2023 Spending', '${:,.2f}'.format(spend_total_2023), '')
 
-    with col4:
-        st.metric('2024 Spending', '${:,.2f}'.format(spend_total_2024), percent_of_change(spend_total_2023, spend_total_2024))
-        
-    with col5:
-        st.metric('Total Spending', '${:,.2f}'.format(spend_total_2023 + spend_total_2024), '')
-        
-        
-    style_metric_cards()
     
     ### DISPLAY PRODUCT PURCHASE SUMMARIES FOR SELECTED CUSTOMER ###
     if len(text_input) > 1:
+
+        ### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS
+        with col3:
+            st.metric('2023 Spending', '${:,.2f}'.format(spend_total_2023), '')
+    
+        with col4:
+            st.metric('2024 Spending', '${:,.2f}'.format(spend_total_2024), percent_of_change(spend_total_2023, spend_total_2024))
+            
+        with col5:
+            st.metric('Total Spending', '${:,.2f}'.format(spend_total_2023 + spend_total_2024), '')
+            
+            
+        style_metric_cards()
+
+        
         st.subheader('Product Totals:')
         col6, col7, col8 = st.columns(3)
         with col6.container(border=True):
