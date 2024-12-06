@@ -3349,7 +3349,7 @@ elif task_choice == 'Leaderboards':
 	
 	
 	spend_year = st.selectbox('Choose Year', 
-			     ['2023', '2024'])
+			     ['2024', '2023'])
 	
 	ranking_number = st.selectbox('Choose Leaderboard Length',
 				 [5, 10, 15, 20, 25, 50])
