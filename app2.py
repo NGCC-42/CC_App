@@ -1106,7 +1106,7 @@ def display_month_data_x(sales_dict1, sales_dict2=None):
     return None
 	
 
-def display_metrics(sales_dict1, sales_dict2=None, month='All'):
+def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=None):
 
 
     if sales_dict2 == None:
@@ -1116,20 +1116,21 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
         
         db1, db2, db3 = st.columns(3)
         
-        db1.metric('**Website Sales**', '${:,}'.format(int(data[3])))
-        db1.metric('**Website Transactions**', '{:,}'.format(data[6]))
-        db1.metric('**Website Average Sale**', '${:,}'.format(int(data[0])))
+        db1.metric(label='**Website Sales**', value='${:,}'.format(int(data[3])), delta='')
+        db1.metric(label='**Website Transactions**', value='{:,}'.format(data[6]), delta='')
+        db1.metric(label='**Website Average Sale**', value='${:,}'.format(int(data[0])), delta='')
     
-        db2.metric('**Total Sales**', '${:,}'.format(int(data[5])))
-        db2.metric('**Monthly Average**', '${:,}'.format(int(avg_month)))
-        db2.metric('**Total Transactions**', '{:,}'.format(data[8]))
+        db2.metric(label='**Total Sales**', value='${:,}'.format(int(data[5])), delta='')
+        db2.metric(label='**Monthly Average**', value='${:,}'.format(int(avg_month)), delta='')
+        db2.metric(label='**Total Transactions**', value='{:,}'.format(data[8]), delta='')
         
-        db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data[4])))
-        db3.metric('**Fulcrum Transactions**', '{:,}'.format(data[7]))
-        db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data[1])))
+        db3.metric(label='**Fulcrum Sales**', value='${:,}'.format(int(data[4])), delta='')
+        db3.metric(label='**Fulcrum Transactions**', value='{:,}'.format(data[7]), delta='')
+        db3.metric(label='**Fulcrum Average Sale**', value='${:,}'.format(int(data[1])), delta='')
+        
         style_metric_cards()
         
-
+    
     elif month == 'All':
 
         total_sales1, total_web_perc1, total_fulcrum_perc1, avg_month1 = calc_monthly_totals_v2(sales_dict1)
@@ -1147,22 +1148,50 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
         fulcrum_trans = percent_of_change(data2[7], data1[7])
         fulcrum_avg_sale = percent_of_change(data2[1], data1[1])
         avg_per_month = percent_of_change(avg_month2, avg_month1)
-        
-        db1, db2, db3 = st.columns(3)
-    
-        db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
-        db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
-        db1.metric('**Website Average Sale**', '${:,}'.format(int(data1[0])), web_avg_sale)
-    
-        db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
-        db2.metric('**Monthly Average**', '${:,}'.format(int(avg_month1)), avg_per_month)
-        db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
-        
-        db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
-        db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
-        db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
-        style_metric_cards()
 
+        wholesale_sales1, retail_sales1 = wholesale_retail_totals(wvr1)
+
+        db1, db2, db3 = st.columns(3)      
+        
+        if wvr2 == None:
+
+            db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
+            db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
+            db1.metric('**Website Average Sale**', '${:,}'.format(int(data1[0])), web_avg_sale)
+            db1.metric('**Retail Sales**', '${:,}'.format(int(retail_sales1)), '')
+        
+            db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
+            db2.metric('**Monthly Average**', '${:,}'.format(int(avg_month1)), avg_per_month)
+            db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
+            
+            db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
+            db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
+            db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
+            db3.metric('**Wholesale Sales**', '${:,}'.format(int(wholesale_sales1)), '')
+
+            style_metric_cards()
+
+        else:
+
+            wholesale_sales2, retail_sales2 = wholesale_retail_totals(wvr2)
+            wholesale_delta = percent_of_change(wholesale_sales2, wholesale_sales1)
+            retail_delta = percent_of_change(retail_sales2, retail_sales1)
+        
+            db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
+            db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
+            db1.metric('**Website Average Sale**', '${:,}'.format(int(data1[0])), web_avg_sale)
+            db1.metric('**Retail Sales**', '${:,}'.format(int(retail_sales1)), retail_delta)
+        
+            db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
+            db2.metric('**Monthly Average**', '${:,}'.format(int(avg_month1)), avg_per_month)
+            db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
+            
+            db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
+            db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
+            db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
+            db3.metric('**Wholesale Sales**', '${:,}'.format(int(wholesale_sales1)), wholesale_delta)
+        
+            style_metric_cards()
         
     else:
 
@@ -1177,27 +1206,73 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All'):
         fulcrum_sales = percent_of_change(data2[4], data1[4])
         fulcrum_trans = percent_of_change(data2[7], data1[7])
         fulcrum_avg_sale = percent_of_change(data2[1], data1[1])
-    
-        db1, db2, db3 = st.columns(3)
-    
-        db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
-        db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
-        db1.metric('**Website Average Sale**', '${:,}'.format(int(data1[0])), web_avg_sale)
-    
-        db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
-        db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
-        db2.metric('**Average Sale**', '${:,}'.format(int(data1[2])), avg_sale)
         
-        db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
-        db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
-        db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
-        style_metric_cards()
-	
+
+        db1, db2, db3 = st.columns(3)
+
+        if wvr2 == None:
+
+            db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
+            db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
+            db1.metric('**Website Average Sale**', '${:,}'.format(int(data1[0])), web_avg_sale)
+            db1.metric('**Retail Sales**', '${:,}'.format(int(wvr1[month][1])), '')
+        
+            db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
+            db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
+            db2.metric('**Average Sale**', '${:,}'.format(int(data1[2])), avg_sale)
+            
+            db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
+            db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
+            db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
+            db3.metric('**Wholesale Sales**', '${:,}'.format(int(wvr1[month][0])), '')
+
+            style_metric_cards()
+        
+        else:
+
+            retail_delta = percent_of_change(wvr2[month][1], wvr1[month][1])
+            wholesale_delta = percent_of_change(wvr2[month][0], wvr1[month][0])
+            
+            db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
+            db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
+            db1.metric('**Website Average Sale**', '${:,}'.format(int(data1[0])), web_avg_sale)
+            db1.metric('**Retail Sales**', '${:,}'.format(int(wvr1[month][1])), retail_delta)
+        
+            db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
+            db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
+            db2.metric('**Average Sale**', '${:,}'.format(int(data1[2])), avg_sale)
+            
+            db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
+            db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
+            db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
+            db3.metric('**Wholesale Sales**', '${:,}'.format(int(wvr1[month][0])), wholesale_delta)
+    
+            style_metric_cards()
+    
     return None
+
+
+def wholesale_retail_totals(monthly_sales_wVr):
+    
+    wholesale_totals = 0
+    retail_totals = 0
+
+    for month, sales in monthly_sales_wVr.items():
+        wholesale_totals += sales[0]
+        retail_totals += sales[1]
+
+    return wholesale_totals, retail_totals
 
 if task_choice == 'Dashboard':
 
 
+    ### WHOLESALE VS RETAIL MONTHLY TOTALS
+    
+    wvr_23_months = get_monthly_sales_wvr(df, 2023)
+    wvr_24_months = get_monthly_sales_wvr(df, 2024)
+    wvr_23_totals = wholesale_retail_totals(wvr_23_months)
+    wvr_24_totals = wholesale_retail_totals(wvr_24_months)    
+    
     ### COMPILE DATA FOR SALES REPORTS ###
     total_22 = 1483458.64
     avg_22 = 147581.12
@@ -1235,7 +1310,7 @@ if task_choice == 'Dashboard':
 
     if year_select == 2024:
 
-        display_metrics(sales_dict_24, sales_dict_23)
+        display_metrics(sales_dict_24, sales_dict_23, wvr1=wvr_24_months, wvr2=wvr_23_months)
         
         st.header('')
         plot_bar_chart_ms(format_for_chart_ms(sales_dict_24))
@@ -1247,35 +1322,35 @@ if task_choice == 'Dashboard':
         if focus == 'Overview':
             display_month_data_x(sales_dict_24, sales_dict_23)
         elif focus == 'January':
-            display_metrics(sales_dict_24, sales_dict_23, 'January')
+            display_metrics(sales_dict_24, sales_dict_23, 'January', wvr1=wvr_24_months, wvr2=wvr_23_months)
         elif focus == 'February':
-            display_metrics(sales_dict_24, sales_dict_23, 'February')
+            display_metrics(sales_dict_24, sales_dict_23, 'February', wvr1=wvr_24_months, wvr2=wvr_23_months)
         elif focus == 'March':
-            display_metrics(sales_dict_24, sales_dict_23, 'March')
+            display_metrics(sales_dict_24, sales_dict_23, 'March', wvr1=wvr_24_months, wvr2=wvr_23_months)
         elif focus == 'April':
-            display_metrics(sales_dict_24, sales_dict_23, 'April')
+            display_metrics(sales_dict_24, sales_dict_23, 'April', wvr1=wvr_24_months, wvr2=wvr_23_months)
         elif focus == 'May':
-            display_metrics(sales_dict_24, sales_dict_23, 'May')
+            display_metrics(sales_dict_24, sales_dict_23, 'May', wvr1=wvr_24_months, wvr2=wvr_23_months)
         elif focus == 'June':
-            display_metrics(sales_dict_24, sales_dict_23, 'June')
+            display_metrics(sales_dict_24, sales_dict_23, 'June', wvr1=wvr_24_months, wvr2=wvr_23_months)
         elif focus == 'July':
-            display_metrics(sales_dict_24, sales_dict_23, 'July')
+            display_metrics(sales_dict_24, sales_dict_23, 'July', wvr1=wvr_24_months, wvr2=wvr_23_months)
         elif focus == 'August':
-            display_metrics(sales_dict_24, sales_dict_23, 'August')
+            display_metrics(sales_dict_24, sales_dict_23, 'August', wvr1=wvr_24_months, wvr2=wvr_23_months)
         elif focus == 'September':
-            display_metrics(sales_dict_24, sales_dict_23, 'September')
+            display_metrics(sales_dict_24, sales_dict_23, 'September', wvr1=wvr_24_months, wvr2=wvr_23_months)
         elif focus == 'October':
-            display_metrics(sales_dict_24, sales_dict_23, 'October')
+            display_metrics(sales_dict_24, sales_dict_23, 'October', wvr1=wvr_24_months, wvr2=wvr_23_months)
         elif focus == 'November':
-            display_metrics(sales_dict_24, sales_dict_23, 'November')
+            display_metrics(sales_dict_24, sales_dict_23, 'November', wvr1=wvr_24_months, wvr2=wvr_23_months)
         else:
-            display_metrics(sales_dict_24, sales_dict_23, 'December')
+            display_metrics(sales_dict_24, sales_dict_23, 'December', wvr1=wvr_24_months, wvr2=wvr_23_months)
 
 
         
     if year_select == 2023:
 
-        display_metrics(sales_dict_23, sales_dict_22)
+        display_metrics(sales_dict_23, sales_dict_22, wvr1=wvr_23_months)
 
         st.header('')
         plot_bar_chart_ms(format_for_chart_ms(sales_dict_23))
@@ -1289,29 +1364,29 @@ if task_choice == 'Dashboard':
         if focus == 'Overview':
             display_month_data_x(sales_dict_23, sales_dict_22)
         elif focus == 'January':
-            display_metrics(sales_dict_23, sales_dict_22, 'January')
+            display_metrics(sales_dict_23, sales_dict_22, 'January', wvr1=wvr_23_months)
         elif focus == 'February':
-            display_metrics(sales_dict_23, sales_dict_22, 'February')
+            display_metrics(sales_dict_23, sales_dict_22, 'February', wvr1=wvr_23_months)
         elif focus == 'March':
-            display_metrics(sales_dict_23, sales_dict_22, 'March')
+            display_metrics(sales_dict_23, sales_dict_22, 'March', wvr1=wvr_23_months)
         elif focus == 'April':
-            display_metrics(sales_dict_23, sales_dict_22, 'April')
+            display_metrics(sales_dict_23, sales_dict_22, 'April', wvr1=wvr_23_months)
         elif focus == 'May':
-            display_metrics(sales_dict_23, sales_dict_22, 'May')
+            display_metrics(sales_dict_23, sales_dict_22, 'May', wvr1=wvr_23_months)
         elif focus == 'June':
-            display_metrics(sales_dict_23, sales_dict_22, 'June')
+            display_metrics(sales_dict_23, sales_dict_22, 'June', wvr1=wvr_23_months)
         elif focus == 'July':
-            display_metrics(sales_dict_23, sales_dict_22, 'July')
+            display_metrics(sales_dict_23, sales_dict_22, 'July', wvr1=wvr_23_months)
         elif focus == 'August':
-            display_metrics(sales_dict_23, sales_dict_22, 'August')
+            display_metrics(sales_dict_23, sales_dict_22, 'August', wvr1=wvr_23_months)
         elif focus == 'September':
-            display_metrics(sales_dict_23, sales_dict_22, 'September')
+            display_metrics(sales_dict_23, sales_dict_22, 'September', wvr1=wvr_23_months)
         elif focus == 'October':
-            display_metrics(sales_dict_23, sales_dict_22, 'October')
+            display_metrics(sales_dict_23, sales_dict_22, 'October', wvr1=wvr_23_months)
         elif focus == 'November':
-            display_metrics(sales_dict_23, sales_dict_22, 'November')
+            display_metrics(sales_dict_23, sales_dict_22, 'November', wvr1=wvr_23_months)
         else:
-            display_metrics(sales_dict_23, sales_dict_22, 'December')
+            display_metrics(sales_dict_23, sales_dict_22, 'December', wvr1=wvr_23_months)
             
 
     if year_select == 2022:
