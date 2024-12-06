@@ -710,7 +710,7 @@ def sales_channel(year, month=['All']):
 task_select = ''
 #task_choice = ''
 with st.sidebar:
-    task_choice = st.radio('**Select Task**', options=['Dashboard', 'Customer Details', 'Product Sales Reports', 'Shipping Reports', 'Quote Reports', 'Leaderboards', 'Product Sales Reports v1'])
+    task_choice = st.radio('**Select Task**', options=['Dashboard', 'Customer Details', 'Product Sales Reports', 'Shipping Reports', 'Quote Reports', 'Leaderboards'])
 
 
 def style_metric_cards(
