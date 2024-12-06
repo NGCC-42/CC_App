@@ -2725,7 +2725,7 @@ if task_choice == 'Shipping Reports':
     #st.write(df_ac24_rev['January'].iloc[26])
 
 ### QUOTE REPORTS ###
-elif task_choice == 'Quote Reports':
+if task_choice == 'Quote Reports':
 
     st.header('Quote Reports')
     
@@ -2741,13 +2741,13 @@ elif task_choice == 'Quote Reports':
 
     idx = 0
     cust_list_q = []
+    cust_won_list = []
+    cust_lost_list = []
     cust_won_total = 0
     cust_won_count = 0
     cust_lost_total = 0
     cust_lost_count = 0
-    
-    
-    
+
     for customer in df_quotes.customer:
 
         if customer.upper() == quote_cust.upper():
@@ -2755,9 +2755,18 @@ elif task_choice == 'Quote Reports':
             if df_quotes.iloc[idx].status == 'Won':
                 cust_won_total += df_quotes.iloc[idx].total
                 cust_won_count += 1
+                cust_won_list.append('({}) - **${:,.2f}**  - {}'.format(
+                df_quotes.iloc[idx].number,
+                df_quotes.iloc[idx].total,
+                df_quotes.iloc[idx].date_created.year))
+                
             if df_quotes.iloc[idx].status == 'Lost' or df_quotes.iloc[idx].status == 'Sent' or df_quotes.iloc[idx].status == 'Draft':
                 cust_lost_total += df_quotes.iloc[idx].total
                 cust_lost_count += 1
+                cust_lost_list.append('({}) - **${:,.2f}**  - {}'.format(
+                df_quotes.iloc[idx].number,
+                df_quotes.iloc[idx].total,
+                df_quotes.iloc[idx].date_created.year))
             
             cust_list_q.append('({})  {}  - ${:,.2f}  - {} - {}'.format(
                 df_quotes.iloc[idx].number,
@@ -2768,35 +2777,35 @@ elif task_choice == 'Quote Reports':
 
         idx += 1
 
-    
-    col11, col12 = st.columns(2)
-    if cust_won_count >= 1:
-    
-        with col11:
-            st.header('')
-            st.header('')
-            st.header('')
-            st.subheader('Quotes Won: ' + str(cust_won_count)) 
-        with col11:
-         
-            st.subheader('For a Total of: ' + '${:,.2f}'.format(cust_won_total))
-    if cust_lost_count >= 1:
-        with col12:
-            st.header('')
-            st.header('')
-            st.header('')
-            st.subheader('Quotes Lost or Pending: ' + str(cust_lost_count))
-        with col12:
-    
-            st.subheader('For a Total of: ' + '${:,.2f}'.format(cust_lost_total))
-
-    if cust_lost_count >= 1 and cust_won_count >= 1:
-        st.write('Conversion Percentage: ' + '{:,.2f}'.format((cust_won_count / (cust_lost_count + cust_won_count)) * 100) + '% of Quotes ' + '( {:,.2f}'.format((cust_won_total / (cust_lost_total + cust_won_total)) * 100) + '% of Potential Revenue )')
-        st.divider()
+    if len(quote_cust) > 1:
+        st.header('')
         st.header('')
         
-        for quote in cust_list_q:
-            st.write(quote)
+        col1, col2, col3, col4 = st.columns(4)
+        with st.container(border=True):        
+            col1.metric('**Quotes Won**', str(cust_won_count), '${:,.2f}'.format(cust_won_total)) 
+            
+        with st.container(border=True):
+            col4.metric('**Quotes Lost / Open**', str(cust_lost_count), '-${:,.2f}'.format(cust_lost_total))
+        
+        if cust_lost_count >= 1 and cust_won_count >= 1:
+            col2.metric('**Conversion Percentage**', '{:,.2f}%'.format((cust_won_count / (cust_lost_count + cust_won_count)) * 100))
+            col3.metric('**Potential Rev. Collected**', '{:,.2f}%'.format((cust_won_total / (cust_lost_total + cust_won_total)) * 100))
+            
+            st.divider()
+
+            col1, col2 = st.columns(2)
+            col1.subheader('Won')
+            col2.subheader('Lost')
+            with st.container(border=True):
+                for quote in cust_won_list:
+                    col1.markdown(' - {}'.format(quote))
+            with st.container(border=True):
+                for quote in cust_lost_list:
+                    col2.markdown(' - {}'.format(quote))
+                
+
+    style_metric_cards()
 
 
 elif task_choice == 'Customer Details':
