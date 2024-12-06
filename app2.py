@@ -40,6 +40,8 @@ shipstat_ss_23 = '2023 SR.xlsx'
 
 prod_sales = 'Product Sales Data.xlsx'
 
+wholesale_cust = 'wholesale_customers.xlsx'
+
 ### LOAD SHEETS FROM PRODUCT SUMMARY
 
 acc_2024 = 'Accessories 2024'
@@ -78,6 +80,12 @@ df_shipstat_24 = create_dataframe(shipstat_ss_24)
 df_shipstat_23 = create_dataframe(shipstat_ss_23)
 
 df_hsd = create_dataframe(hsd_ss)
+
+df_wholesale = create_dataframe(wholesale_cust)
+
+wholesale_list = []
+for ws in df_wholesale.name:
+    wholesale_list.append(ws)
 
 ### STRIP UNUSED COLUMN ###
 
@@ -853,6 +861,28 @@ def calc_monthly_totals(sales_dict, months=['All']):
 	total_fulcrum_perc = percent_of_sales(total_fulcrum, total_web)
 	
 	return total_sales, total_web_perc, total_fulcrum_perc, avg_month
+
+@st.cache_data
+def get_monthly_sales_wvr(df, year):
+
+    sales_dict = {'January': [0, 0], 'February': [0, 0], 'March': [0, 0], 'April': [0, 0], 'May': [0, 0], 'June': [0, 0], 'July': [0, 0], 'August': [0, 0], 'September': [0, 0], 'October': [0, 0], 'November': [0, 0], 'December': [0, 0]}
+
+    idx = 0
+
+    for cust in df.customer:
+		
+        month = num_to_month(df.iloc[idx].order_date.month)
+    
+        if df.iloc[idx].order_date.year == year:
+            if cust in wholesale_list:
+                sales_dict[month][0] += df.iloc[idx].total_line_item_spend
+            else:
+                sales_dict[month][1] += df.iloc[idx].total_line_item_spend            
+
+        idx += 1
+	
+    return sales_dict
+
 	
 ### FOR DASHBOARD ###  
 @st.cache_data
