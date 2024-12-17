@@ -1792,12 +1792,12 @@ def extract_control_data(df):
 
     # CREATE DATA DICTS 
     for month in months_x:
-        dict_23[month] = {'The Button': [0,0],
-                     'Shostarter': [0,0],
-                     'Shomaster': [0,0]}
-        dict_24[month] = {'The Button': [0,0],
-                     'Shostarter': [0,0],
-                     'Shomaster': [0,0]}
+        dict_23[month] = {'The Button': [0,0,0],
+                     'Shostarter': [0,0,0],
+                     'Shomaster': [0,0,0]}
+        dict_24[month] = {'The Button': [0,0,0],
+                     'Shostarter': [0,0,0],
+                     'Shomaster': [0,0,0]}
     
     idx = 0
     for line in df.line_item:
@@ -1805,23 +1805,35 @@ def extract_control_data(df):
             if line[:7] == 'CC-TB-3':
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['The Button'][0] += df.iloc[idx].quantity
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['The Button'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['The Button'][2] += df.iloc[idx].quantity  
             elif line[:8] == 'CC-SS-35':
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][0] += df.iloc[idx].quantity
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][2] += df.iloc[idx].quantity  
             elif line[:5] == 'CC-SM':
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][0] += df.iloc[idx].quantity
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][2] += df.iloc[idx].quantity 
 
         elif df.iloc[idx].order_date.year == 2023:
             if line[:7] == 'CC-TB-3':
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['The Button'][0] += df.iloc[idx].quantity
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['The Button'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['The Button'][2] += df.iloc[idx].quantity 
             elif line[:8] == 'CC-SS-35':
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][0] += df.iloc[idx].quantity
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][2] += df.iloc[idx].quantity 
             elif line[:5] == 'CC-SM':
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][0] += df.iloc[idx].quantity
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][2] += df.iloc[idx].quantity 
 
                 
         idx += 1
@@ -1839,14 +1851,14 @@ def extract_jet_data(df):
 
     # CREATE DATA DICTS 
     for month in months_x:
-        dict_23[month] = {'Pro Jet': [0,0],
-                'Quad Jet': [0,0],
-               'Micro Jet': [0,0],
-               'Cryo Clamp': [0,0]}
-        dict_24[month] = {'Pro Jet': [0,0],
-                'Quad Jet': [0,0],
-               'Micro Jet': [0,0],
-               'Cryo Clamp': [0,0]}
+        dict_23[month] = {'Pro Jet': [0,0,0],
+                'Quad Jet': [0,0,0],
+               'Micro Jet': [0,0,0],
+               'Cryo Clamp': [0,0,0]}
+        dict_24[month] = {'Pro Jet': [0,0,0],
+                'Quad Jet': [0,0,0],
+               'Micro Jet': [0,0,0],
+               'Cryo Clamp': [0,0,0]}
     
     idx = 0
     for line in df.line_item:
@@ -1854,28 +1866,44 @@ def extract_jet_data(df):
             if line[:6] == 'CC-PRO':
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][0] += df.iloc[idx].quantity
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][2] += df.iloc[idx].quantity     
             elif line[:5] == 'CC-QJ':
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][0] += df.iloc[idx].quantity
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][2] += df.iloc[idx].quantity  
             elif line[:6] == 'CC-MJM':
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][0] += df.iloc[idx].quantity
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][2] += df.iloc[idx].quantity  
             elif line[:6] == 'CC-CC2':
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][0] += df.iloc[idx].quantity
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][2] += df.iloc[idx].quantity  
         elif df.iloc[idx].order_date.year == 2023:
             if line[:6] == 'CC-PRO':
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][0] += df.iloc[idx].quantity
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][2] += df.iloc[idx].quantity  
             elif line[:5] == 'CC-QJ':
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][0] += df.iloc[idx].quantity
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][2] += df.iloc[idx].quantity  
             elif line[:6] == 'CC-MJM':
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][0] += df.iloc[idx].quantity
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][2] += df.iloc[idx].quantity  
             elif line[:6] == 'CC-CC2':
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][0] += df.iloc[idx].quantity
                 dict_23[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][2] += df.iloc[idx].quantity  
                 
         idx += 1
     
@@ -1905,6 +1933,9 @@ def collect_product_data(df, prod='All', years=[2023, 2024]):
 @st.cache_data
 def product_annual_totals(prod_dict_list):
 
+    jet_list = ['Pro Jet', 'Quad Jet', 'Micro Jet', 'Cryo Clamp']
+    control_list = ['The Button', 'Shostarter', 'Shomaster']
+    
     totals = []
     
     for year_data in prod_dict_list:
@@ -1913,11 +1944,13 @@ def product_annual_totals(prod_dict_list):
             for prod, val in product.items():
                 if prod == 'CC-RC-2430':
                     temp_dict[prod] = [0,0,0,0,0]
+                elif prod in jet_list or prod in control_list:
+                    temp_dict[prod] = [0,0,0]
                 else:
                     temp_dict[prod] = [0,0]
     
         
-        for month, product in year_data.items():   
+        for month, product in year_data.items():
             for prod, val in product.items():
                 if prod == 'CC-RC-2430':
                     temp_dict[prod][0] += val[0]
@@ -1925,6 +1958,10 @@ def product_annual_totals(prod_dict_list):
                     temp_dict[prod][2] += val[2]
                     temp_dict[prod][3] += val[3]
                     temp_dict[prod][4] += val[4]
+                elif prod in jet_list or prod in control_list:
+                    temp_dict[prod][0] += val[0]
+                    temp_dict[prod][1] += val[1]
+                    temp_dict[prod][2] += val[2]
                 else:
                     temp_dict[prod][0] += val[0]
                     temp_dict[prod][1] += val[1]
@@ -2172,13 +2209,24 @@ def display_hose_data(hose_details1, hose_details2):
 
 def calculate_product_metrics(annual_product_totals, prod_select, key, bom_dict):
 
+    jet_list = ['Pro Jet', 'Quad Jet', 'Micro Jet', 'Cryo Clamp']
+    control_list = ['The Button', 'Shostarter', 'Shomaster']
+
     prod_profit = (annual_product_totals[key][prod_select][1]) - (annual_product_totals[key][prod_select][0] * bom_dict[prod_select])
     profit_per_unit = prod_profit / annual_product_totals[key][prod_select][0]
     prod_profit_last = (annual_product_totals[key-1][prod_select][1]) - (annual_product_totals[key-1][prod_select][0] * bom_dict[prod_select])
     avg_price = annual_product_totals[key][prod_select][1] / annual_product_totals[key][prod_select][0]
     avg_price_last = annual_product_totals[key-1][prod_select][1] / annual_product_totals[key-1][prod_select][0]
+
+    if (prod_select in jet_list or prod_select in control_list) and (key == 1 or key == 3):
+        wholesale_sales = annual_product_totals[key][prod_select][2]
+        wholesale_percentage = (annual_product_totals[key][prod_select][2] / annual_product_totals[key][prod_select][0]) * 100
+
+        return prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage
         
-    return prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last
+    else:
+        
+        return prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last
 
 if task_choice == 'Product Sales Reports':
 
@@ -2203,12 +2251,10 @@ if task_choice == 'Product Sales Reports':
         if year == 2024:
             
             total_jet_rev = annual_product_totals[1]['Pro Jet'][1] + annual_product_totals[1]['Quad Jet'][1] + annual_product_totals[1]['Micro Jet'][1] + annual_product_totals[1]['Cryo Clamp'][1]
-
-
+            
             col1, col2, col3, col4 = st.columns(4)
 
             col1.subheader('Pro Jet')
-            #display_overview_metric('Pro Jet', 'Jet', 1)
             col1.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[1]['Pro Jet'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[1]['Pro Jet'][0]), annual_product_totals[1]['Pro Jet'][0] - annual_product_totals[0]['Pro Jet'][0])
             #col1.metric('', '${:,}'.format(annual_product_totals[1]['Pro Jet'][1]), percent_of_change(annual_product_totals[0]['Pro Jet'][0], annual_product_totals[1]['Pro Jet'][0]))
             col2.subheader('Quad Jet')
@@ -2233,8 +2279,8 @@ if task_choice == 'Product Sales Reports':
             ### DISPLAY PRODUCT DETAILS 
             col5, col6, col7 = st.columns(3)
 
-            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, prod_select, 1, bom_cost_jet)
-		
+            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage = calculate_product_metrics(annual_product_totals, prod_select, 1, bom_cost_jet)
+            
             #prod_profit = int((annual_product_totals[1][prod_select][1]) - (annual_product_totals[1][prod_select][0] * bom_cost_jet[prod_select]))
             #prod_profit_last = int((annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select]))
             #avg_price = annual_product_totals[1][prod_select][1] / annual_product_totals[1][prod_select][0]
@@ -2243,6 +2289,7 @@ if task_choice == 'Product Sales Reports':
             col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[1][prod_select][1]), percent_of_change(annual_product_totals[0][prod_select][0], annual_product_totals[1][prod_select][0]))
             col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+            col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))        
             col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_jet[prod_select]), '')
     
@@ -2294,7 +2341,6 @@ if task_choice == 'Product Sales Reports':
             
 
     elif prod_cat == 'Controllers':
-		
         if year == 2024:
 
             total_cntl_rev = annual_product_totals[3]['The Button'][1] + annual_product_totals[3]['Shostarter'][1] + annual_product_totals[3]['Shomaster'][1]
@@ -2316,8 +2362,8 @@ if task_choice == 'Product Sales Reports':
     
             ### DISPLAY PRODUCT DETAILS 
             col5, col6, col7 = st.columns(3)
-            
-            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, prod_select, 3, bom_cost_control)
+
+            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage = calculate_product_metrics(annual_product_totals, prod_select, 3, bom_cost_control)
     
             #prod_profit = int((annual_product_totals[3][prod_select][1]) - (annual_product_totals[3][prod_select][0] * bom_cost_control[prod_select]))
             #prod_profit_last = int((annual_product_totals[2][prod_select][1]) - (annual_product_totals[2][prod_select][0] * bom_cost_control[prod_select]))
@@ -2327,11 +2373,12 @@ if task_choice == 'Product Sales Reports':
             col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[3][prod_select][1]), percent_of_change(annual_product_totals[2][prod_select][0], annual_product_totals[3][prod_select][0]))
             col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+            col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
             col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_control[prod_select]), '')
 
             style_metric_cards()
-    
+            
             display_month_data_prod(prod_select, control24, control23)
 
         elif year == 2023:
@@ -2367,7 +2414,7 @@ if task_choice == 'Product Sales Reports':
             col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_control[prod_select]), '')
 
             style_metric_cards()
-    
+            
             display_month_data_prod(prod_select, control23)
             
 
