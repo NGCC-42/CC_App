@@ -2211,21 +2211,30 @@ def calculate_product_metrics(annual_product_totals, prod_select, key, bom_dict)
 
     jet_list = ['Pro Jet', 'Quad Jet', 'Micro Jet', 'Cryo Clamp']
     control_list = ['The Button', 'Shostarter', 'Shomaster']
+    no_prior_list = [0,2,4,6,8]
 
     prod_profit = (annual_product_totals[key][prod_select][1]) - (annual_product_totals[key][prod_select][0] * bom_dict[prod_select])
     profit_per_unit = prod_profit / annual_product_totals[key][prod_select][0]
-    prod_profit_last = (annual_product_totals[key-1][prod_select][1]) - (annual_product_totals[key-1][prod_select][0] * bom_dict[prod_select])
     avg_price = annual_product_totals[key][prod_select][1] / annual_product_totals[key][prod_select][0]
-    avg_price_last = annual_product_totals[key-1][prod_select][1] / annual_product_totals[key-1][prod_select][0]
+    
+    if key not in no_prior_list:
+        avg_price_last = annual_product_totals[key-1][prod_select][1] / annual_product_totals[key-1][prod_select][0]
+        prod_profit_last = (annual_product_totals[key-1][prod_select][1]) - (annual_product_totals[key-1][prod_select][0] * bom_dict[prod_select])
 
-    if (prod_select in jet_list or prod_select in control_list) and (key == 1 or key == 3):
+    if (prod_select in jet_list or prod_select in control_list) and (key in [0, 1, 2, 3]):
         wholesale_sales = annual_product_totals[key][prod_select][2]
         wholesale_percentage = (annual_product_totals[key][prod_select][2] / annual_product_totals[key][prod_select][0]) * 100
+        
+        if key not in no_prior_list:
+            wholesale_delta = wholesale_percentage - ((annual_product_totals[key-1][prod_select][2] / annual_product_totals[key-1][prod_select][0]) * 100)
+            return prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage, wholesale_delta
+        else:
+            return prod_profit, profit_per_unit, avg_price, wholesale_sales, wholesale_percentage
 
-        return prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage
-        
+    elif key in no_prior_list:
+        return prod_profit, profit_per_unit, avg_price
+    
     else:
-        
         return prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last
 
 if task_choice == 'Product Sales Reports':
@@ -2326,13 +2335,15 @@ if task_choice == 'Product Sales Reports':
             ### DISPLAY PRODUCT DETAILS 
             col5, col6, col7 = st.columns(3)
     
-            prod_profit = (annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select])
-            avg_price = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
-            profit_per_unit = avg_price - bom_cost_jet[prod_select]
-    
+            prod_profit, profit_per_unit, avg_price, wholesale_sales, wholesale_percentage = calculate_product_metrics(annual_product_totals, prod_select, 0, bom_cost_jet)
+            #prod_profit = (annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select])
+            #avg_price = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
+            #profit_per_unit = avg_price - bom_cost_jet[prod_select]
+
             col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[0][prod_select][1]), '')
             col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), '')
+            col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), '')        
             col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_jet[prod_select]), '')
     
@@ -2403,13 +2414,15 @@ if task_choice == 'Product Sales Reports':
             ### DISPLAY PRODUCT DETAILS 
             col5, col6, col7 = st.columns(3)
     
-            prod_profit = (annual_product_totals[2][prod_select][1]) - (annual_product_totals[2][prod_select][0] * bom_cost_control[prod_select])
-            avg_price = annual_product_totals[2][prod_select][1] / annual_product_totals[2][prod_select][0]
-            profit_per_unit = avg_price - bom_cost_control[prod_select]
+            prod_profit, profit_per_unit, avg_price, wholesale_sales, wholesale_percentage = calculate_product_metrics(annual_product_totals, prod_select, 2, bom_cost_control)
+            #prod_profit = (annual_product_totals[2][prod_select][1]) - (annual_product_totals[2][prod_select][0] * bom_cost_control[prod_select])
+            #avg_price = annual_product_totals[2][prod_select][1] / annual_product_totals[2][prod_select][0]
+            #profit_per_unit = avg_price - bom_cost_control[prod_select]
             
             col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[2][prod_select][1]), '')
             col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), '')
+            col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), '')
             col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_control[prod_select]), '')
 
