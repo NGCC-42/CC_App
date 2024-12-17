@@ -2288,7 +2288,7 @@ if task_choice == 'Product Sales Reports':
             ### DISPLAY PRODUCT DETAILS 
             col5, col6, col7 = st.columns(3)
 
-            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage = calculate_product_metrics(annual_product_totals, prod_select, 1, bom_cost_jet)
+            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage, wholesale_delta = calculate_product_metrics(annual_product_totals, prod_select, 1, bom_cost_jet)
             
             #prod_profit = int((annual_product_totals[1][prod_select][1]) - (annual_product_totals[1][prod_select][0] * bom_cost_jet[prod_select]))
             #prod_profit_last = int((annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select]))
@@ -2374,7 +2374,7 @@ if task_choice == 'Product Sales Reports':
             ### DISPLAY PRODUCT DETAILS 
             col5, col6, col7 = st.columns(3)
 
-            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage = calculate_product_metrics(annual_product_totals, prod_select, 3, bom_cost_control)
+            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage, wholesale_delta = calculate_product_metrics(annual_product_totals, prod_select, 3, bom_cost_control)
     
             #prod_profit = int((annual_product_totals[3][prod_select][1]) - (annual_product_totals[3][prod_select][0] * bom_cost_control[prod_select]))
             #prod_profit_last = int((annual_product_totals[2][prod_select][1]) - (annual_product_totals[2][prod_select][0] * bom_cost_control[prod_select]))
