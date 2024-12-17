@@ -1909,7 +1909,7 @@ def extract_jet_data(df):
     
     return dict_23, dict_24
     
-        
+   
 @st.cache_data
 def collect_product_data(df, prod='All', years=[2023, 2024]):
 
