@@ -1189,7 +1189,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
             db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
             db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
             db1.metric('**Website Average Sale**', '${:,}'.format(int(data1[0])), web_avg_sale)
-            db1.metric('**Retail Sales**', '${:,}'.format(int(retail_sales1)), '')
+            db1.metric('**Retail Revenue**', '${:,}'.format(int(retail_sales1)), '')
         
             db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
             db2.metric('**Monthly Average**', '${:,}'.format(int(avg_month1)), avg_per_month)
@@ -1198,7 +1198,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
             db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
             db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
             db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
-            db3.metric('**Wholesale Sales**', '${:,}'.format(int(wholesale_sales1)), '')
+            db3.metric('**Wholesale Revenue**', '${:,}'.format(int(wholesale_sales1)), '')
 
             style_metric_cards()
 
@@ -1211,7 +1211,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
             db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
             db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
             db1.metric('**Website Average Sale**', '${:,}'.format(int(data1[0])), web_avg_sale)
-            db1.metric('**Retail Sales**', '${:,}'.format(int(retail_sales1)), retail_delta)
+            db1.metric('**Retail Revenue**', '${:,}'.format(int(retail_sales1)), retail_delta)
         
             db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
             db2.metric('**Monthly Average**', '${:,}'.format(int(avg_month1)), avg_per_month)
@@ -1220,7 +1220,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
             db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
             db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
             db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
-            db3.metric('**Wholesale Sales**', '${:,}'.format(int(wholesale_sales1)), wholesale_delta)
+            db3.metric('**Wholesale Revenue**', '${:,}'.format(int(wholesale_sales1)), wholesale_delta)
         
             style_metric_cards()
         
@@ -1246,7 +1246,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
             db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
             db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
             db1.metric('**Website Average Sale**', '${:,}'.format(int(data1[0])), web_avg_sale)
-            db1.metric('**Retail Sales**', '${:,}'.format(int(wvr1[month][1])), '')
+            db1.metric('**Retail Revenue**', '${:,}'.format(int(wvr1[month][1])), '')
         
             db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
             db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
@@ -1255,7 +1255,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
             db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
             db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
             db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
-            db3.metric('**Wholesale Sales**', '${:,}'.format(int(wvr1[month][0])), '')
+            db3.metric('**Wholesale Revenue**', '${:,}'.format(int(wvr1[month][0])), '')
 
             style_metric_cards()
         
