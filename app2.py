@@ -1294,6 +1294,47 @@ def wholesale_retail_totals(monthly_sales_wVr):
 
     return wholesale_totals, retail_totals
 
+
+def beginning_of_year(dt: datetime) -> datetime:
+    return datetime(dt.year, 1, 1)
+
+
+
+    
+    today = datetime.now()
+    #today = datetime(2024, 3, 5)
+    one_year_ago = today - timedelta(days=365)
+    two_years_ago = today - timedelta(days=730)
+    three_years_ago = today - timedelta(days=1095)
+
+
+
+def to_date_revenue():
+
+    revtd_22 = 0
+    revtd_23 = 0
+    revtd_24 = 0
+    revtd_25 = 0
+
+    idx = 0
+    
+    for sale in df.sales_order:
+        order_date = df.iloc[idx].order_date
+        if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
+            revtd_22 += df.iloc[idx].total_line_item_spend
+        elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
+            revtd_23 += df.iloc[idx].total_line_item_spend
+        elif today.date() >= order_date >= beginning_of_year(today).date():
+            revtd_24 += df.iloc[idx].total_line_item_spend
+        elif order_date.year == 2025:
+            revtd_25 += df.iloc[idx].total_line_item_spend            
+
+        idx += 1
+        
+    return revtd_22, revtd_23, revtd_24, revtd_25
+
+
+
 if task_choice == 'Dashboard':
 
 
@@ -2236,6 +2277,36 @@ def calculate_product_metrics(annual_product_totals, prod_select, key, bom_dict)
     
     else:
         return prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last
+
+
+def to_date_product(sku_string):
+    
+    # 15FT & 8FT HOSES DO NOT INCLUDE HANDHELDS
+
+    prod_cnt_25 = 0
+    prod_cnt_24 = 0
+    prod_cnt_23 = 0
+    prod_cnt_22 = 0
+
+    idx = 0
+
+    for order in df.line_item:
+        order_date = df.iloc[idx].order_date
+        if order[:len(sku_string)] == sku_string:
+            if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
+                prod_cnt_22 += df.iloc[idx].quantity
+            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
+                prod_cnt_23 += df.iloc[idx].quantity
+            elif today.date() >= order_date >= beginning_of_year(today).date():
+                prod_cnt_24 += df.iloc[idx].quantity
+            elif order_date.year == 2025:
+                prod_cnt_25 += df.iloc[idx].quantity
+                
+        idx += 1
+            
+    return prod_cnt_23, prod_cnt_24, prod_cnt_25
+
+
 
 if task_choice == 'Product Sales Reports':
 
