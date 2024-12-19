@@ -1343,7 +1343,7 @@ def to_date_revenue():
 
         idx += 1
         
-    return revtd_22, revtd_23, revtd_24, revtd_25
+    return td_22, td_23, td_24, td_25
 
 # MAKE TO-DATE REV GLOBAL FOR USE WITH PRODUCTS
 
