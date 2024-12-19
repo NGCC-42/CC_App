@@ -1301,11 +1301,11 @@ def beginning_of_year(dt: datetime) -> datetime:
 
 
     
-    today = datetime.now()
-    #today = datetime(2024, 3, 5)
-    one_year_ago = today - timedelta(days=365)
-    two_years_ago = today - timedelta(days=730)
-    three_years_ago = today - timedelta(days=1095)
+today = datetime.now()
+#today = datetime(2024, 3, 5)
+one_year_ago = today - timedelta(days=365)
+two_years_ago = today - timedelta(days=730)
+three_years_ago = today - timedelta(days=1095)
 
 
 
