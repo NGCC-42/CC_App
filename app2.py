@@ -1311,27 +1311,48 @@ def beginning_of_year(dt: datetime) -> datetime:
 
 def to_date_revenue():
 
-    revtd_22 = 0
-    revtd_23 = 0
-    revtd_24 = 0
-    revtd_25 = 0
+    # WEB SALES, FULCRUM SALES
+
+    td_22 = [0,0]
+    td_23 = [0,0]
+    td_24 = [0,0]
+    td_25 = [0,0]
 
     idx = 0
     
     for sale in df.sales_order:
         order_date = df.iloc[idx].order_date
-        if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
-            revtd_22 += df.iloc[idx].total_line_item_spend
-        elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
-            revtd_23 += df.iloc[idx].total_line_item_spend
-        elif today.date() >= order_date >= beginning_of_year(today).date():
-            revtd_24 += df.iloc[idx].total_line_item_spend
-        elif order_date.year == 2025:
-            revtd_25 += df.iloc[idx].total_line_item_spend            
+        if df.iloc[idx].channel[0] == 'F':
+            if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
+                td_22[0] += df.iloc[idx].total_line_item_spend
+            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
+                td_23[0] += df.iloc[idx].total_line_item_spend
+            elif today.date() >= order_date >= beginning_of_year(today).date():
+                td_24[0] += df.iloc[idx].total_line_item_spend
+            elif order_date.year == 2025:
+                td_25[0] += df.iloc[idx].total_line_item_spend   
+        else:
+            if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
+                td_22[1] += df.iloc[idx].total_line_item_spend
+            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
+                td_23[1] += df.iloc[idx].total_line_item_spend
+            elif today.date() >= order_date >= beginning_of_year(today).date():
+                td_24[1] += df.iloc[idx].total_line_item_spend
+            elif order_date.year == 2025:
+                td_25[1] += df.iloc[idx].total_line_item_spend            
 
         idx += 1
         
     return revtd_22, revtd_23, revtd_24, revtd_25
+
+# MAKE TO-DATE REV GLOBAL FOR USE WITH PRODUCTS
+
+td_22, td_23, td_24, td_25 = to_date_revenue()
+
+td_22_tot = td_22[0] + td_22[1]
+td_23_tot = td_23[0] + td_23[1]
+td_24_tot = td_24[0] + td_24[1]
+td_25_tot = td_25[0] + td_25[1]
 
 
 
