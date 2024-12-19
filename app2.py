@@ -2543,7 +2543,24 @@ if task_choice == 'Product Sales Reports':
             col4.subheader('15FT TC')
             col4.metric('{:.1f}% of Total Rev'.format((annual_product_totals[5]['15FT - Travel Case'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[5]['15FT - Travel Case'][0]),  '{}'.format(annual_product_totals[5]['15FT - Travel Case'][0] - annual_product_totals[4]['15FT - Travel Case'][0]))
             col4.metric('', '${:,}'.format(int(annual_product_totals[5]['15FT - Travel Case'][1])), percent_of_change(annual_product_totals[4]['15FT - Travel Case'][1], annual_product_totals[5]['15FT - Travel Case'][1]))
-        
+
+
+            prod_profit_8NC, profit_per_unit_8NC, prod_profit_last_8NC, avg_price_8NC, avg_price_last_8NC = calculate_product_metrics(annual_product_totals, '8FT - No Case', 5, bom_cost_hh)
+            prod_profit_8TC, profit_per_unit_8TC, prod_profit_last_8TC, avg_price_8TC, avg_price_last_8TC = calculate_product_metrics(annual_product_totals, '8FT - Travel Case', 5, bom_cost_hh)
+            prod_profit_15NC, profit_per_unit_15NC, prod_profit_last_15NC, avg_price_15NC, avg_price_last_15NC = calculate_product_metrics(annual_product_totals, '15FT - No Case', 5, bom_cost_hh)
+            prod_profit_15TC, profit_per_unit_15TC, prod_profit_last_15TC, avg_price_15TC, avg_price_last_15TC = calculate_product_metrics(annual_product_totals, '15FT - Travel Case', 5, bom_cost_hh)
+            
+            tot_hh_rev24 = annual_product_totals[5]['8FT - No Case'][1] + annual_product_totals[5]['8FT - Travel Case'][1] + annual_product_totals[5]['15FT - No Case'][1] + annual_product_totals[5]['15FT - Travel Case'][1]
+            tot_hh_prof24 = prod_profit_8NC + prod_profit_8TC + prod_profit_15NC + prod_profit_15TC
+            prof_margin24 = (tot_hh_prof24 / tot_hh_rev24) * 100
+            
+            col1, col2, col3 = st.columns(3)
+
+            col1.metric('Total Profit', '${:,}'.format(int(tot_hh_rev24)))
+            col2.metric('Profit Margin', '{:,.2f}%'.format(prof_margin24))
+            col3.metric('Totat Profit', '${:,}'.format(int(tot_hh_prof24)))
+
+            
             st.divider()
             display_pie_chart_comp(annual_product_totals[5])
             st.divider()
@@ -2588,7 +2605,24 @@ if task_choice == 'Product Sales Reports':
             col4.subheader('15FT TC')
             col4.metric('{:.1f}% of Total Rev'.format((annual_product_totals[4]['15FT - Travel Case'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[4]['15FT - Travel Case'][0]),  '')
             col4.metric('', '${:,}'.format(int(annual_product_totals[4]['15FT - Travel Case'][1])), '')
-        
+
+
+            prod_profit_8NC, profit_per_unit_8NC, avg_price_8NC = calculate_product_metrics(annual_product_totals, '8FT - No Case', 4, bom_cost_hh)
+            prod_profit_8TC, profit_per_unit_8TC, avg_price_8TC = calculate_product_metrics(annual_product_totals, '8FT - Travel Case', 4, bom_cost_hh)
+            prod_profit_15NC, profit_per_unit_15NC, avg_price_15NC = calculate_product_metrics(annual_product_totals, '15FT - No Case', 4, bom_cost_hh)
+            prod_profit_15TC, profit_per_unit_15TC, avg_price_15TC = calculate_product_metrics(annual_product_totals, '15FT - Travel Case', 4, bom_cost_hh)
+            
+            tot_hh_rev23 = annual_product_totals[4]['8FT - No Case'][1] + annual_product_totals[4]['8FT - Travel Case'][1] + annual_product_totals[4]['15FT - No Case'][1] + annual_product_totals[4]['15FT - Travel Case'][1]
+            tot_hh_prof23 = prod_profit_8NC + prod_profit_8TC + prod_profit_15NC + prod_profit_15TC
+            prof_margin23 = (tot_hh_prof23 / tot_hh_rev23) * 100
+            
+            col1, col2, col3 = st.columns(3)
+
+            col1.metric('Total Profit', '${:,}'.format(int(tot_hh_rev23)))
+            col2.metric('Profit Margin', '{:,.2f}%'.format(prof_margin23))
+            col3.metric('Totat Profit', '${:,}'.format(int(tot_hh_prof23)))   
+
+            
             st.divider()
             display_pie_chart_comp(annual_product_totals[5])
             st.divider()
