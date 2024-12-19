@@ -83,9 +83,14 @@ df_hsd = create_dataframe(hsd_ss)
 
 df_wholesale = create_dataframe(wholesale_cust)
 
-wholesale_list = []
-for ws in df_wholesale.name:
-    wholesale_list.append(ws)
+@st.cache_data
+def gen_ws_list():
+    wholesale_list = []
+    for ws in df_wholesale.name:
+        wholesale_list.append(ws)
+    return wholesale_list
+
+wholesale_list = gen_ws_list()
 
 ### STRIP UNUSED COLUMN ###
 
