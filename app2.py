@@ -1501,8 +1501,10 @@ def extract_handheld_data(df):
 
     dict_23 = {}
     dict_24 = {}
+    dict_25 = {}
     hose_count_23 = {}
     hose_count_24 = {}
+    hose_count_25 = {}
     
     # CREATE DATA DICTS 
     for month in months_x:
@@ -1514,12 +1516,36 @@ def extract_handheld_data(df):
                      '8FT - Travel Case': [0,0],
                      '15FT - No Case': [0,0],
                      '15FT - Travel Case': [0,0]}
+        dict_25[month] = {'8FT - No Case': [0,0],
+                     '8FT - Travel Case': [0,0],
+                     '15FT - No Case': [0,0],
+                     '15FT - Travel Case': [0,0]}
         
         hose_count_23[month] = [0,0]
         hose_count_24[month] = [0,0]
+        hose_count_25[month] = [0,0]
     
     idx = 0
     for line in df.line_item:
+
+        if df.iloc[idx].order_date.year == 2025:
+            if line[:16] == 'CC-HCCMKII-08-NC':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - No Case'][0] += df.iloc[idx].quantity
+                hose_count_24[num_to_month(df.iloc[idx].order_date.month)][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - No Case'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:16] == 'CC-HCCMKII-08-TC':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - Travel Case'][0] += df.iloc[idx].quantity
+                hose_count_24[num_to_month(df.iloc[idx].order_date.month)][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - Travel Case'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:16] == 'CC-HCCMKII-15-NC':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT - No Case'][0] += df.iloc[idx].quantity
+                hose_count_24[num_to_month(df.iloc[idx].order_date.month)][1] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT - No Case'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:16] == 'CC-HCCMKII-15-TC':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT - Travel Case'][0] += df.iloc[idx].quantity
+                hose_count_24[num_to_month(df.iloc[idx].order_date.month)][1] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT - Travel Case'][1] += df.iloc[idx].total_line_item_spend
+                
         if df.iloc[idx].order_date.year == 2024:
             if line[:16] == 'CC-HCCMKII-08-NC':
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - No Case'][0] += df.iloc[idx].quantity
@@ -1558,7 +1584,7 @@ def extract_handheld_data(df):
                 
         idx += 1
     
-    return dict_23, dict_24, hose_count_23, hose_count_24
+    return dict_23, dict_24, dict_25, hose_count_23, hose_count_24, hose_count_25
 
 
 
@@ -1567,14 +1593,86 @@ def extract_hose_data(df):
 
     dict_23 = {}
     dict_24 = {}
+    dict_25 = {}
 
     # CREATE DATA DICTS 
     for month in months_x:
         dict_23[month] = {'2FT MFD': [0,0], '3.5FT MFD': [0,0], '5FT MFD': [0,0], '5FT STD': [0,0], '5FT DSY': [0,0], '5FT EXT': [0,0], '8FT STD': [0,0], '8FT DSY': [0,0], '8FT EXT': [0,0], '15FT STD': [0,0], '15FT DSY': [0,0], '15FT EXT': [0,0], '25FT STD': [0,0], '25FT DSY': [0,0], '25FT EXT': [0,0], '35FT STD': [0,0], '35FT DSY': [0,0], '35FT EXT': [0,0], '50FT STD': [0,0], '50FT EXT': [0,0], '100FT STD': [0,0], 'CUSTOM': [0,0]}
         dict_24[month] = {'2FT MFD': [0,0], '3.5FT MFD': [0,0], '5FT MFD': [0,0], '5FT STD': [0,0], '5FT DSY': [0,0], '5FT EXT': [0,0], '8FT STD': [0,0], '8FT DSY': [0,0], '8FT EXT': [0,0], '15FT STD': [0,0], '15FT DSY': [0,0], '15FT EXT': [0,0], '25FT STD': [0,0], '25FT DSY': [0,0], '25FT EXT': [0,0], '35FT STD': [0,0], '35FT DSY': [0,0], '35FT EXT': [0,0], '50FT STD': [0,0], '50FT EXT': [0,0], '100FT STD': [0,0], 'CUSTOM': [0,0]}
+        dict_25[month] = {'2FT MFD': [0,0], '3.5FT MFD': [0,0], '5FT MFD': [0,0], '5FT STD': [0,0], '5FT DSY': [0,0], '5FT EXT': [0,0], '8FT STD': [0,0], '8FT DSY': [0,0], '8FT EXT': [0,0], '15FT STD': [0,0], '15FT DSY': [0,0], '15FT EXT': [0,0], '25FT STD': [0,0], '25FT DSY': [0,0], '25FT EXT': [0,0], '35FT STD': [0,0], '35FT DSY': [0,0], '35FT EXT': [0,0], '50FT STD': [0,0], '50FT EXT': [0,0], '100FT STD': [0,0], 'CUSTOM': [0,0]}
     
     idx = 0
+    
     for line in df.line_item:
+
+        if df.iloc[idx].order_date.year == 2025:
+            if line[:8] == 'CC-CH-02':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['2FT MFD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['2FT MFD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-CH-03':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['3.5FT MFD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['3.5FT MFD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-05-M':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT MFD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT MFD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-05-S':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-05-D':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT DSY'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-05-E':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT EXT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-08-S':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-08-D':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT DSY'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-08-E':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT EXT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-15-S':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-15-D':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT DSY'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-15-E':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT EXT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-25-S':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['25FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['25FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-25-D':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['25FT DSY'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['25FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-25-E':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['25FT EXT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['25FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-35-S':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['35FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['35FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-35-D':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['35FT DSY'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['35FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-35-E':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['35FT EXT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['35FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-50-S':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['50FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['50FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-50-E':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['50FT EXT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['50FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-CH-100':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['100FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['100FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-CH-XX':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CUSTOM'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CUSTOM'][1] += df.iloc[idx].total_line_item_spend
+
         if df.iloc[idx].order_date.year == 2024:
             if line[:8] == 'CC-CH-02':
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['2FT MFD'][0] += df.iloc[idx].quantity
@@ -1713,7 +1811,7 @@ def extract_hose_data(df):
                 
         idx += 1
     
-    return dict_23, dict_24
+    return dict_23, dict_24, dict_25
 
 
 @st.cache_data
@@ -1721,6 +1819,7 @@ def extract_acc_data(df):
 
     dict_23 = {}
     dict_24 = {}
+    dict_25 = {}
 
     # CREATE DATA DICTS 
     for month in months_x:
@@ -1728,9 +1827,65 @@ def extract_acc_data(df):
                 'CC-RC-2430': [0,0,0,0,0], 'CC-AC-LA2': [0,0]}
         dict_24[month] = {'CC-AC-CCL': [0,0], 'CC-AC-CTS': [0,0], 'CC-F-DCHA': [0,0], 'CC-F-HEA': [0,0], 'CC-AC-RAA': [0,0], 'CC-AC-4PM': [0,0], 'CC-F-MFDCGAJIC': [0,0], ' CC-AC-CGAJIC-SET': [0,0], 'CC-CTC-20': [0,0], 'CC-CTC-50': [0,0], 'CC-AC-TC': [0,0], 'CC-VV-KIT': [0,0], 
                 'CC-RC-2430': [0,0,0,0,0], 'CC-AC-LA2': [0,0]}
+        dict_25[month] = {'CC-AC-CCL': [0,0], 'CC-AC-CTS': [0,0], 'CC-F-DCHA': [0,0], 'CC-F-HEA': [0,0], 'CC-AC-RAA': [0,0], 'CC-AC-4PM': [0,0], 'CC-F-MFDCGAJIC': [0,0], ' CC-AC-CGAJIC-SET': [0,0], 'CC-CTC-20': [0,0], 'CC-CTC-50': [0,0], 'CC-AC-TC': [0,0], 'CC-VV-KIT': [0,0], 
+                'CC-RC-2430': [0,0,0,0,0], 'CC-AC-LA2': [0,0]}
     
     idx = 0
     for line in df.line_item:
+
+       if df.iloc[idx].order_date.year == 2025:
+            if line[:9] == 'CC-AC-CCL':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CCL'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CCL'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-AC-CTS':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CTS'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CTS'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-F-DCHA':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-F-DCHA'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-F-DCHA'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-F-HEA':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-F-HEA'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-F-HEA'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-AC-RAA':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-RAA'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-RAA'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-AC-4PM':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-4PM'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-4PM'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:14] == 'CC-F-MFDCGAJIC':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-F-MFDCGAJIC'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-F-MFDCGAJIC'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:17] == ' CC-AC-CGAJIC-SET':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)][' CC-AC-CGAJIC-SET'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)][' CC-AC-CGAJIC-SET'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-CTC-20':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-CTC-20'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-CTC-20'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-CTC-50':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-CTC-50'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-CTC-50'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-AC-TC':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-TC'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-TC'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-VV-KIT':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-VV-KIT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-VV-KIT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-AC-LA2':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-LA2'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-LA2'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:5] == 'CC-RC':
+                if line[:14] == 'CC-RC-2430-TTI':
+                    pass
+                elif line[:14] == 'CC-RC-2430-PJI':
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][2] += df.iloc[idx].quantity
+                elif line[:14] == 'CC-RC-2430-LAI':
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][3] += df.iloc[idx].quantity                    
+                elif line[:14] == 'CC-RC-2430-QJF':
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][4] += df.iloc[idx].quantity
+                else:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][0] += df.iloc[idx].quantity
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][1] += df.iloc[idx].total_line_item_spend
+                    
         if df.iloc[idx].order_date.year == 2024:
             if line[:9] == 'CC-AC-CCL':
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CCL'][0] += df.iloc[idx].quantity
@@ -1842,7 +1997,7 @@ def extract_acc_data(df):
                 
         idx += 1
     
-    return dict_23, dict_24
+    return dict_23, dict_24, dict_25
 
 
 
@@ -1851,6 +2006,7 @@ def extract_control_data(df):
 
     dict_23 = {}
     dict_24 = {}
+    dict_25 = {}
 
     # CREATE DATA DICTS 
     for month in months_x:
@@ -1860,9 +2016,30 @@ def extract_control_data(df):
         dict_24[month] = {'The Button': [0,0,0],
                      'Shostarter': [0,0,0],
                      'Shomaster': [0,0,0]}
+        dict_25[month] = {'The Button': [0,0,0],
+                     'Shostarter': [0,0,0],
+                     'Shomaster': [0,0,0]}
     
     idx = 0
     for line in df.line_item:
+
+        if df.iloc[idx].order_date.year == 2025:
+            if line[:7] == 'CC-TB-3':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['The Button'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['The Button'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['The Button'][2] += df.iloc[idx].quantity  
+            elif line[:8] == 'CC-SS-35':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][2] += df.iloc[idx].quantity  
+            elif line[:5] == 'CC-SM':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][2] += df.iloc[idx].quantity 
+                    
         if df.iloc[idx].order_date.year == 2024:
             if line[:7] == 'CC-TB-3':
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['The Button'][0] += df.iloc[idx].quantity
@@ -1900,7 +2077,7 @@ def extract_control_data(df):
                 
         idx += 1
     
-    return dict_23, dict_24
+    return dict_23, dict_24, dict_25
     
 
 
@@ -1910,6 +2087,7 @@ def extract_jet_data(df):
 
     dict_23 = {}
     dict_24 = {}
+    dict_25 = {}
 
     # CREATE DATA DICTS 
     for month in months_x:
@@ -1921,9 +2099,36 @@ def extract_jet_data(df):
                 'Quad Jet': [0,0,0],
                'Micro Jet': [0,0,0],
                'Cryo Clamp': [0,0,0]}
+        dict_25[month] = {'Pro Jet': [0,0,0],
+                'Quad Jet': [0,0,0],
+               'Micro Jet': [0,0,0],
+               'Cryo Clamp': [0,0,0]}
     
     idx = 0
     for line in df.line_item:
+
+        if df.iloc[idx].order_date.year == 2025:
+            if line[:6] == 'CC-PRO':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][2] += df.iloc[idx].quantity     
+            elif line[:5] == 'CC-QJ':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][2] += df.iloc[idx].quantity  
+            elif line[:6] == 'CC-MJM':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][2] += df.iloc[idx].quantity  
+            elif line[:6] == 'CC-CC2':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][1] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].customer in wholesale_list:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][2] += df.iloc[idx].quantity 
+                    
         if df.iloc[idx].order_date.year == 2024:
             if line[:6] == 'CC-PRO':
                 dict_24[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][0] += df.iloc[idx].quantity
@@ -1969,18 +2174,19 @@ def extract_jet_data(df):
                 
         idx += 1
     
-    return dict_23, dict_24
+    return dict_23, dict_24, dict_25
     
    
 @st.cache_data
 def collect_product_data(df, prod='All', years=[2023, 2024]):
 
+    # NEEDS TO ALLOW FOR 2025 AND KICK OUT 2025 DATA
 
-    jet23, jet24 = extract_jet_data(df)
-    control23, control24 = extract_control_data(df)
-    handheld23, handheld24, hh_hose_count_23, hh_hose_count_24 = extract_handheld_data(df)
-    hose23, hose24 = extract_hose_data(df)
-    acc23, acc24 = extract_acc_data(df)
+    jet23, jet24, jet25 = extract_jet_data(df)
+    control23, control24, control25 = extract_control_data(df)
+    handheld23, handheld24, handheld25, hh_hose_count_23, hh_hose_count_24, hh_hose_count_25 = extract_handheld_data(df)
+    hose23, hose24, hose25 = extract_hose_data(df)
+    acc23, acc24, acc25 = extract_acc_data(df)
 
     # INCLUDE HANDHELD HOSES IN COUNTS
     for key, val in hose23.items():
@@ -1988,7 +2194,10 @@ def collect_product_data(df, prod='All', years=[2023, 2024]):
         hose23[key]['15FT STD'][0] += hh_hose_count_23[key][1]
     for key, val in hose24.items():
         hose24[key]['8FT STD'][0] += hh_hose_count_24[key][0]
-        hose24[key]['15FT STD'][0] += hh_hose_count_24[key][1]        
+        hose24[key]['15FT STD'][0] += hh_hose_count_24[key][1] 
+    for key, val in hose25.items():
+        hose25[key]['8FT STD'][0] += hh_hose_count_25[key][0]
+        hose25[key]['15FT STD'][0] += hh_hose_count_25[key][1] 
 
     return jet23, jet24, control23, control24, handheld23, handheld24, hose23, hose24, acc23, acc24
 
