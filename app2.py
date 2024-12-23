@@ -21,7 +21,7 @@ st.set_page_config(page_title='Club Cannon Database',
 
 ### SET HEADER IMAGE
 #image = 'club-cannon-logo-bbb.png'
-st.image('logo.png', use_column_width=True)
+st.image('logo.png', use_container_width=False)
 
 st.divider()
 
