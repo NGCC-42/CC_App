@@ -2771,7 +2771,7 @@ if task_choice == 'Product Sales Reports':
             
             col1, col2, col3 = st.columns(3)
 
-            col1.metric('Total Profit', '${:,}'.format(int(tot_hh_rev24)))
+            col1.metric('Total Revenue', '${:,}'.format(int(tot_hh_rev24)))
             col2.metric('Profit Margin', '{:,.2f}%'.format(prof_margin24))
             col3.metric('Totat Profit', '${:,}'.format(int(tot_hh_prof24)))
 
@@ -2833,7 +2833,7 @@ if task_choice == 'Product Sales Reports':
             
             col1, col2, col3 = st.columns(3)
 
-            col1.metric('Total Profit', '${:,}'.format(int(tot_hh_rev23)))
+            col1.metric('Total Revenue', '${:,}'.format(int(tot_hh_rev23)))
             col2.metric('Profit Margin', '{:,.2f}%'.format(prof_margin23))
             col3.metric('Totat Profit', '${:,}'.format(int(tot_hh_prof23)))   
 
