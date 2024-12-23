@@ -2184,7 +2184,7 @@ def extract_jet_data(df):
     
    
 @st.cache_data
-def collect_product_data(df, prod='All', years=[2023, 2024]):
+def collect_product_data(df, prod='All', years=[2023, 2024, 2025]):
 
     # NEEDS TO ALLOW FOR 2025 AND KICK OUT 2025 DATA
 
@@ -2205,7 +2205,8 @@ def collect_product_data(df, prod='All', years=[2023, 2024]):
         hose25[key]['8FT STD'][0] += hh_hose_count_25[key][0]
         hose25[key]['15FT STD'][0] += hh_hose_count_25[key][1] 
 
-    return jet23, jet24, control23, control24, handheld23, handheld24, hose23, hose24, acc23, acc24
+    return jet23, jet24, jet25, control23, control24, control25, handheld23, handheld24, handheld25, hose23, hose24, hose25, acc23, acc24, acc25
+
 
 @st.cache_data
 def product_annual_totals(prod_dict_list):
@@ -2546,42 +2547,90 @@ def to_date_product(sku_string):
 
 if task_choice == 'Product Sales Reports':
 
-    st.header('Product Sales')
+    st.header('Product Reports')
     #st.subheader('')
 
     # PULL ALL PRODUCT SALES BY MONTH (DICTIONARIES)
-    jet23, jet24, control23, control24, handheld23, handheld24, hose23, hose24, acc23, acc24 = collect_product_data(df)
+    jet23, jet24, jet25, control23, control24, control25, handheld23, handheld24, handheld25, hose23, hose24, hose25, acc23, acc24, acc25 = collect_product_data(df)
+    hose_detail25 = organize_hose_data(hose25)
     hose_detail24 = organize_hose_data(hose24)
     hose_detail23 = organize_hose_data(hose23)
 
     
     # CALCULATE ANNUAL PRODUCT TOTALS
-    annual_product_totals = product_annual_totals([jet23, jet24, control23, control24, handheld23, handheld24, hose23, hose24, acc23, acc24])
+    annual_product_totals = product_annual_totals([jet23, jet24, jet25, control23, control24, control25, handheld23, handheld24, handheld25, hose23, hose24, hose25, acc23, acc24, acc25])
 
+    
     # NAVIGATION TABS
     prod_cat = ui.tabs(options=['Jets', 'Controllers', 'Handhelds', 'Hoses', 'Accessories'], default_value='Jets', key='Product Categories')
-    year = ui.tabs(options=[2024, 2023], default_value=2024, key='Products Year Select')
+    year = ui.tabs(options=[2025, 2024, 2023], default_value=2024, key='Products Year Select')
     st.divider()
+
     
     if prod_cat == 'Jets':
-        if year == 2024:
+
+        if year == 2025:
+            
+            total_jet_rev = annual_product_totals[2]['Pro Jet'][1] + annual_product_totals[2]['Quad Jet'][1] + annual_product_totals[2]['Micro Jet'][1] + annual_product_totals[2]['Cryo Clamp'][1]
+            
+            col1, col2, col3, col4 = st.columns(4)
+
+            col1.subheader('Pro Jet')
+            col1.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Pro Jet'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Pro Jet'][0]), annual_product_totals[2]['Pro Jet'][0] - annual_product_totals[1]['Pro Jet'][0])
+
+            col2.subheader('Quad Jet')
+            col2.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Quad Jet'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Quad Jet'][0]), annual_product_totals[2]['Quad Jet'][0] - annual_product_totals[1]['Quad Jet'][0])
+
+            col3.subheader('Micro Jet')
+            col3.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Micro Jet'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Micro Jet'][0]), annual_product_totals[2]['Micro Jet'][0] - annual_product_totals[1]['Micro Jet'][0])
+
+            col4.subheader('Cryo Clamp')
+            col4.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Cryo Clamp'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Cryo Clamp'][0]), annual_product_totals[2]['Cryo Clamp'][0] - annual_product_totals[1]['Cryo Clamp'][0])
+
+            style_metric_cards()
+            st.divider()
+            display_pie_chart_comp(annual_product_totals[2])
+            #fig1 = px.line(format_for_line_graph(jet24, 'Pro Jet'), x='Months', y='Units Sold')
+            #fig1.show()
+            st.divider()
+            
+            prod_select = ui.tabs(options=['Pro Jet', 'Quad Jet', 'Micro Jet', 'Cryo Clamp'], default_value='Pro Jet', key='Jets')
+    
+    
+            ### DISPLAY PRODUCT DETAILS 
+            col5, col6, col7 = st.columns(3)
+
+            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage, wholesale_delta = calculate_product_metrics(annual_product_totals, prod_select, 2, bom_cost_jet)
+
+    
+            col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[2][prod_select][1]), percent_of_change(annual_product_totals[1][prod_select][0], annual_product_totals[2][prod_select][0]))
+            col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
+            col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+            col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
+            col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))        
+            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_jet[prod_select]), '')
+    
+            
+            display_month_data_prod(prod_select, jet25, jet24)
+        
+        elif year == 2024:
             
             total_jet_rev = annual_product_totals[1]['Pro Jet'][1] + annual_product_totals[1]['Quad Jet'][1] + annual_product_totals[1]['Micro Jet'][1] + annual_product_totals[1]['Cryo Clamp'][1]
             
             col1, col2, col3, col4 = st.columns(4)
 
             col1.subheader('Pro Jet')
-            col1.metric('{:.1f}% of Total Rev'.format((annual_product_totals[1]['Pro Jet'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[1]['Pro Jet'][0]), annual_product_totals[1]['Pro Jet'][0] - annual_product_totals[0]['Pro Jet'][0])
-            #col1.metric('', '${:,}'.format(annual_product_totals[1]['Pro Jet'][1]), percent_of_change(annual_product_totals[0]['Pro Jet'][0], annual_product_totals[1]['Pro Jet'][0]))
+            col1.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[1]['Pro Jet'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[1]['Pro Jet'][0]), annual_product_totals[1]['Pro Jet'][0] - annual_product_totals[0]['Pro Jet'][0])
+
             col2.subheader('Quad Jet')
-            col2.metric('{:.1f}% of Total Rev'.format((annual_product_totals[1]['Quad Jet'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[1]['Quad Jet'][0]), annual_product_totals[1]['Quad Jet'][0] - annual_product_totals[0]['Quad Jet'][0])
-            #col2.metric('', '${:,}'.format(annual_product_totals[1]['Quad Jet'][1]), percent_of_change(annual_product_totals[0]['Quad Jet'][0], annual_product_totals[1]['Quad Jet'][0]))
+            col2.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[1]['Quad Jet'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[1]['Quad Jet'][0]), annual_product_totals[1]['Quad Jet'][0] - annual_product_totals[0]['Quad Jet'][0])
+
             col3.subheader('Micro Jet')
-            col3.metric('{:.1f}% of Total Rev'.format((annual_product_totals[1]['Micro Jet'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[1]['Micro Jet'][0]), annual_product_totals[1]['Micro Jet'][0] - annual_product_totals[0]['Micro Jet'][0])
-            #col3.metric('', '${:,}'.format(annual_product_totals[1]['Micro Jet'][1]), percent_of_change(annual_product_totals[0]['Micro Jet'][0], annual_product_totals[1]['Micro Jet'][0]))
+            col3.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[1]['Micro Jet'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[1]['Micro Jet'][0]), annual_product_totals[1]['Micro Jet'][0] - annual_product_totals[0]['Micro Jet'][0])
+
             col4.subheader('Cryo Clamp')
-            col4.metric('{:.1f}% of Total Rev'.format((annual_product_totals[1]['Cryo Clamp'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[1]['Cryo Clamp'][0]), annual_product_totals[1]['Cryo Clamp'][0] - annual_product_totals[0]['Cryo Clamp'][0])
-            #col4.metric('', '${:,}'.format(annual_product_totals[1]['Cryo Clamp'][1]), percent_of_change(annual_product_totals[0]['Cryo Clamp'][0], annual_product_totals[1]['Cryo Clamp'][0]))
+            col4.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[1]['Cryo Clamp'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[1]['Cryo Clamp'][0]), annual_product_totals[1]['Cryo Clamp'][0] - annual_product_totals[0]['Cryo Clamp'][0])
+
             style_metric_cards()
             st.divider()
             display_pie_chart_comp(annual_product_totals[1])
@@ -2597,10 +2646,6 @@ if task_choice == 'Product Sales Reports':
 
             prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage, wholesale_delta = calculate_product_metrics(annual_product_totals, prod_select, 1, bom_cost_jet)
             
-            #prod_profit = int((annual_product_totals[1][prod_select][1]) - (annual_product_totals[1][prod_select][0] * bom_cost_jet[prod_select]))
-            #prod_profit_last = int((annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select]))
-            #avg_price = annual_product_totals[1][prod_select][1] / annual_product_totals[1][prod_select][0]
-            #avg_price_last = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
     
             col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[1][prod_select][1]), percent_of_change(annual_product_totals[0][prod_select][0], annual_product_totals[1][prod_select][0]))
             col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
@@ -2620,17 +2665,17 @@ if task_choice == 'Product Sales Reports':
             col1, col2, col3, col4 = st.columns(4)
     
             col1.subheader('Pro Jet')
-            col1.metric('{:.1f}% of Total Rev'.format((annual_product_totals[0]['Pro Jet'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[0]['Pro Jet'][0]), '')
-            #col1.metric('', '${:,}'.format(annual_product_totals[1]['Pro Jet'][1]), percent_of_change(annual_product_totals[0]['Pro Jet'][0], annual_product_totals[1]['Pro Jet'][0]))
+            col1.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[0]['Pro Jet'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[0]['Pro Jet'][0]), '')
+
             col2.subheader('Quad Jet')
-            col2.metric('{:.1f}% of Total Rev'.format((annual_product_totals[0]['Quad Jet'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[0]['Quad Jet'][0]), '')
-            #col2.metric('', '${:,}'.format(annual_product_totals[1]['Quad Jet'][1]), percent_of_change(annual_product_totals[0]['Quad Jet'][0], annual_product_totals[1]['Quad Jet'][0]))
+            col2.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[0]['Quad Jet'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[0]['Quad Jet'][0]), '')
+
             col3.subheader('Micro Jet')
-            col3.metric('{:.1f}% of Total Rev'.format((annual_product_totals[0]['Micro Jet'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[0]['Micro Jet'][0]), '')
-            #col3.metric('', '${:,}'.format(annual_product_totals[1]['Micro Jet'][1]), percent_of_change(annual_product_totals[0]['Micro Jet'][0], annual_product_totals[1]['Micro Jet'][0]))
+            col3.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[0]['Micro Jet'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[0]['Micro Jet'][0]), '')
+
             col4.subheader('Cryo Clamp')
-            col4.metric('{:.1f}% of Total Rev'.format((annual_product_totals[0]['Cryo Clamp'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[0]['Cryo Clamp'][0]), '')
-            #col4.metric('', '${:,}'.format(annual_product_totals[1]['Cryo Clamp'][1]), percent_of_change(annual_product_totals[0]['Cryo Clamp'][0], annual_product_totals[1]['Cryo Clamp'][0]))
+            col4.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[0]['Cryo Clamp'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[0]['Cryo Clamp'][0]), '')
+         
             style_metric_cards()
             st.divider()
             display_pie_chart_comp(annual_product_totals[0])
@@ -2641,11 +2686,9 @@ if task_choice == 'Product Sales Reports':
     
             ### DISPLAY PRODUCT DETAILS 
             col5, col6, col7 = st.columns(3)
-    
+            
             prod_profit, profit_per_unit, avg_price, wholesale_sales, wholesale_percentage = calculate_product_metrics(annual_product_totals, prod_select, 0, bom_cost_jet)
-            #prod_profit = (annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select])
-            #avg_price = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
-            #profit_per_unit = avg_price - bom_cost_jet[prod_select]
+
 
             col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[0][prod_select][1]), '')
             col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
@@ -2655,25 +2698,26 @@ if task_choice == 'Product Sales Reports':
             col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_jet[prod_select]), '')
     
             
-            display_month_data_prod(prod_select, jet23)            
+            display_month_data_prod(prod_select, jet23)             
             
 
     elif prod_cat == 'Controllers':
-        if year == 2024:
 
-            total_cntl_rev = annual_product_totals[3]['The Button'][1] + annual_product_totals[3]['Shostarter'][1] + annual_product_totals[3]['Shomaster'][1]
+        if year == 2025:
+
+            total_cntl_rev = annual_product_totals[5]['The Button'][1] + annual_product_totals[5]['Shostarter'][1] + annual_product_totals[5]['Shomaster'][1]
             
             col1, col2, col3 = st.columns(3)
             
             col1.subheader('The Button')
-            col1.metric('{:.1f}% of Total Rev'.format((annual_product_totals[3]['The Button'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[3]['The Button'][0]), annual_product_totals[3]['The Button'][0] - annual_product_totals[2]['The Button'][0])
+            col1.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['The Button'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['The Button'][0]), annual_product_totals[5]['The Button'][0] - annual_product_totals[4]['The Button'][0])
             col2.subheader('Shostarter')
-            col2.metric('{:.1f}% of Total Rev'.format((annual_product_totals[3]['Shostarter'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[3]['Shostarter'][0]), annual_product_totals[3]['Shostarter'][0] - annual_product_totals[2]['Shostarter'][0])
+            col2.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['Shostarter'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['Shostarter'][0]), annual_product_totals[5]['Shostarter'][0] - annual_product_totals[4]['Shostarter'][0])
             col3.subheader('Shomaster')
-            col3.metric('{:.1f}% of Total Rev'.format((annual_product_totals[3]['Shomaster'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[3]['Shomaster'][0]), annual_product_totals[3]['Shomaster'][0] - annual_product_totals[2]['Shomaster'][0])
+            col3.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['Shomaster'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['Shomaster'][0]), annual_product_totals[5]['Shomaster'][0] - annual_product_totals[4]['Shomaster'][0])
     
             st.divider()
-            display_pie_chart_comp(annual_product_totals[3])
+            display_pie_chart_comp(annual_product_totals[5])
             st.divider()
             
             prod_select = ui.tabs(options=['The Button', 'Shostarter', 'Shomaster'], default_value='The Button', key='Controllers')
@@ -2681,14 +2725,46 @@ if task_choice == 'Product Sales Reports':
             ### DISPLAY PRODUCT DETAILS 
             col5, col6, col7 = st.columns(3)
 
-            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage, wholesale_delta = calculate_product_metrics(annual_product_totals, prod_select, 3, bom_cost_control)
-    
-            #prod_profit = int((annual_product_totals[3][prod_select][1]) - (annual_product_totals[3][prod_select][0] * bom_cost_control[prod_select]))
-            #prod_profit_last = int((annual_product_totals[2][prod_select][1]) - (annual_product_totals[2][prod_select][0] * bom_cost_control[prod_select]))
-            #avg_price = annual_product_totals[3][prod_select][1] / annual_product_totals[3][prod_select][0]
-            #avg_price_last = annual_product_totals[2][prod_select][1] / annual_product_totals[2][prod_select][0]
+            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage, wholesale_delta = calculate_product_metrics(annual_product_totals, prod_select, 5, bom_cost_control)
             
-            col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[3][prod_select][1]), percent_of_change(annual_product_totals[2][prod_select][0], annual_product_totals[3][prod_select][0]))
+            
+            col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[5][prod_select][1]), percent_of_change(annual_product_totals[4][prod_select][0], annual_product_totals[5][prod_select][0]))
+            col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
+            col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+            col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
+            col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
+            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_control[prod_select]), '')
+            
+            style_metric_cards()
+            
+            display_month_data_prod(prod_select, control25, control24)    
+        
+        elif year == 2024:
+
+            total_cntl_rev = annual_product_totals[4]['The Button'][1] + annual_product_totals[4]['Shostarter'][1] + annual_product_totals[4]['Shomaster'][1]
+            
+            col1, col2, col3 = st.columns(3)
+            
+            col1.subheader('The Button')
+            col1.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[4]['The Button'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[4]['The Button'][0]), annual_product_totals[4]['The Button'][0] - annual_product_totals[3]['The Button'][0])
+            col2.subheader('Shostarter')
+            col2.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[4]['Shostarter'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[4]['Shostarter'][0]), annual_product_totals[4]['Shostarter'][0] - annual_product_totals[3]['Shostarter'][0])
+            col3.subheader('Shomaster')
+            col3.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[4]['Shomaster'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[4]['Shomaster'][0]), annual_product_totals[4]['Shomaster'][0] - annual_product_totals[3]['Shomaster'][0])
+    
+            st.divider()
+            display_pie_chart_comp(annual_product_totals[4])
+            st.divider()
+            
+            prod_select = ui.tabs(options=['The Button', 'Shostarter', 'Shomaster'], default_value='The Button', key='Controllers')
+    
+            ### DISPLAY PRODUCT DETAILS 
+            col5, col6, col7 = st.columns(3)
+
+            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage, wholesale_delta = calculate_product_metrics(annual_product_totals, prod_select, 4, bom_cost_control)
+
+            
+            col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[4][prod_select][1]), percent_of_change(annual_product_totals[3][prod_select][0], annual_product_totals[4][prod_select][0]))
             col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
             col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
@@ -2701,32 +2777,30 @@ if task_choice == 'Product Sales Reports':
 
         elif year == 2023:
 
-            total_cntl_rev = annual_product_totals[2]['The Button'][1] + annual_product_totals[2]['Shostarter'][1] + annual_product_totals[2]['Shomaster'][1]
+            total_cntl_rev = annual_product_totals[3]['The Button'][1] + annual_product_totals[3]['Shostarter'][1] + annual_product_totals[3]['Shomaster'][1]
             
             col1, col2, col3 = st.columns(3)
             
             col1.subheader('The Button')
-            col1.metric('{:.1f}% of Total Rev'.format((annual_product_totals[2]['The Button'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[2]['The Button'][0]), '')
+            col1.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[3]['The Button'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[3]['The Button'][0]), '')
             col2.subheader('Shostarter')
-            col2.metric('{:.1f}% of Total Rev'.format((annual_product_totals[2]['Shostarter'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[2]['Shostarter'][0]), '')
+            col2.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[3]['Shostarter'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[3]['Shostarter'][0]), '')
             col3.subheader('Shomaster')
-            col3.metric('{:.1f}% of Total Rev'.format((annual_product_totals[2]['Shomaster'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[2]['Shomaster'][0]), '')
+            col3.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[3]['Shomaster'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[3]['Shomaster'][0]), '')
     
             st.divider()
-            display_pie_chart_comp(annual_product_totals[2])
+            display_pie_chart_comp(annual_product_totals[3])
             st.divider()
             
             prod_select = ui.tabs(options=['The Button', 'Shostarter', 'Shomaster'], default_value='The Button', key='Controllers')
     
             ### DISPLAY PRODUCT DETAILS 
             col5, col6, col7 = st.columns(3)
-    
-            prod_profit, profit_per_unit, avg_price, wholesale_sales, wholesale_percentage = calculate_product_metrics(annual_product_totals, prod_select, 2, bom_cost_control)
-            #prod_profit = (annual_product_totals[2][prod_select][1]) - (annual_product_totals[2][prod_select][0] * bom_cost_control[prod_select])
-            #avg_price = annual_product_totals[2][prod_select][1] / annual_product_totals[2][prod_select][0]
-            #profit_per_unit = avg_price - bom_cost_control[prod_select]
+
+            prod_profit, profit_per_unit, avg_price, wholesale_sales, wholesale_percentage = calculate_product_metrics(annual_product_totals, prod_select, 3, bom_cost_control)
+
             
-            col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[2][prod_select][1]), '')
+            col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[3][prod_select][1]), '')
             col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), '')
             col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
@@ -2739,33 +2813,90 @@ if task_choice == 'Product Sales Reports':
             
 
     elif prod_cat == 'Handhelds':
-		
-        if year == 2024:
 
-            total_hh_rev = annual_product_totals[5]['8FT - No Case'][1] + annual_product_totals[5]['8FT - Travel Case'][1] + annual_product_totals[5]['15FT - No Case'][1] + annual_product_totals[5]['15FT - Travel Case'][1]
+        if year == 2025:
+
+            total_hh_rev = annual_product_totals[8]['8FT - No Case'][1] + annual_product_totals[8]['8FT - Travel Case'][1] + annual_product_totals[8]['15FT - No Case'][1] + annual_product_totals[8]['15FT - Travel Case'][1]
             
             col1, col2, col3, col4 = st.columns(4)
     
             col1.subheader('8FT NC')
-            col1.metric('{:.1f}% of Total Rev'.format((annual_product_totals[5]['8FT - No Case'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[5]['8FT - No Case'][0]), '{}'.format(annual_product_totals[5]['8FT - No Case'][0] - annual_product_totals[4]['8FT - No Case'][0]))
-            col1.metric('', '${:,}'.format(int(annual_product_totals[5]['8FT - No Case'][1])), percent_of_change(annual_product_totals[4]['8FT - No Case'][1], annual_product_totals[5]['8FT - No Case'][1]))
+            col1.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[8]['8FT - No Case'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[8]['8FT - No Case'][0]), '{}'.format(annual_product_totals[8]['8FT - No Case'][0] - annual_product_totals[7]['8FT - No Case'][0]))
+            col1.metric('', '${:,}'.format(int(annual_product_totals[8]['8FT - No Case'][1])), percent_of_change(annual_product_totals[7]['8FT - No Case'][1], annual_product_totals[8]['8FT - No Case'][1]))
             col2.subheader('8FT TC')
-            col2.metric('{:.1f}% of Total Rev'.format((annual_product_totals[5]['8FT - Travel Case'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[5]['8FT - Travel Case'][0]),  '{}'.format(annual_product_totals[5]['8FT - Travel Case'][0] - annual_product_totals[4]['8FT - Travel Case'][0]))
-            col2.metric('', '${:,}'.format(int(annual_product_totals[5]['8FT - Travel Case'][1])), percent_of_change(annual_product_totals[4]['8FT - Travel Case'][1], annual_product_totals[5]['8FT - Travel Case'][1]))
+            col2.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[8]['8FT - Travel Case'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[8]['8FT - Travel Case'][0]),  '{}'.format(annual_product_totals[5]['8FT - Travel Case'][0] - annual_product_totals[7]['8FT - Travel Case'][0]))
+            col2.metric('', '${:,}'.format(int(annual_product_totals[8]['8FT - Travel Case'][1])), percent_of_change(annual_product_totals[7]['8FT - Travel Case'][1], annual_product_totals[8]['8FT - Travel Case'][1]))
             col3.subheader('15FT NC')
-            col3.metric('{:.1f}% of Total Rev'.format((annual_product_totals[5]['15FT - No Case'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[5]['15FT - No Case'][0]),  '{}'.format(annual_product_totals[5]['15FT - No Case'][0] - annual_product_totals[4]['15FT - No Case'][0]))
-            col3.metric('', '${:,}'.format(int(annual_product_totals[5]['15FT - No Case'][1])), percent_of_change(annual_product_totals[4]['15FT - No Case'][1], annual_product_totals[5]['15FT - No Case'][1]))
+            col3.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[8]['15FT - No Case'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[8]['15FT - No Case'][0]),  '{}'.format(annual_product_totals[5]['15FT - No Case'][0] - annual_product_totals[7]['15FT - No Case'][0]))
+            col3.metric('', '${:,}'.format(int(annual_product_totals[8]['15FT - No Case'][1])), percent_of_change(annual_product_totals[7]['15FT - No Case'][1], annual_product_totals[8]['15FT - No Case'][1]))
             col4.subheader('15FT TC')
-            col4.metric('{:.1f}% of Total Rev'.format((annual_product_totals[5]['15FT - Travel Case'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[5]['15FT - Travel Case'][0]),  '{}'.format(annual_product_totals[5]['15FT - Travel Case'][0] - annual_product_totals[4]['15FT - Travel Case'][0]))
-            col4.metric('', '${:,}'.format(int(annual_product_totals[5]['15FT - Travel Case'][1])), percent_of_change(annual_product_totals[4]['15FT - Travel Case'][1], annual_product_totals[5]['15FT - Travel Case'][1]))
+            col4.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[8]['15FT - Travel Case'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[8]['15FT - Travel Case'][0]),  '{}'.format(annual_product_totals[5]['15FT - Travel Case'][0] - annual_product_totals[7]['15FT - Travel Case'][0]))
+            col4.metric('', '${:,}'.format(int(annual_product_totals[8]['15FT - Travel Case'][1])), percent_of_change(annual_product_totals[7]['15FT - Travel Case'][1], annual_product_totals[8]['15FT - Travel Case'][1]))
 
 
-            prod_profit_8NC, profit_per_unit_8NC, prod_profit_last_8NC, avg_price_8NC, avg_price_last_8NC = calculate_product_metrics(annual_product_totals, '8FT - No Case', 5, bom_cost_hh)
-            prod_profit_8TC, profit_per_unit_8TC, prod_profit_last_8TC, avg_price_8TC, avg_price_last_8TC = calculate_product_metrics(annual_product_totals, '8FT - Travel Case', 5, bom_cost_hh)
-            prod_profit_15NC, profit_per_unit_15NC, prod_profit_last_15NC, avg_price_15NC, avg_price_last_15NC = calculate_product_metrics(annual_product_totals, '15FT - No Case', 5, bom_cost_hh)
-            prod_profit_15TC, profit_per_unit_15TC, prod_profit_last_15TC, avg_price_15TC, avg_price_last_15TC = calculate_product_metrics(annual_product_totals, '15FT - Travel Case', 5, bom_cost_hh)
+            prod_profit_8NC, profit_per_unit_8NC, prod_profit_last_8NC, avg_price_8NC, avg_price_last_8NC = calculate_product_metrics(annual_product_totals, '8FT - No Case', 8, bom_cost_hh)
+            prod_profit_8TC, profit_per_unit_8TC, prod_profit_last_8TC, avg_price_8TC, avg_price_last_8TC = calculate_product_metrics(annual_product_totals, '8FT - Travel Case', 8, bom_cost_hh)
+            prod_profit_15NC, profit_per_unit_15NC, prod_profit_last_15NC, avg_price_15NC, avg_price_last_15NC = calculate_product_metrics(annual_product_totals, '15FT - No Case', 8, bom_cost_hh)
+            prod_profit_15TC, profit_per_unit_15TC, prod_profit_last_15TC, avg_price_15TC, avg_price_last_15TC = calculate_product_metrics(annual_product_totals, '15FT - Travel Case', 8, bom_cost_hh)
             
-            tot_hh_rev24 = annual_product_totals[5]['8FT - No Case'][1] + annual_product_totals[5]['8FT - Travel Case'][1] + annual_product_totals[5]['15FT - No Case'][1] + annual_product_totals[5]['15FT - Travel Case'][1]
+            tot_hh_rev25 = annual_product_totals[8]['8FT - No Case'][1] + annual_product_totals[8]['8FT - Travel Case'][1] + annual_product_totals[8]['15FT - No Case'][1] + annual_product_totals[8]['15FT - Travel Case'][1]
+            tot_hh_prof25 = prod_profit_8NC + prod_profit_8TC + prod_profit_15NC + prod_profit_15TC
+            prof_margin25 = (tot_hh_prof25 / tot_hh_rev25) * 100
+            
+            col1, col2, col3 = st.columns(3)
+
+            col1.metric('Total Revenue', '${:,}'.format(int(tot_hh_rev25)))
+            col2.metric('Profit Margin', '{:,.2f}%'.format(prof_margin25))
+            col3.metric('Totat Profit', '${:,}'.format(int(tot_hh_prof25)))
+        
+            st.divider()
+            display_pie_chart_comp(annual_product_totals[8])
+            st.divider()
+    
+            prod_select = ui.tabs(options=['8FT - No Case', '8FT - Travel Case', '15FT - No Case', '15FT - Travel Case'], default_value='8FT - No Case', key='Handhelds')
+    
+            ### DISPLAY PRODUCT DETAILS 
+            col5, col6, col7 = st.columns(3)
+
+            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, prod_select, 8, bom_cost_hh)
+            
+            
+            col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[8][prod_select][1])), percent_of_change(annual_product_totals[7][prod_select][0], annual_product_totals[8][prod_select][0]))
+            col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
+            col6.metric('**Profit**', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+            col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
+            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')        
+
+            style_metric_cards()
+            
+            display_month_data_prod(prod_select, handheld25, handheld24)
+		
+        elif year == 2024:
+
+            total_hh_rev = annual_product_totals[7]['8FT - No Case'][1] + annual_product_totals[7]['8FT - Travel Case'][1] + annual_product_totals[7]['15FT - No Case'][1] + annual_product_totals[7]['15FT - Travel Case'][1]
+            
+            col1, col2, col3, col4 = st.columns(4)
+    
+            col1.subheader('8FT NC')
+            col1.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[7]['8FT - No Case'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[7]['8FT - No Case'][0]), '{}'.format(annual_product_totals[7]['8FT - No Case'][0] - annual_product_totals[6]['8FT - No Case'][0]))
+            col1.metric('', '${:,}'.format(int(annual_product_totals[7]['8FT - No Case'][1])), percent_of_change(annual_product_totals[6]['8FT - No Case'][1], annual_product_totals[7]['8FT - No Case'][1]))
+            col2.subheader('8FT TC')
+            col2.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[7]['8FT - Travel Case'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[7]['8FT - Travel Case'][0]),  '{}'.format(annual_product_totals[7]['8FT - Travel Case'][0] - annual_product_totals[6]['8FT - Travel Case'][0]))
+            col2.metric('', '${:,}'.format(int(annual_product_totals[7]['8FT - Travel Case'][1])), percent_of_change(annual_product_totals[6]['8FT - Travel Case'][1], annual_product_totals[7]['8FT - Travel Case'][1]))
+            col3.subheader('15FT NC')
+            col3.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[7]['15FT - No Case'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[7]['15FT - No Case'][0]),  '{}'.format(annual_product_totals[7]['15FT - No Case'][0] - annual_product_totals[6]['15FT - No Case'][0]))
+            col3.metric('', '${:,}'.format(int(annual_product_totals[7]['15FT - No Case'][1])), percent_of_change(annual_product_totals[6]['15FT - No Case'][1], annual_product_totals[7]['15FT - No Case'][1]))
+            col4.subheader('15FT TC')
+            col4.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[7]['15FT - Travel Case'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[7]['15FT - Travel Case'][0]),  '{}'.format(annual_product_totals[7]['15FT - Travel Case'][0] - annual_product_totals[6]['15FT - Travel Case'][0]))
+            col4.metric('', '${:,}'.format(int(annual_product_totals[7]['15FT - Travel Case'][1])), percent_of_change(annual_product_totals[6]['15FT - Travel Case'][1], annual_product_totals[7]['15FT - Travel Case'][1]))
+
+
+            prod_profit_8NC, profit_per_unit_8NC, prod_profit_last_8NC, avg_price_8NC, avg_price_last_8NC = calculate_product_metrics(annual_product_totals, '8FT - No Case', 7, bom_cost_hh)
+            prod_profit_8TC, profit_per_unit_8TC, prod_profit_last_8TC, avg_price_8TC, avg_price_last_8TC = calculate_product_metrics(annual_product_totals, '8FT - Travel Case', 7, bom_cost_hh)
+            prod_profit_15NC, profit_per_unit_15NC, prod_profit_last_15NC, avg_price_15NC, avg_price_last_15NC = calculate_product_metrics(annual_product_totals, '15FT - No Case', 7, bom_cost_hh)
+            prod_profit_15TC, profit_per_unit_15TC, prod_profit_last_15TC, avg_price_15TC, avg_price_last_15TC = calculate_product_metrics(annual_product_totals, '15FT - Travel Case', 7, bom_cost_hh)
+            
+            tot_hh_rev24 = annual_product_totals[7]['8FT - No Case'][1] + annual_product_totals[7]['8FT - Travel Case'][1] + annual_product_totals[7]['15FT - No Case'][1] + annual_product_totals[7]['15FT - Travel Case'][1]
             tot_hh_prof24 = prod_profit_8NC + prod_profit_8TC + prod_profit_15NC + prod_profit_15TC
             prof_margin24 = (tot_hh_prof24 / tot_hh_rev24) * 100
             
@@ -2774,10 +2905,9 @@ if task_choice == 'Product Sales Reports':
             col1.metric('Total Revenue', '${:,}'.format(int(tot_hh_rev24)))
             col2.metric('Profit Margin', '{:,.2f}%'.format(prof_margin24))
             col3.metric('Totat Profit', '${:,}'.format(int(tot_hh_prof24)))
-
-            
+        
             st.divider()
-            display_pie_chart_comp(annual_product_totals[5])
+            display_pie_chart_comp(annual_product_totals[7])
             st.divider()
     
             prod_select = ui.tabs(options=['8FT - No Case', '8FT - Travel Case', '15FT - No Case', '15FT - Travel Case'], default_value='8FT - No Case', key='Handhelds')
@@ -2785,18 +2915,14 @@ if task_choice == 'Product Sales Reports':
             ### DISPLAY PRODUCT DETAILS 
             col5, col6, col7 = st.columns(3)
 
-            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, prod_select, 5, bom_cost_hh)
-    
-            #prod_profit = int((annual_product_totals[5][prod_select][1]) - (annual_product_totals[5][prod_select][0] * bom_cost_hh[prod_select]))
-            #prod_profit_last = int((annual_product_totals[4][prod_select][1]) - (annual_product_totals[4][prod_select][0] * bom_cost_hh[prod_select]))
-            #avg_price = annual_product_totals[5][prod_select][1] / annual_product_totals[5][prod_select][0]
-            #avg_price_last = annual_product_totals[4][prod_select][1] / annual_product_totals[4][prod_select][0]
+            prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, prod_select, 7, bom_cost_hh)
             
-            col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[5][prod_select][1]), percent_of_change(annual_product_totals[4][prod_select][0], annual_product_totals[5][prod_select][0]))
+            
+            col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[7][prod_select][1])), percent_of_change(annual_product_totals[6][prod_select][0], annual_product_totals[7][prod_select][0]))
             col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
-            col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+            col6.metric('**Profit**', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
-            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')       
+            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')             
 
             style_metric_cards()       
             
@@ -2804,30 +2930,30 @@ if task_choice == 'Product Sales Reports':
             
         elif year == 2023:
 
-            total_hh_rev = annual_product_totals[5]['8FT - No Case'][1] + annual_product_totals[5]['8FT - Travel Case'][1] + annual_product_totals[5]['15FT - No Case'][1] + annual_product_totals[5]['15FT - Travel Case'][1]
+            total_hh_rev = annual_product_totals[6]['8FT - No Case'][1] + annual_product_totals[6]['8FT - Travel Case'][1] + annual_product_totals[6]['15FT - No Case'][1] + annual_product_totals[6]['15FT - Travel Case'][1]
             
             col1, col2, col3, col4 = st.columns(4)
     
             col1.subheader('8FT NC')
-            col1.metric('{:.1f}% of Total Rev'.format((annual_product_totals[4]['8FT - No Case'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[4]['8FT - No Case'][0]), '')
-            col1.metric('', '${:,}'.format(int(annual_product_totals[4]['8FT - No Case'][1])), '')
+            col1.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[6]['8FT - No Case'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[6]['8FT - No Case'][0]), '')
+            col1.metric('', '${:,}'.format(int(annual_product_totals[6]['8FT - No Case'][1])), '')
             col2.subheader('8FT TC')
-            col2.metric('{:.1f}% of Total Rev'.format((annual_product_totals[4]['8FT - Travel Case'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[4]['8FT - Travel Case'][0]),  '')
-            col2.metric('', '${:,}'.format(int(annual_product_totals[4]['8FT - Travel Case'][1])), '')
+            col2.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[6]['8FT - Travel Case'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[6]['8FT - Travel Case'][0]),  '')
+            col2.metric('', '${:,}'.format(int(annual_product_totals[6]['8FT - Travel Case'][1])), '')
             col3.subheader('15FT NC')
-            col3.metric('{:.1f}% of Total Rev'.format((annual_product_totals[4]['15FT - No Case'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[4]['15FT - No Case'][0]),  '')
-            col3.metric('', '${:,}'.format(int(annual_product_totals[4]['15FT - No Case'][1])), '')
+            col3.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[6]['15FT - No Case'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[6]['15FT - No Case'][0]),  '')
+            col3.metric('', '${:,}'.format(int(annual_product_totals[6]['15FT - No Case'][1])), '')
             col4.subheader('15FT TC')
-            col4.metric('{:.1f}% of Total Rev'.format((annual_product_totals[4]['15FT - Travel Case'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[4]['15FT - Travel Case'][0]),  '')
-            col4.metric('', '${:,}'.format(int(annual_product_totals[4]['15FT - Travel Case'][1])), '')
+            col4.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[6]['15FT - Travel Case'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[6]['15FT - Travel Case'][0]),  '')
+            col4.metric('', '${:,}'.format(int(annual_product_totals[6]['15FT - Travel Case'][1])), '')
 
 
-            prod_profit_8NC, profit_per_unit_8NC, avg_price_8NC = calculate_product_metrics(annual_product_totals, '8FT - No Case', 4, bom_cost_hh)
-            prod_profit_8TC, profit_per_unit_8TC, avg_price_8TC = calculate_product_metrics(annual_product_totals, '8FT - Travel Case', 4, bom_cost_hh)
-            prod_profit_15NC, profit_per_unit_15NC, avg_price_15NC = calculate_product_metrics(annual_product_totals, '15FT - No Case', 4, bom_cost_hh)
-            prod_profit_15TC, profit_per_unit_15TC, avg_price_15TC = calculate_product_metrics(annual_product_totals, '15FT - Travel Case', 4, bom_cost_hh)
+            prod_profit_8NC, profit_per_unit_8NC, avg_price_8NC = calculate_product_metrics(annual_product_totals, '8FT - No Case', 6, bom_cost_hh)
+            prod_profit_8TC, profit_per_unit_8TC, avg_price_8TC = calculate_product_metrics(annual_product_totals, '8FT - Travel Case', 6, bom_cost_hh)
+            prod_profit_15NC, profit_per_unit_15NC, avg_price_15NC = calculate_product_metrics(annual_product_totals, '15FT - No Case', 6, bom_cost_hh)
+            prod_profit_15TC, profit_per_unit_15TC, avg_price_15TC = calculate_product_metrics(annual_product_totals, '15FT - Travel Case', 6, bom_cost_hh)
             
-            tot_hh_rev23 = annual_product_totals[4]['8FT - No Case'][1] + annual_product_totals[4]['8FT - Travel Case'][1] + annual_product_totals[4]['15FT - No Case'][1] + annual_product_totals[4]['15FT - Travel Case'][1]
+            tot_hh_rev23 = annual_product_totals[6]['8FT - No Case'][1] + annual_product_totals[6]['8FT - Travel Case'][1] + annual_product_totals[6]['15FT - No Case'][1] + annual_product_totals[6]['15FT - Travel Case'][1]
             tot_hh_prof23 = prod_profit_8NC + prod_profit_8TC + prod_profit_15NC + prod_profit_15TC
             prof_margin23 = (tot_hh_prof23 / tot_hh_rev23) * 100
             
@@ -2837,9 +2963,10 @@ if task_choice == 'Product Sales Reports':
             col2.metric('Profit Margin', '{:,.2f}%'.format(prof_margin23))
             col3.metric('Totat Profit', '${:,}'.format(int(tot_hh_prof23)))   
 
+
             
             st.divider()
-            display_pie_chart_comp(annual_product_totals[5])
+            display_pie_chart_comp(annual_product_totals[6])
             st.divider()
     
             prod_select = ui.tabs(options=['8FT - No Case', '8FT - Travel Case', '15FT - No Case', '15FT - Travel Case'], default_value='8FT - No Case', key='Handhelds')
@@ -2847,43 +2974,53 @@ if task_choice == 'Product Sales Reports':
             ### DISPLAY PRODUCT DETAILS 
             col5, col6, col7 = st.columns(3)
     
-            prod_profit = (annual_product_totals[4][prod_select][1]) - (annual_product_totals[4][prod_select][0] * bom_cost_hh[prod_select])
-            avg_price = annual_product_totals[4][prod_select][1] / annual_product_totals[4][prod_select][0]
+            prod_profit = (annual_product_totals[6][prod_select][1]) - (annual_product_totals[6][prod_select][0] * bom_cost_hh[prod_select])
+            avg_price = annual_product_totals[6][prod_select][1] / annual_product_totals[6][prod_select][0]
             profit_per_unit = avg_price - bom_cost_hh[prod_select]
             
-            col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[4][prod_select][1]), '')
+            col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[6][prod_select][1]), '')
             col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
             col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), '')
             col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), '')
-            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')             
+            col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')        
             
-            style_metric_cards()     
+            style_metric_cards()
             
             display_month_data_prod(prod_select, handheld23)
         
     elif prod_cat == 'Hoses':
-
-        display_hose_data(hose_detail24, hose_detail23)
+        display_hose_data(hose_detail25, hose_detail24, hose_detail23)
         
           
     elif prod_cat == 'Accessories':
-
-
-        col1, col2 = st.columns(2)
-        col1.subheader('2024')               
-        col2.subheader('2023')
+        col1, col2, col3 = st.columns(3)
+        col1.subheader('2025')
+        col2.subheader('2024')
+        col3.subheader('2023')
         with col1:
             for item, value in annual_product_totals[-1].items():
                 if item == 'CC-RC-2430':
-                    ui.metric_card(title='{}'.format(item), content='{} (PJ: {}, LA: {}, QJ: {})'.format(value[0], value[2], value[3], value[4]), description='${:,.2f} in Revenue'.format(value[1]))
+                    ui.metric_card(title='{}'.format(item), content='{} (PJ: {}, LA: {}, QJ: {})'.format(int(value[0]), int(value[2]), int(value[3]), int(value[4])), description='${:,.2f} in Revenue'.format(value[1]))
                 else:
+                    value[0] = int(value[0])
                     ui.metric_card(title='{}'.format(item), content='{}'.format(value[0]), description='${:,.2f} in Revenue'.format(value[1])) 
         with col2:
             for item_last, value_last in annual_product_totals[-2].items():
                 if item_last == 'CC-RC-2430':
-                    ui.metric_card(title='{}'.format(item_last), content='{} (PJ: {}, LA: {})'.format(value_last[0], value_last[2], value_last[3]), description='${:,.2f} in Revenue'.format(value_last[1]))
+                    ui.metric_card(title='{}'.format(item_last), content='{} (PJ: {}, LA: {}, QJ: {})'.format(int(value_last[0]), int(value_last[2]), int(value_last[3]), int(value_last[4])), description='${:,.2f} in Revenue'.format(value_last[1]))
                 else:
+                    value_last[0] = int(value_last[0])
                     ui.metric_card(title='{}'.format(item_last), content='{}'.format(value_last[0]), description='${:,.2f} in Revenue'.format(value_last[1]))
+        with col3:
+            key = 'a'
+            for item_last2, value_last2 in annual_product_totals[-3].items():
+                if item_last2 == 'CC-RC-2430':
+                    ui.metric_card(title='{}'.format(item_last2), content='{} (PJ: {}, LA: {})'.format(int(value_last2[0]), int(value_last2[2]), int(value_last2[3])), description='${:,.2f} in Revenue'.format(value_last2[1]), key=key)
+                else:
+                    value_last2[0] = int(value_last2[0])
+                    ui.metric_card(title='{}'.format(item_last2), content='{}'.format(value_last2[0]), description='${:,.2f} in Revenue'.format(value_last2[1]), key=key)
+                key += 'ba'
+        
 
         
 ### SHIPPING REPORTS ###  
