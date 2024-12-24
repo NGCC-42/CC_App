@@ -2464,9 +2464,9 @@ def organize_hose_data(dict):
 
 def display_hose_data(hose_details1, hose_details2):
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     with col1:
-        st.subheader('2024')
+        st.subheader('2025')
         idx = 0
         for group in hose_details1[:7]:
             group_units = 0
@@ -2475,17 +2475,17 @@ def display_hose_data(hose_details1, hose_details2):
                 for hose, vals in group.items():
                     group_units += vals[0]
                     group_rev += vals[1]
-                    ui.metric_card(title=hose, content='{} units'.format(vals[0]), description='${:,.2f} in revenue'.format(vals[1]))
+                    ui.metric_card(title=hose, content='{} units'.format(int(vals[0])), description='${:,.2f} in rev'.format(vals[1]))
                 if idx == 0:
-                    st.markdown('**Manifold Totals: {} - (${:,.2f})**'.format(group_units, group_rev))
+                    st.markdown('**Totals: {} - (${:,})**'.format(int(group_units), int(group_rev)))
                 else:
-                    st.markdown('**{} Totals: {} - (${:,.2f})**'.format(hose[:4], group_units, group_rev))
+                    st.markdown('**Totals: {} - (${:,})**'.format(int(group_units), int(group_rev)))
                             
             idx += 1
-        ui.metric_card(title='100FT STD', content='{} units'.format(hose_details1[7][0]), description='${:,.2f} in revenue'.format(hose_details1[7][1]), key='2024')
+        ui.metric_card(title='100FT STD', content='{} units'.format(int(hose_details1[7][0])), description='${:,.2f} in rev'.format(hose_details1[7][1]), key='2025')
         
     with col2:
-        st.subheader('2023')
+        st.subheader('2024')
         idx2 = 0
         for group2 in hose_details2[:7]:
             group2_units = 0
@@ -2494,13 +2494,31 @@ def display_hose_data(hose_details1, hose_details2):
                 for hose2, vals2 in group2.items():
                     group2_units += vals2[0]
                     group2_rev += vals2[1]
-                    ui.metric_card(title=hose2, content='{} units'.format(vals2[0]), description='${:,.2f} in revenue'.format(vals2[1]))
+                    ui.metric_card(title=hose2, content='{} units'.format(int(vals2[0])), description='${:,.2f} in rev'.format(vals2[1]))
                 if idx2 == 0:
-                    st.markdown('**Manifold Totals: {} - (${:,.2f})**'.format(group2_units, group2_rev))
+                    st.markdown('**Totals: {} - (${:,})**'.format(int(group2_units), int(group2_rev)))
                 else:
-                    st.markdown('**{} Totals: {} - (${:,.2f})**'.format(hose2[:4], group2_units, group2_rev))
+                    st.markdown('**Totals: {} - (${:,})**'.format(int(group2_units), int(group2_rev)))
             idx2 += 1
-        ui.metric_card(title='100FT STD', content='{} units'.format(hose_details2[7][0]), description='${:,.2f} in revenue'.format(hose_details2[7][1]), key='2023')
+        ui.metric_card(title='100FT STD', content='{} units'.format(int(hose_details2[7][0])), description='${:,.2f} in rev'.format(hose_details2[7][1]), key='2024')
+
+        with col3:
+            st.subheader('2023')
+            idx3 = 0
+            for group3 in hose_details3[:7]:
+                group3_units = 0
+                group3_rev = 0
+                with st.container(border=True):
+                    for hose3, vals3 in group3.items():
+                        group3_units += vals3[0]
+                        group3_rev += vals3[1]
+                        ui.metric_card(title=hose3, content='{} units'.format(int(vals3[0])), description='${:,.2f} in rev'.format(vals3[1]))
+                    if idx3 == 0:
+                        st.markdown('**Totals: {} - (${:,})**'.format(int(group3_units), int(group3_rev)))
+                    else:
+                        st.markdown('**Totals: {} - (${:,})**'.format(int(group3_units), int(group3_rev)))
+                idx3 += 1
+            ui.metric_card(title='100FT STD', content='{} units'.format(int(hose_details3[7][0])), description='${:,.2f} in rev'.format(hose_details3[7][1]), key='2023')
         
     return None
 
