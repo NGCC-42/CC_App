@@ -2462,7 +2462,7 @@ def organize_hose_data(dict):
     return [count_mfd, count_5ft, count_8ft, count_15ft, count_25ft, count_35ft, count_50ft, count_100ft]
 
 
-def display_hose_data(hose_details1, hose_details2):
+def display_hose_data(hose_details1, hose_details2, hose_details3):
 
     col1, col2, col3 = st.columns(3)
     with col1:
