@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 import openpyxl
 import streamlit_shadcn_ui as ui
 from streamlit_extras.metric_cards import style_metric_cards
+from streamlit_option_menu import option_menu
 
 ### SET WEB APP CONFIGURATIONS
 st.set_page_config(page_title='Club Cannon Database', 
@@ -715,8 +716,26 @@ def sales_channel(year, month=['All']):
 ### GENERATE SIDEBAR MENU ###
 task_select = ''
 #task_choice = ''
+
+st.markdown("""
+<style>
+    [data-testid=stSidebar] {
+        background-color: #000000;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 with st.sidebar:
-    task_choice = st.radio('**Select Task**', options=['Dashboard', 'Customer Details', 'Product Sales Reports', 'Shipping Reports', 'Quote Reports', 'Leaderboards'])
+    task_choice = option_menu(None, ["Dashboard", "Product Reports",  "Customer Details", "Shipping Reports", "Quote Reports", "Leaderboards"], 
+        icons=['house', 'projector', 'person-circle', 'box-seam', 'shadows', 'trophy'], 
+        menu_icon="cast", default_index=0, orientation="vertical",
+        styles={
+            "container": {"padding": "0!important"},
+            "icon": {"color": "white", "font-size": "20px"}, 
+            "nav-link": {"color": "white", "font-size": "25px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+            "nav-link-selected": {"background-color": "limegreen"},
+            }
+        )
 
 
 def style_metric_cards(
