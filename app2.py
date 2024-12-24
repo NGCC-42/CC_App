@@ -2564,7 +2564,7 @@ def to_date_product(sku_string):
 
 
 
-if task_choice == 'Product Sales Reports':
+if task_choice == 'Product Reports':
 
     st.header('Product Reports')
     #st.subheader('')
