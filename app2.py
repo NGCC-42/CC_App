@@ -2526,7 +2526,7 @@ def calculate_product_metrics(annual_product_totals, prod_select, key, bom_dict)
 
     jet_list = ['Pro Jet', 'Quad Jet', 'Micro Jet', 'Cryo Clamp']
     control_list = ['The Button', 'Shostarter', 'Shomaster']
-    no_prior_list = [0,2,4,6,8]
+    no_prior_list = [0,3,6,9,12]
 
     prod_profit = (annual_product_totals[key][prod_select][1]) - (annual_product_totals[key][prod_select][0] * bom_dict[prod_select])
     profit_per_unit = prod_profit / annual_product_totals[key][prod_select][0]
@@ -2536,7 +2536,7 @@ def calculate_product_metrics(annual_product_totals, prod_select, key, bom_dict)
         avg_price_last = annual_product_totals[key-1][prod_select][1] / annual_product_totals[key-1][prod_select][0]
         prod_profit_last = (annual_product_totals[key-1][prod_select][1]) - (annual_product_totals[key-1][prod_select][0] * bom_dict[prod_select])
 
-    if (prod_select in jet_list or prod_select in control_list) and (key in [0, 1, 2, 3]):
+    if (prod_select in jet_list or prod_select in control_list) and (key in [0, 1, 2, 3, 4, 5]):
         wholesale_sales = annual_product_totals[key][prod_select][2]
         wholesale_percentage = (annual_product_totals[key][prod_select][2] / annual_product_totals[key][prod_select][0]) * 100
         
@@ -2551,7 +2551,6 @@ def calculate_product_metrics(annual_product_totals, prod_select, key, bom_dict)
     
     else:
         return prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last
-
 
 def to_date_product(sku_string):
     
