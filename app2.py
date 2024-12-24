@@ -720,7 +720,7 @@ task_select = ''
 st.markdown("""
 <style>
     [data-testid=stSidebar] {
-        background-color: #000000;
+        background-color: #121212;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -731,8 +731,8 @@ with st.sidebar:
         menu_icon="cast", default_index=0, orientation="vertical",
         styles={
             "container": {"padding": "0!important"},
-            "icon": {"color": "white", "font-size": "20px"}, 
-            "nav-link": {"color": "white", "font-size": "25px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+            "icon": {"color": "limegreen", "font-size": "18px"}, 
+            "nav-link": {"color": "white", "font-size": "22px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
             "nav-link-selected": {"background-color": "limegreen"},
             }
         )
