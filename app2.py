@@ -1332,6 +1332,50 @@ two_years_ago = today - timedelta(days=730)
 three_years_ago = today - timedelta(days=1095)
 
 
+@st.cache_data
+def quarterly_sales(year):
+
+    q1_end = datetime(year, 3, 31)
+    q2_start = datetime(year, 4, 1)
+    q2_end = datetime(year, 6, 30)
+    q3_start = datetime(year, 7, 1)
+    q3_end = datetime(year, 9, 30)
+    q4_start = datetime(year, 10, 1)
+    q4_end = datetime(year, 12, 31)
+    
+    
+    q1_count = [0, 0]
+    q2_count = [0, 0]
+    q3_count = [0, 0]
+    q4_count = [0, 0]
+    
+    idx = 0
+    
+    for sale in df.sales_order:
+        order_date = df.iloc[idx].order_date
+        if df.iloc[idx].channel[0] == 'F':
+            if q1_end.date() >= order_date >= beginning_of_year(q1_end).date():
+                q1_count[0] += df.iloc[idx].total_line_item_spend
+            elif q2_end.date() >= order_date >= q2_start.date():
+                q2_count[0] += df.iloc[idx].total_line_item_spend
+            elif q3_end.date() >= order_date >= q3_start.date():
+                q3_count[0] += df.iloc[idx].total_line_item_spend
+            elif q4_end.date() >= order_date >= q4_start.date():
+                q4_count[0] += df.iloc[idx].total_line_item_spend
+        else:
+            if q1_end.date() >= order_date >= beginning_of_year(q1_end).date():
+                q1_count[1] += df.iloc[idx].total_line_item_spend
+            elif q2_end.date() >= order_date >= q2_start.date():
+                q2_count[1] += df.iloc[idx].total_line_item_spend
+            elif q3_end.date() >= order_date >= q3_start.date():
+                q3_count[1] += df.iloc[idx].total_line_item_spend
+            elif q4_end.date() >= order_date >= q4_start.date():
+                q4_count[1] += df.iloc[idx].total_line_item_spend
+    
+        idx += 1
+    
+    return q1_count, q2_count, q3_count, q4_count
+    
 
 def to_date_revenue():
 
