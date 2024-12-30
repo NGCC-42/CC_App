@@ -1188,7 +1188,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
     if sales_dict2 == None:
         
         data = extract_transaction_data(sales_dict1)
-        total_sales, total_web_perc, total_fulcrum_perc, avg_month = calc_monthly_totals_v2(sales_dict1)
+        total_sales, total_web_perc, total_fulcrum_perc, avg_month, magic_sales = calc_monthly_totals_v2(sales_dict1)
         
         db1, db2, db3 = st.columns(3)
         
