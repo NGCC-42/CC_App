@@ -1477,11 +1477,11 @@ if task_choice == 'Dashboard':
     
     sales_dict_23 = get_monthly_sales_v2(df, 2023)
     #transaction_data_23 = extract_transaction_data(sales_dict_23)
-    total_23, web_23, ful_23, avg_23 = calc_monthly_totals_v2(sales_dict_23)
+    total_23, web_23, ful_23, avg_23, magic23 = calc_monthly_totals_v2(sales_dict_23)
     
     sales_dict_24 = get_monthly_sales_v2(df, 2024)
     #transaction_data_24 = extract_transaction_data(sales_dict_24)
-    total_24, web_24, ful_24, avg_24 = calc_monthly_totals_v2(sales_dict_24)
+    total_24, web_24, ful_24, avg_24, magic24 = calc_monthly_totals_v2(sales_dict_24)
 
     ### SALES CHANNEL BREAKDOWN ###
     web_avg_perc = (web_23 + web_24)/2
