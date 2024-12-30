@@ -1455,8 +1455,10 @@ if task_choice == 'Dashboard':
     
     wvr_23_months = get_monthly_sales_wvr(df, 2023)
     wvr_24_months = get_monthly_sales_wvr(df, 2024)
+    #wvr_25_months = get_monthly_sales_wvr(df, 2025)
     wvr_23_totals = wholesale_retail_totals(wvr_23_months)
     wvr_24_totals = wholesale_retail_totals(wvr_24_months)    
+    #wvr_25_totals = wholesale_retail_totals(wvr_25_months)
     
     ### COMPILE DATA FOR SALES REPORTS ###
     total_22 = 1483458.64
@@ -1484,11 +1486,14 @@ if task_choice == 'Dashboard':
     #transaction_data_24 = extract_transaction_data(sales_dict_24)
     total_24, web_24, ful_24, avg_24, magic24 = calc_monthly_totals_v2(sales_dict_24)
 
+    #sales_dict_25 = get_monthly_sales_v2(df, 2025)
+    #total_25, web_25, ful_25, avg_25, magic25 = calc_monthly_totals_v2(sales_dict_25)
+
     ### SALES CHANNEL BREAKDOWN ###
     web_avg_perc = (web_23 + web_24)/2
     ful_avg_perc = (ful_23 + ful_24)/2
 
-    year_select = ui.tabs(options=[2024, 2023, 2022], default_value=2024, key='Year')
+    year_select = ui.tabs(options=[2025, 2024, 2023, 2022], default_value=2024, key='Year')
 
     
     ### DISPLAY SALES METRICS ###
