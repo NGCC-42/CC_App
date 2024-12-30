@@ -915,8 +915,7 @@ def get_monthly_sales_v2(df, year):
 
     unique_sales_orders = []
 
-    sales_dict = {'January': [[0, 0], [0, 0]], 'February': [[0, 0], [0, 0]], 'March': [[0, 0], [0, 0]], 'April': [[0, 0], [0, 0]], 'May': [[0, 0], [0, 0]], 'June': [[0, 0], [0, 0]], 'July': [[0, 0], [0, 0]], 'August': [[0, 0], [0, 0]], 'September': [[0, 0], [0, 0]], 'October': [[0, 0], [0, 0]], 'November': [[0, 0], [0, 0]], 'December': [[0, 0], [0, 0]]}
-
+    sales_dict = {'January': [[0, 0], [0, 0], [0]], 'February': [[0, 0], [0, 0], [0]], 'March': [[0, 0], [0, 0], [0]], 'April': [[0, 0], [0, 0], [0]], 'May': [[0, 0], [0, 0], [0]], 'June': [[0, 0], [0, 0], [0]], 'July': [[0, 0], [0, 0], [0]], 'August': [[0, 0], [0, 0], [0]], 'September': [[0, 0], [0, 0], [0]], 'October': [[0, 0], [0, 0], [0]], 'November': [[0, 0], [0, 0], [0]], 'December': [[0, 0], [0, 0], [0]]}
     idx = 0
 
     for sale in df.sales_order:
@@ -932,6 +931,8 @@ def get_monthly_sales_v2(df, year):
                     unique_sales_orders.append(sale)
             else:
                 sales_dict[month][1][0] += df.iloc[idx].total_line_item_spend   
+                if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX':
+                    sales_dict[month][2][0] += df.iloc[idx].total_line_item_spend
                 if sale not in unique_sales_orders:
                     sales_dict[month][1][1] += 1
                     unique_sales_orders.append(sale)
@@ -947,12 +948,14 @@ def calc_monthly_totals_v2(sales_dict, months=['All']):
     total_web = 0
     total_fulcrum = 0
     num_months = 0
+    magic_sales = 0
     
     for month, sales in sales_dict.items():
         if months == ['All']:
             total_sales += (sales[0][0] + sales[1][0])
             total_web += sales[0][0]
             total_fulcrum += sales[1][0]
+            magic_sales += sales[2][0]
             if sales[0][0] + sales[1][0] < 100:
                 pass
             else:
@@ -973,7 +976,7 @@ def calc_monthly_totals_v2(sales_dict, months=['All']):
     total_web_perc = percent_of_sales(total_web, total_fulcrum)
     total_fulcrum_perc = percent_of_sales(total_fulcrum, total_web)
     
-    return total_sales, total_web_perc, total_fulcrum_perc, avg_month
+    return total_sales, total_web_perc, total_fulcrum_perc, avg_month, magic_sales
 
 ### FUNCTIONS FOR PLOTTING CHARTS ###
 def format_for_chart_ms(dict):
@@ -1159,7 +1162,24 @@ def display_month_data_x(sales_dict1, sales_dict2=None):
             idx += 1
 
     return None
-	
+
+@st.cache_data
+def magic_sales(year):
+
+    count = 0
+    magic_list = []
+
+    idx = 0
+
+    for sale in df.sales_order:
+        if df.iloc[idx].ordered_year == year:
+            if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX':
+                count += df.iloc[idx].total_line_item_spend
+                magic_list.append('{} x {}'.format(df.iloc[idx].line_item, df.iloc[idx].quantity))
+
+        idx += 1
+
+    return count
 
 def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=None):
 
@@ -1188,8 +1208,8 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
     
     elif month == 'All':
 
-        total_sales1, total_web_perc1, total_fulcrum_perc1, avg_month1 = calc_monthly_totals_v2(sales_dict1)
-        total_sales2, total_web_perc2, total_fulcrum_perc2, avg_month2 = calc_monthly_totals_v2(sales_dict2)
+        total_sales1, total_web_perc1, total_fulcrum_perc1, avg_month1, magic_sales1 = calc_monthly_totals_v2(sales_dict1)
+        total_sales2, total_web_perc2, total_fulcrum_perc2, avg_month2, magic_sales2 = calc_monthly_totals_v2(sales_dict2)
 
         data1 = extract_transaction_data(sales_dict1)
         data2 = extract_transaction_data(sales_dict2)
@@ -1218,6 +1238,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
             db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
             db2.metric('**Monthly Average**', '${:,}'.format(int(avg_month1)), avg_per_month)
             db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
+            db2.metric('**MagicFX Sales**', '${:,}'.format(int(magic_sales1)))
             
             db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
             db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
@@ -1231,6 +1252,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
             wholesale_sales2, retail_sales2 = wholesale_retail_totals(wvr2)
             wholesale_delta = percent_of_change(wholesale_sales2, wholesale_sales1)
             retail_delta = percent_of_change(retail_sales2, retail_sales1)
+            magic_delta = percent_of_change(magic_sales2, magic_sales1)
         
             db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
             db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
@@ -1240,6 +1262,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
             db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
             db2.metric('**Monthly Average**', '${:,}'.format(int(avg_month1)), avg_per_month)
             db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
+            db2.metric('**MagicFX Sales**', '${:,}'.format(int(magic_sales1)), magic_delta)
             
             db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
             db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
@@ -1439,18 +1462,18 @@ if task_choice == 'Dashboard':
     avg_22 = 147581.12
     trans_22 = 1266
     trans_avg_22 = 126.6
-    sales_dict_22 = {'January': [[0, 1], [0, 1]], 
-                     'February': [[0, 1], [7647.42, 25]], 
-                     'March': [[48547.29, 80], [48457.28, 30]], 
-                     'April': [[69081.04, 86], [69081.05, 30]], 
-                     'May': [[64976.18, 72], [64976.18, 40]], 
-                     'June': [[88817.15, 90], [88817.15, 51]], 
-                     'July': [[104508.24, 86], [104508.24, 30]], 
-                     'August': [[74166.78, 94], [74166.78, 50]], 
-                     'September': [[68018.74, 99], [68018.74, 50]], 
-                     'October': [[86874.13, 126], [86874.13, 40]], 
-                     'November': [[57760.81, 77], [57760.82, 30]], 
-                     'December': [[75155.19, 64], [75155.20, 30]]}
+    sales_dict_22 = {'January': [[0, 1], [0, 1], [0]], 
+                     'February': [[0, 1], [7647.42, 25], [0]], 
+                     'March': [[48547.29, 80], [48457.28, 30], [0]], 
+                     'April': [[69081.04, 86], [69081.05, 30], [0]], 
+                     'May': [[64976.18, 72], [64976.18, 40], [0]], 
+                     'June': [[88817.15, 90], [88817.15, 51], [0]], 
+                     'July': [[104508.24, 86], [104508.24, 30], [0]], 
+                     'August': [[74166.78, 94], [74166.78, 50], [0]], 
+                     'September': [[68018.74, 99], [68018.74, 50], [0]], 
+                     'October': [[86874.13, 126], [86874.13, 40], [0]], 
+                     'November': [[57760.81, 77], [57760.82, 30], [0]], 
+                     'December': [[75155.19, 64], [75155.20, 30], [0]]}
     
     sales_dict_23 = get_monthly_sales_v2(df, 2023)
     #transaction_data_23 = extract_transaction_data(sales_dict_23)
