@@ -2696,6 +2696,21 @@ if task_choice == 'Product Reports':
             col4.subheader('Cryo Clamp')
             col4.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Cryo Clamp'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Cryo Clamp'][0]), annual_product_totals[2]['Cryo Clamp'][0] - annual_product_totals[1]['Cryo Clamp'][0])
 
+            prod_profit_PJ, profit_per_unit_PJ, prod_profit_last_PJ, avg_price_PJ, avg_price_last_PJ, wholesale_sales_PJ, wholesale_percentage_PJ, wholesale_delta_PJ = calculate_product_metrics(annual_product_totals, 'Pro Jet', 2, bom_cost_jet)
+            prod_profit_QJ, profit_per_unit_QJ, prod_profit_last_QJ, avg_price_QJ, avg_price_last_QJ, wholesale_sales_QJ, wholesale_percentage_QJ, wholesale_delta_QJ = calculate_product_metrics(annual_product_totals, 'Quad Jet', 2, bom_cost_jet)
+            prod_profit_MJ, profit_per_unit_MJ, prod_profit_last_MJ, avg_price_MJ, avg_price_last_MJ, wholesale_sales_MJ, wholesale_percentage_MJ, wholesale_delta_MJ = calculate_product_metrics(annual_product_totals, 'Micro Jet', 2, bom_cost_jet)
+            prod_profit_CC, profit_per_unit_CC, prod_profit_last_CC, avg_price_CC, avg_price_last_CC, wholesale_sales_CC, wholesale_percentage_CC, wholesale_delta_CC = calculate_product_metrics(annual_product_totals, 'Cryo Clamp', 2, bom_cost_jet)
+            
+            tot_jet_rev25 = annual_product_totals[2]['Pro Jet'][1] + annual_product_totals[2]['Quad Jet'][1] + annual_product_totals[2]['Micro Jet'][1] + annual_product_totals[2]['Cryo Clamp'][1]
+            tot_jet_prof25 = prod_profit_PJ + prod_profit_QJ + prod_profit_MJ + prod_profit_CC
+            jet_prof_margin25 = (tot_jet_prof25 / tot_jet_rev25) * 100
+            
+            colx, coly, colz = st.columns(3)
+
+            colx.metric('**Total Revenue**', '${:,}'.format(int(tot_jet_rev25)))
+            coly.metric('**Profit Margin**', '{:,.2f}%'.format(jet_prof_margin25))
+            colz.metric('**Total Profit**', '${:,}'.format(int(tot_jet_prof25)))
+            
             style_metric_cards()
             st.divider()
             display_pie_chart_comp(annual_product_totals[2])
@@ -2740,6 +2755,21 @@ if task_choice == 'Product Reports':
             col4.subheader('Cryo Clamp')
             col4.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[1]['Cryo Clamp'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[1]['Cryo Clamp'][0]), annual_product_totals[1]['Cryo Clamp'][0] - annual_product_totals[0]['Cryo Clamp'][0])
 
+            prod_profit_PJ, profit_per_unit_PJ, prod_profit_last_PJ, avg_price_PJ, avg_price_last_PJ, wholesale_sales_PJ, wholesale_percentage_PJ, wholesale_delta_PJ = calculate_product_metrics(annual_product_totals, 'Pro Jet', 1, bom_cost_jet)
+            prod_profit_QJ, profit_per_unit_QJ, prod_profit_last_QJ, avg_price_QJ, avg_price_last_QJ, wholesale_sales_QJ, wholesale_percentage_QJ, wholesale_delta_QJ = calculate_product_metrics(annual_product_totals, 'Quad Jet', 1, bom_cost_jet)
+            prod_profit_MJ, profit_per_unit_MJ, prod_profit_last_MJ, avg_price_MJ, avg_price_last_MJ, wholesale_sales_MJ, wholesale_percentage_MJ, wholesale_delta_MJ = calculate_product_metrics(annual_product_totals, 'Micro Jet', 1, bom_cost_jet)
+            prod_profit_CC, profit_per_unit_CC, prod_profit_last_CC, avg_price_CC, avg_price_last_CC, wholesale_sales_CC, wholesale_percentage_CC, wholesale_delta_CC = calculate_product_metrics(annual_product_totals, 'Cryo Clamp', 1, bom_cost_jet)
+            
+            tot_jet_rev24 = annual_product_totals[1]['Pro Jet'][1] + annual_product_totals[1]['Quad Jet'][1] + annual_product_totals[1]['Micro Jet'][1] + annual_product_totals[1]['Cryo Clamp'][1]
+            tot_jet_prof24 = prod_profit_PJ + prod_profit_QJ + prod_profit_MJ + prod_profit_CC
+            jet_prof_margin24 = (tot_jet_prof24 / tot_jet_rev24) * 100
+            
+            colx, coly, colz = st.columns(3)
+
+            colx.metric('**Total Revenue**', '${:,}'.format(int(tot_jet_rev24)))
+            coly.metric('**Profit Margin**', '{:,.2f}%'.format(jet_prof_margin24))
+            colz.metric('**Total Profit**', '${:,}'.format(int(tot_jet_prof24)))
+            
             style_metric_cards()
             st.divider()
             display_pie_chart_comp(annual_product_totals[1])
@@ -2784,6 +2814,16 @@ if task_choice == 'Product Reports':
 
             col4.subheader('Cryo Clamp')
             col4.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[0]['Cryo Clamp'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[0]['Cryo Clamp'][0]), '')
+
+            tot_jet_rev23 = annual_product_totals[0]['Pro Jet'][1] + annual_product_totals[0]['Quad Jet'][1] + annual_product_totals[0]['Micro Jet'][1] + annual_product_totals[0]['Cryo Clamp'][1]
+            tot_jet_prof23 = prod_profit_PJ + prod_profit_QJ + prod_profit_MJ + prod_profit_CC
+            jet_prof_margin23 = (tot_jet_prof23 / tot_jet_rev23) * 100
+            
+            colx, coly, colz = st.columns(3)
+
+            colx.metric('**Total Revenue**', '${:,}'.format(int(tot_jet_rev23)))
+            coly.metric('**Profit Margin**', '{:,.2f}%'.format(jet_prof_margin23))
+            colz.metric('**Total Profit**', '${:,}'.format(int(tot_jet_prof23)))
          
             style_metric_cards()
             st.divider()
@@ -2824,7 +2864,19 @@ if task_choice == 'Product Reports':
             col2.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['Shostarter'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['Shostarter'][0]), annual_product_totals[5]['Shostarter'][0] - annual_product_totals[4]['Shostarter'][0])
             col3.subheader('Shomaster')
             col3.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['Shomaster'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['Shomaster'][0]), annual_product_totals[5]['Shomaster'][0] - annual_product_totals[4]['Shomaster'][0])
-    
+
+            prod_profit_TB, profit_per_unit_TB, prod_profit_last_TB, avg_price_TB, avg_price_last_TB, wholesale_sales_TB, wholesale_percentage_TB, wholesale_delta_TB = calculate_product_metrics(annual_product_totals, 'The Button', 5, bom_cost_control)
+            prod_profit_SS, profit_per_unit_SS, prod_profit_last_SS, avg_price_SS, avg_price_last_SS, wholesale_sales_SS, wholesale_percentage_SS, wholesale_delta_SS = calculate_product_metrics(annual_product_totals, 'Shostarter', 5, bom_cost_control)
+            prod_profit_SM, profit_per_unit_SM, prod_profit_last_SM, avg_price_SM, avg_price_last_SM, wholesale_sales_SM, wholesale_percentage_SM, wholesale_delta_SM = calculate_product_metrics(annual_product_totals, 'Shomaster', 5, bom_cost_control)
+
+            tot_cntl_rev25 = annual_product_totals[5]['The Button'][1] + annual_product_totals[5]['Shostarter'][1] + annual_product_totals[5]['Shomaster'][1]
+            tot_cntl_prof25 = prod_profit_TB + prod_profit_SS + prod_profit_SM
+            cntl_prof_margin25 = (tot_cntl_prof25 / tot_cntl_rev25) * 100
+
+            col1.metric('**Total Revenue**', '${:,}'.format(int(tot_cntl_rev25)))
+            col2.metric('**Profit Margin**', '{:,.2f}%'.format(cntl_prof_margin25))
+            col3.metric('**Total Profit**', '${:,}'.format(int(tot_cntl_prof25)))
+            
             st.divider()
             display_pie_chart_comp(annual_product_totals[5])
             st.divider()
@@ -2860,7 +2912,19 @@ if task_choice == 'Product Reports':
             col2.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[4]['Shostarter'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[4]['Shostarter'][0]), annual_product_totals[4]['Shostarter'][0] - annual_product_totals[3]['Shostarter'][0])
             col3.subheader('Shomaster')
             col3.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[4]['Shomaster'][1] / td_24_tot) * 100), '{}'.format(annual_product_totals[4]['Shomaster'][0]), annual_product_totals[4]['Shomaster'][0] - annual_product_totals[3]['Shomaster'][0])
-    
+
+            prod_profit_TB, profit_per_unit_TB, prod_profit_last_TB, avg_price_TB, avg_price_last_TB, wholesale_sales_TB, wholesale_percentage_TB, wholesale_delta_TB = calculate_product_metrics(annual_product_totals, 'The Button', 4, bom_cost_control)
+            prod_profit_SS, profit_per_unit_SS, prod_profit_last_SS, avg_price_SS, avg_price_last_SS, wholesale_sales_SS, wholesale_percentage_SS, wholesale_delta_SS = calculate_product_metrics(annual_product_totals, 'Shostarter', 4, bom_cost_control)
+            prod_profit_SM, profit_per_unit_SM, prod_profit_last_SM, avg_price_SM, avg_price_last_SM, wholesale_sales_SM, wholesale_percentage_SM, wholesale_delta_SM = calculate_product_metrics(annual_product_totals, 'Shomaster', 4, bom_cost_control)
+
+            tot_cntl_rev24 = annual_product_totals[4]['The Button'][1] + annual_product_totals[4]['Shostarter'][1] + annual_product_totals[4]['Shomaster'][1]
+            tot_cntl_prof24 = prod_profit_TB + prod_profit_SS + prod_profit_SM
+            cntl_prof_margin24 = (tot_cntl_prof24 / tot_cntl_rev24) * 100
+
+            col1.metric('**Total Revenue**', '${:,}'.format(int(tot_cntl_rev24)))
+            col2.metric('**Profit Margin**', '{:,.2f}%'.format(cntl_prof_margin24))
+            col3.metric('**Total Profit**', '${:,}'.format(int(tot_cntl_prof24)))
+            
             st.divider()
             display_pie_chart_comp(annual_product_totals[4])
             st.divider()
@@ -2896,7 +2960,19 @@ if task_choice == 'Product Reports':
             col2.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[3]['Shostarter'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[3]['Shostarter'][0]), '')
             col3.subheader('Shomaster')
             col3.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[3]['Shomaster'][1] / td_23_tot) * 100), '{}'.format(annual_product_totals[3]['Shomaster'][0]), '')
-    
+
+            prod_profit_TB, profit_per_unit_TB, prod_profit_last_TB, avg_price_TB, avg_price_last_TB = calculate_product_metrics(annual_product_totals, 'The Button', 3, bom_cost_control)
+            prod_profit_SS, profit_per_unit_SS, prod_profit_last_SS, avg_price_SS, avg_price_last_SS = calculate_product_metrics(annual_product_totals, 'Shostarter', 3, bom_cost_control)
+            prod_profit_SM, profit_per_unit_SM, prod_profit_last_SM, avg_price_SM, avg_price_last_SM = calculate_product_metrics(annual_product_totals, 'Shomaster', 3, bom_cost_control)
+            
+            tot_cntl_rev23 = annual_product_totals[3]['The Button'][1] + annual_product_totals[3]['Shostarter'][1] + annual_product_totals[3]['Shomaster'][1]
+            tot_cntl_prof23 = prod_profit_TB + prod_profit_SS + prod_profit_SM
+            cntl_prof_margin23 = (tot_cntl_prof23 / tot_cntl_rev23) * 100
+
+            col1.metric('**Total Revenue**', '${:,}'.format(int(tot_cntl_rev23)))
+            col2.metric('**Profit Margin**', '{:,.2f}%'.format(cntl_prof_margin23))
+            col3.metric('**Total Profit**', '${:,}'.format(int(tot_cntl_prof23)))
+            
             st.divider()
             display_pie_chart_comp(annual_product_totals[3])
             st.divider()
