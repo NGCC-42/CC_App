@@ -2954,9 +2954,9 @@ if task_choice == 'Product Reports':
             
             col1, col2, col3 = st.columns(3)
 
-            col1.metric('Total Revenue', '${:,}'.format(int(tot_hh_rev25)))
-            col2.metric('Profit Margin', '{:,.2f}%'.format(prof_margin25))
-            col3.metric('Totat Profit', '${:,}'.format(int(tot_hh_prof25)))
+            col1.metric('**Total Revenue**', '${:,}'.format(int(tot_hh_rev25)))
+            col2.metric('**Profit Margin**', '{:,.2f}%'.format(prof_margin25))
+            col3.metric('**Total Profit**', '${:,}'.format(int(tot_hh_prof25)))
         
             st.divider()
             display_pie_chart_comp(annual_product_totals[8])
@@ -3011,9 +3011,9 @@ if task_choice == 'Product Reports':
             
             col1, col2, col3 = st.columns(3)
 
-            col1.metric('Total Revenue', '${:,}'.format(int(tot_hh_rev24)))
-            col2.metric('Profit Margin', '{:,.2f}%'.format(prof_margin24))
-            col3.metric('Totat Profit', '${:,}'.format(int(tot_hh_prof24)))
+            col1.metric('**Total Revenue**', '${:,}'.format(int(tot_hh_rev24)))
+            col2.metric('**Profit Margin**', '{:,.2f}%'.format(prof_margin24))
+            col3.metric('**Total Profit**', '${:,}'.format(int(tot_hh_prof24)))
         
             st.divider()
             display_pie_chart_comp(annual_product_totals[7])
@@ -3068,9 +3068,9 @@ if task_choice == 'Product Reports':
             
             col1, col2, col3 = st.columns(3)
 
-            col1.metric('Total Revenue', '${:,}'.format(int(tot_hh_rev23)))
-            col2.metric('Profit Margin', '{:,.2f}%'.format(prof_margin23))
-            col3.metric('Totat Profit', '${:,}'.format(int(tot_hh_prof23)))   
+            col1.metric('**Total Revenue**', '${:,}'.format(int(tot_hh_rev23)))
+            col2.metric('**Profit Margin**', '{:,.2f}%'.format(prof_margin23))
+            col3.metric('**Total Profit**', '${:,}'.format(int(tot_hh_prof23)))   
 
 
             
