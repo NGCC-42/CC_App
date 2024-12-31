@@ -1190,7 +1190,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
         data = extract_transaction_data(sales_dict1)
         total_sales, total_web_perc, total_fulcrum_perc, avg_month, magic_sales = calc_monthly_totals_v2(sales_dict1)
         
-        db1, db2, db3 = st.columns(3)
+        db1, db2, db3 = st.columns([.3, .4, .3], gap='medium')
         
         db1.metric(label='**Website Sales**', value='${:,}'.format(int(data[3])), delta='')
         db1.metric(label='**Website Transactions**', value='{:,}'.format(data[6]), delta='')
@@ -1227,7 +1227,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
 
         wholesale_sales1, retail_sales1 = wholesale_retail_totals(wvr1)
 
-        db1, db2, db3 = st.columns(3)      
+        db1, db2, db3 = st.columns([.3, .4, .3], gap='medium')      
         
         if wvr2 == None:
 
@@ -1287,7 +1287,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
         fulcrum_avg_sale = percent_of_change(data2[1], data1[1])
         
 
-        db1, db2, db3 = st.columns(3)
+        db1, db2, db3 = st.columns([.3, .4, .3], gap='medium')
 
         if wvr2 == None:
 
