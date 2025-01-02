@@ -2807,9 +2807,10 @@ def calculate_product_metrics(annual_product_totals, prod_select, key, bom_dict)
     prod_profit = (annual_product_totals[key][prod_select][1]) - (annual_product_totals[key][prod_select][0] * bom_dict[prod_select])
     if annual_product_totals[key][prod_select][0] == 0:
         profit_per_unit = 0
+        avg_price = 0
     else:
         profit_per_unit = prod_profit / annual_product_totals[key][prod_select][0]
-    avg_price = annual_product_totals[key][prod_select][1] / annual_product_totals[key][prod_select][0]
+        avg_price = annual_product_totals[key][prod_select][1] / annual_product_totals[key][prod_select][0]
     
     if key not in no_prior_list:
         avg_price_last = annual_product_totals[key-1][prod_select][1] / annual_product_totals[key-1][prod_select][0]
