@@ -2816,6 +2816,11 @@ if task_choice == 'Product Reports':
             col4.subheader('Cryo Clamp')
             col4.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[0]['Cryo Clamp'][1] / total_23) * 100), '{}'.format(annual_product_totals[0]['Cryo Clamp'][0]), '')
 
+            prod_profit_PJ, profit_per_unit_PJ, prod_profit_last_PJ, avg_price_PJ, avg_price_last_PJ, wholesale_sales_PJ, wholesale_percentage_PJ, wholesale_delta_PJ = calculate_product_metrics(annual_product_totals, 'Pro Jet', 0, bom_cost_jet)
+            prod_profit_QJ, profit_per_unit_QJ, prod_profit_last_QJ, avg_price_QJ, avg_price_last_QJ, wholesale_sales_QJ, wholesale_percentage_QJ, wholesale_delta_QJ = calculate_product_metrics(annual_product_totals, 'Quad Jet', 0, bom_cost_jet)
+            prod_profit_MJ, profit_per_unit_MJ, prod_profit_last_MJ, avg_price_MJ, avg_price_last_MJ, wholesale_sales_MJ, wholesale_percentage_MJ, wholesale_delta_MJ = calculate_product_metrics(annual_product_totals, 'Micro Jet', 0, bom_cost_jet)
+            prod_profit_CC, profit_per_unit_CC, prod_profit_last_CC, avg_price_CC, avg_price_last_CC, wholesale_sales_CC, wholesale_percentage_CC, wholesale_delta_CC = calculate_product_metrics(annual_product_totals, 'Cryo Clamp', 0, bom_cost_jet)
+		
             tot_jet_rev23 = annual_product_totals[0]['Pro Jet'][1] + annual_product_totals[0]['Quad Jet'][1] + annual_product_totals[0]['Micro Jet'][1] + annual_product_totals[0]['Cryo Clamp'][1]
             tot_jet_prof23 = prod_profit_PJ + prod_profit_QJ + prod_profit_MJ + prod_profit_CC
             jet_prof_margin23 = (tot_jet_prof23 / tot_jet_rev23) * 100
