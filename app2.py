@@ -1578,7 +1578,8 @@ if task_choice == 'Dashboard':
                 st.header('Sales by Month')
                 plot_bar_chart_ms(format_for_chart_ms(sales_dict_25))
 
-                #st.write('')
+                st.write('')
+                st.header('')
                 st.header('Quarterly Sales')
                 
                 col6, col7, col8 = st.columns([.3, .4, .3])
@@ -1640,6 +1641,7 @@ if task_choice == 'Dashboard':
                 plot_bar_chart_ms(format_for_chart_ms(sales_dict_24))
     
                 st.write('')
+                st.header('')
                 st.header('Quarterly Sales')
                 
                 col6, col7, col8 = st.columns([.3, .4, .3])
@@ -1704,6 +1706,7 @@ if task_choice == 'Dashboard':
                 plot_bar_chart_ms(format_for_chart_ms(sales_dict_23)) 
     
                 st.write('')
+                st.header('')
                 st.header('Quarterly Sales')
                 
                 col6, col7, col8 = st.columns([.3, .4, .3])
