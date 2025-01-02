@@ -2853,7 +2853,7 @@ def to_date_product(sku_string):
                 
         idx += 1
             
-    return prod_cnt_23, prod_cnt_24, prod_cnt_25
+    return prod_cnt_23, prod_cnt_24
 
 
 
