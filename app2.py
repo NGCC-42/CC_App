@@ -2921,7 +2921,10 @@ if task_choice == 'Product Reports':
                 
                 tot_jet_rev25 = annual_product_totals[2]['Pro Jet'][1] + annual_product_totals[2]['Quad Jet'][1] + annual_product_totals[2]['Micro Jet'][1] + annual_product_totals[2]['Cryo Clamp'][1]
                 tot_jet_prof25 = prod_profit_PJ + prod_profit_QJ + prod_profit_MJ + prod_profit_CC
-                jet_prof_margin25 = (tot_jet_prof25 / tot_jet_rev25) * 100
+                if tot_jet_rev25 == 0:
+                    jet_prof_margin25 = 0
+                else:
+                    jet_prof_margin25 = (tot_jet_prof25 / tot_jet_rev25) * 100
                 
                 colx, coly, colz = st.columns(3)
     
@@ -3090,7 +3093,10 @@ if task_choice == 'Product Reports':
     
                 tot_cntl_rev25 = annual_product_totals[5]['The Button'][1] + annual_product_totals[5]['Shostarter'][1] + annual_product_totals[5]['Shomaster'][1]
                 tot_cntl_prof25 = prod_profit_TB + prod_profit_SS + prod_profit_SM
-                cntl_prof_margin25 = (tot_cntl_prof25 / tot_cntl_rev25) * 100
+                if tot_cntl_rev25 == 0:
+                    cntl_prof_margin = 0
+                else:
+                    cntl_prof_margin25 = (tot_cntl_prof25 / tot_cntl_rev25) * 100
     
                 cola.metric('**Total Revenue**', '${:,}'.format(int(tot_cntl_rev25)))
                 colb.metric('**Profit Margin**', '{:,.2f}%'.format(cntl_prof_margin25))
@@ -3246,7 +3252,10 @@ if task_choice == 'Product Reports':
                 
                 tot_hh_rev25 = annual_product_totals[8]['8FT - No Case'][1] + annual_product_totals[8]['8FT - Travel Case'][1] + annual_product_totals[8]['15FT - No Case'][1] + annual_product_totals[8]['15FT - Travel Case'][1]
                 tot_hh_prof25 = prod_profit_8NC + prod_profit_8TC + prod_profit_15NC + prod_profit_15TC
-                prof_margin25 = (tot_hh_prof25 / tot_hh_rev25) * 100
+                if tot_hh_rev25 == 0:
+                    prof_margin25 = 0
+                else:
+                    prof_margin25 = (tot_hh_prof25 / tot_hh_rev25) * 100
                 
                 colx, coly, colz = st.columns(3)
     
