@@ -3034,11 +3034,11 @@ if task_choice == 'Product Reports':
             tot_hh_prof25 = prod_profit_8NC + prod_profit_8TC + prod_profit_15NC + prod_profit_15TC
             prof_margin25 = (tot_hh_prof25 / tot_hh_rev25) * 100
             
-            col1, col2, col3 = st.columns(3)
+            colx, coly, colz = st.columns(3)
 
-            col1.metric('**Total Revenue**', '${:,}'.format(int(tot_hh_rev25)))
-            col2.metric('**Profit Margin**', '{:,.2f}%'.format(prof_margin25))
-            col3.metric('**Total Profit**', '${:,}'.format(int(tot_hh_prof25)))
+            colx.metric('**Total Revenue**', '${:,}'.format(int(tot_hh_rev25)))
+            coly.metric('**Profit Margin**', '{:,.2f}%'.format(prof_margin25))
+            colz.metric('**Total Profit**', '${:,}'.format(int(tot_hh_prof25)))
         
             st.divider()
             display_pie_chart_comp(annual_product_totals[8])
@@ -3091,11 +3091,11 @@ if task_choice == 'Product Reports':
             tot_hh_prof24 = prod_profit_8NC + prod_profit_8TC + prod_profit_15NC + prod_profit_15TC
             prof_margin24 = (tot_hh_prof24 / tot_hh_rev24) * 100
             
-            col1, col2, col3 = st.columns(3)
+            colx, coly, colz = st.columns(3)
 
-            col1.metric('**Total Revenue**', '${:,}'.format(int(tot_hh_rev24)))
-            col2.metric('**Profit Margin**', '{:,.2f}%'.format(prof_margin24))
-            col3.metric('**Total Profit**', '${:,}'.format(int(tot_hh_prof24)))
+            colx.metric('**Total Revenue**', '${:,}'.format(int(tot_hh_rev24)))
+            coly.metric('**Profit Margin**', '{:,.2f}%'.format(prof_margin24))
+            colz.metric('**Total Profit**', '${:,}'.format(int(tot_hh_prof24)))
         
             st.divider()
             display_pie_chart_comp(annual_product_totals[7])
@@ -3148,14 +3148,12 @@ if task_choice == 'Product Reports':
             tot_hh_prof23 = prod_profit_8NC + prod_profit_8TC + prod_profit_15NC + prod_profit_15TC
             prof_margin23 = (tot_hh_prof23 / tot_hh_rev23) * 100
             
-            col1, col2, col3 = st.columns(3)
+            colx, coly, colz = st.columns(3)
 
-            col1.metric('**Total Revenue**', '${:,}'.format(int(tot_hh_rev23)))
-            col2.metric('**Profit Margin**', '{:,.2f}%'.format(prof_margin23))
-            col3.metric('**Total Profit**', '${:,}'.format(int(tot_hh_prof23)))   
+            colx.metric('**Total Revenue**', '${:,}'.format(int(tot_hh_rev23)))
+            coly.metric('**Profit Margin**', '{:,.2f}%'.format(prof_margin23))
+            colz.metric('**Total Profit**', '${:,}'.format(int(tot_hh_prof23)))   
 
-
-            
             st.divider()
             display_pie_chart_comp(annual_product_totals[6])
             st.divider()
