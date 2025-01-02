@@ -3881,6 +3881,8 @@ elif task_choice == 'Customer Details':
                 sales_order_list.append(df.iloc[idx].sales_order)
         idx += 1
         
+    perc_change = percent_of_change(spend_total_2023, spend_total_2024)    
+    
     with colb:
         st.header('')
         st.subheader('')
