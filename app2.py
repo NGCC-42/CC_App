@@ -1447,6 +1447,18 @@ td_24_tot = td_24[0] + td_24[1]
 td_25_tot = td_25[0] + td_25[1]
 
 
+sales_dict_23 = get_monthly_sales_v2(df, 2023)
+#transaction_data_23 = extract_transaction_data(sales_dict_23)
+total_23, web_23, ful_23, avg_23, magic23 = calc_monthly_totals_v2(sales_dict_23)
+
+sales_dict_24 = get_monthly_sales_v2(df, 2024)
+#transaction_data_24 = extract_transaction_data(sales_dict_24)
+total_24, web_24, ful_24, avg_24, magic24 = calc_monthly_totals_v2(sales_dict_24)
+
+st.write(total_24)
+
+#sales_dict_25 = get_monthly_sales_v2(df, 2025)
+#total_25, web_25, ful_25, avg_25, magic25 = calc_monthly_totals_v2(sales_dict_25)
 
 if task_choice == 'Dashboard':
 
@@ -1478,16 +1490,7 @@ if task_choice == 'Dashboard':
                      'November': [[57760.81, 77], [57760.82, 30], [0]], 
                      'December': [[75155.19, 64], [75155.20, 30], [0]]}
     
-    sales_dict_23 = get_monthly_sales_v2(df, 2023)
-    #transaction_data_23 = extract_transaction_data(sales_dict_23)
-    total_23, web_23, ful_23, avg_23, magic23 = calc_monthly_totals_v2(sales_dict_23)
-    
-    sales_dict_24 = get_monthly_sales_v2(df, 2024)
-    #transaction_data_24 = extract_transaction_data(sales_dict_24)
-    total_24, web_24, ful_24, avg_24, magic24 = calc_monthly_totals_v2(sales_dict_24)
 
-    #sales_dict_25 = get_monthly_sales_v2(df, 2025)
-    #total_25, web_25, ful_25, avg_25, magic25 = calc_monthly_totals_v2(sales_dict_25)
 
     ### SALES CHANNEL BREAKDOWN ###
     web_avg_perc = (web_23 + web_24)/2
