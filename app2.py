@@ -972,7 +972,8 @@ def calc_monthly_totals_v2(sales_dict, months=['All']):
                     pass
                 else:
                     num_months += 1
-                        
+    if num_months == 0:
+        num_months = 1
     avg_month = total_sales / num_months                
     total_web_perc = percent_of_sales(total_web, total_fulcrum)
     total_fulcrum_perc = percent_of_sales(total_fulcrum, total_web)
