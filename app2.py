@@ -1542,6 +1542,7 @@ if task_choice == 'Dashboard':
         #st.subheader('')
         st.write('')
         st.write('')
+        st.write('')
         st.header('To-Date Sales')
         
         cola, colb, colc = st.columns(3)
