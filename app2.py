@@ -1454,11 +1454,9 @@ td_25_tot = td_25[0] + td_25[1]
 
 
 sales_dict_23 = get_monthly_sales_v2(df, 2023)
-#transaction_data_23 = extract_transaction_data(sales_dict_23)
 total_23, web_23, ful_23, avg_23, magic23 = calc_monthly_totals_v2(sales_dict_23)
 
 sales_dict_24 = get_monthly_sales_v2(df, 2024)
-#transaction_data_24 = extract_transaction_data(sales_dict_24)
 total_24, web_24, ful_24, avg_24, magic24 = calc_monthly_totals_v2(sales_dict_24)
 
 sales_dict_25 = get_monthly_sales_v2(df, 2025)
@@ -1466,7 +1464,12 @@ total_25, web_25, ful_25, avg_25, magic25 = calc_monthly_totals_v2(sales_dict_25
 
 if task_choice == 'Dashboard':
 
-
+    # QUARTERLY TOTALS
+    q1_25, q2_25, q3_25, q4_25 = quarterly_sales(2025)
+    q1_24, q2_24, q3_24, q4_24 = quarterly_sales(2024)
+    q1_23, q2_23, q3_23, q4_23 = quarterly_sales(2023)
+    q1_22, q2_22, q3_22, q4_22 = [52371, 52371], [222874.37, 222874.38], [246693.76, 246693.76], [219790.14, 219790.14]
+    
     ### WHOLESALE VS RETAIL MONTHLY TOTALS
     
     wvr_23_months = get_monthly_sales_wvr(df, 2023)
@@ -1494,144 +1497,300 @@ if task_choice == 'Dashboard':
                      'November': [[57760.81, 77], [57760.82, 30], [0]], 
                      'December': [[75155.19, 64], [75155.20, 30], [0]]}
     
+    x = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+    y2022 = []
+    y2023 = []
+    y2024 = []
+    y2025 = []
 
+    for key, val in sales_dict_22.items():
+        y2022.append(val[0][0] + val[1][0])
+    for key, val in sales_dict_23.items():
+        y2023.append(val[0][0] + val[1][0])
+    for key, val in sales_dict_24.items():
+        y2024.append(val[0][0] + val[1][0])
+    for key, val in sales_dict_25.items():
+        y2025.append(val[0][0] + val[1][0])
+    
+    fig, ax = plt.subplots()
+    
+    ax.plot(x, y2022, label='2022', color='limegreen', linewidth=4.5)
+    ax.plot(x, y2023, label='2023', color='white', linewidth=4.5)
+    ax.plot(x, y2024, label='2024', color='grey', linewidth=4.5)
+    ax.set_facecolor('#000000')
+    fig.set_facecolor('#000000')
+    plt.yticks([20000, 40000, 60000, 80000, 100000, 120000, 140000, 160000, 180000, 200000, 220000, 240000, 260000, 280000])
+    plt.tick_params(axis='x', colors='white')
+    plt.tick_params(axis='y', colors='white')
+    #plt.title('Annual Comparison', color='green')
+    plt.figure(figsize=(12,6))
+
+    fig.legend()
 
     ### SALES CHANNEL BREAKDOWN ###
     web_avg_perc = (web_23 + web_24)/2
     ful_avg_perc = (ful_23 + ful_24)/2
 
-    year_select = ui.tabs(options=[2025, 2024, 2023, 2022], default_value=2025, key='Year')
+    col1, col2, col3 = st.columns([.28, .44, .28], gap='medium')
+
+    col1.header('Annual Comparison')
+    col1.pyplot(fig)
+    
+    with col1:
+        
+        st.header('')
+        st.subheader('')
+        #st.write('')
+        st.header('To-Date Sales')
+        
+        cola, colb, colc = st.columns(3)
+
+        cola.metric('**2025 Total**', '${:,}'.format(int(td_25[1] + td_25[0])), percent_of_change((td_24[0] + td_24[1]), (td_25[0] + td_25[1])))
+        cola.metric('**2025 Web**', '${:,}'.format(int(td_25[0])), percent_of_change(td_24[0], td_25[0]))
+        cola.metric('**2025 Fulcrum**', '${:,}'.format(int(td_25[1])), percent_of_change(td_24[1], td_25[1]))
+        
+        colb.metric('**2024 Total**', '${:,}'.format(int(td_24[1] + td_24[0])), percent_of_change((td_23[0] + td_23[1]), (td_24[0] + td_24[1])))
+        colb.metric('**2024 Web**', '${:,}'.format(int(td_24[0])), percent_of_change(td_23[0], td_24[0]))
+        colb.metric('**2024 Fulcrum**', '${:,}'.format(int(td_24[1])), percent_of_change(td_23[1], td_24[1]))
+        
+        colc.metric('**2023 Total**', '${:,}'.format(int(td_23[1] + td_23[0])), '100%')
+        colc.metric('**2023 Web**', '${:,}'.format(int(td_23[0])), '100%')
+        colc.metric('**2023 Fulcrum**', '${:,}'.format(int(td_23[1])), '100%')
+
+        style_metric_cards()
+    
+    with col2:
+        year_select = ui.tabs(options=[2025, 2024, 2023, 2022], default_value=2025, key='Year')     
+    
+        #tot_vs_ytd = ui.tabs(options=['Totals', 'YTD'], default_value='Totals')
 
     
     ### DISPLAY SALES METRICS ###
 
-    if year_select == 2025:
+    with col2:
 
-        display_metrics(sales_dict_25, sales_dict_24, wvr1=wvr_25_months, wvr2=wvr_24_months)
+        if year_select == 2025:
         
-        st.header('')
-        plot_bar_chart_ms(format_for_chart_ms(sales_dict_25))
-        
-        st.divider()
-        months[0] = 'Overview'
-        focus = st.selectbox('', options=months, key='Focus25')
+            display_metrics(sales_dict_25, sales_dict_24, wvr1=wvr_25_months, wvr2=wvr_24_months)
+    
+            with col3:
+                
+                st.header('Sales by Month')
+                plot_bar_chart_ms(format_for_chart_ms(sales_dict_25))
 
-        if focus == 'Overview':
-            display_month_data_x(sales_dict_25, sales_dict_24)
-        elif focus == 'January':
-            display_metrics(sales_dict_25, sales_dict_24, 'January', wvr1=wvr_25_months, wvr2=wvr_24_months)
-        elif focus == 'February':
-            display_metrics(sales_dict_25, sales_dict_24, 'February', wvr1=wvr_25_months, wvr2=wvr_24_months)
-        elif focus == 'March':
-            display_metrics(sales_dict_25, sales_dict_24, 'March', wvr1=wvr_25_months, wvr2=wvr_24_months)
-        elif focus == 'April':
-            display_metrics(sales_dict_25, sales_dict_24, 'April', wvr1=wvr_25_months, wvr2=wvr_24_months)
-        elif focus == 'May':
-            display_metrics(sales_dict_25, sales_dict_24, 'May', wvr1=wvr_25_months, wvr2=wvr_24_months)
-        elif focus == 'June':
-            display_metrics(sales_dict_25, sales_dict_24, 'June', wvr1=wvr_25_months, wvr2=wvr_24_months)
-        elif focus == 'July':
-            display_metrics(sales_dict_25, sales_dict_24, 'July', wvr1=wvr_25_months, wvr2=wvr_24_months)
-        elif focus == 'August':
-            display_metrics(sales_dict_25, sales_dict_24, 'August', wvr1=wvr_25_months, wvr2=wvr_24_months)
-        elif focus == 'September':
-            display_metrics(sales_dict_25, sales_dict_24, 'September', wvr1=wvr_25_months, wvr2=wvr_24_months)
-        elif focus == 'October':
-            display_metrics(sales_dict_25, sales_dict_24, 'October', wvr1=wvr_25_months, wvr2=wvr_24_months)
-        elif focus == 'November':
-            display_metrics(sales_dict_25, sales_dict_24, 'November', wvr1=wvr_25_months, wvr2=wvr_24_months)
-        else:
-            display_metrics(sales_dict_25, sales_dict_24, 'December', wvr1=wvr_25_months, wvr2=wvr_24_months)
+                #st.write('')
+                st.header('Quarterly Sales')
+                
+                col6, col7, col8 = st.columns([.3, .4, .3])
+                
+                col6.metric('**Q1 Web Sales**', '${:,}'.format(int(q1_25[0])), percent_of_change(q1_24[0], q1_25[0]))
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(q1_25[0] + q1_25[1])), percent_of_change((q1_24[0] + q1_24[1]), (q1_25[0] + q1_25[1])))
+                col8.metric('**Q1 Fulcrum Sales**', '${:,}'.format(int(q1_25[1])), percent_of_change(q1_24[1], q1_25[1]))
+                
+                col6.metric('**Q2 Web Sales**', '${:,}'.format(int(q2_25[0])), percent_of_change(q2_23[0], q2_24[0]))
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(q2_25[0] + q2_25[1])), percent_of_change((q2_24[0] + q2_24[1]), (q2_25[0] + q2_25[1])))
+                col8.metric('**Q2 Fulcrum Sales**', '${:,}'.format(int(q2_25[1])), percent_of_change(q2_24[1], q2_25[1]))
+                
+                col6.metric('**Q3 Web Sales**', '${:,}'.format(int(q3_25[0])), percent_of_change(q3_24[0], q3_25[0]))
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(q3_25[0] + q3_25[1])), percent_of_change((q3_24[0] + q3_24[1]), (q3_25[0] + q3_25[1])))
+                col8.metric('**Q3 Fulcrum Sales**', '${:,}'.format(int(q3_25[1])), percent_of_change(q3_24[1], q3_25[1]))
+    
+                col6.metric('**Q4 Web Sales**', '${:,}'.format(int(q4_25[0])), percent_of_change(q4_24[0], q4_25[0]))
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(q4_25[0] + q4_25[1])), percent_of_change((q4_24[0] + q4_24[1]), (q4_25[0] + q4_25[1])))
+                col8.metric('**Q4 Fulcrum Sales**', '${:,}'.format(int(q4_25[1])), percent_of_change(q4_24[1], q4_25[1]))
+    
+    
+            months[0] = 'Overview'
+            focus = st.selectbox('', options=months, key='Focus25')
+    
+            if focus == 'Overview':
+                display_month_data_x(sales_dict_25, sales_dict_24)
+            elif focus == 'January':
+                display_metrics(sales_dict_25, sales_dict_24, 'January', wvr1=wvr_25_months, wvr2=wvr_24_months)
+            elif focus == 'February':
+                display_metrics(sales_dict_25, sales_dict_24, 'February', wvr1=wvr_25_months, wvr2=wvr_24_months)
+            elif focus == 'March':
+                display_metrics(sales_dict_25, sales_dict_24, 'March', wvr1=wvr_25_months, wvr2=wvr_24_months)
+            elif focus == 'April':
+                display_metrics(sales_dict_25, sales_dict_24, 'April', wvr1=wvr_25_months, wvr2=wvr_24_months)
+            elif focus == 'May':
+                display_metrics(sales_dict_25, sales_dict_24, 'May', wvr1=wvr_25_months, wvr2=wvr_24_months)
+            elif focus == 'June':
+                display_metrics(sales_dict_25, sales_dict_24, 'June', wvr1=wvr_25_months, wvr2=wvr_24_months)
+            elif focus == 'July':
+                display_metrics(sales_dict_25, sales_dict_24, 'July', wvr1=wvr_25_months, wvr2=wvr_24_months)
+            elif focus == 'August':
+                display_metrics(sales_dict_25, sales_dict_24, 'August', wvr1=wvr_25_months, wvr2=wvr_24_months)
+            elif focus == 'September':
+                display_metrics(sales_dict_25, sales_dict_24, 'September', wvr1=wvr_25_months, wvr2=wvr_24_months)
+            elif focus == 'October':
+                display_metrics(sales_dict_25, sales_dict_24, 'October', wvr1=wvr_25_months, wvr2=wvr_24_months)
+            elif focus == 'November':
+                display_metrics(sales_dict_25, sales_dict_24, 'November', wvr1=wvr_25_months, wvr2=wvr_24_months)
+            else:
+                display_metrics(sales_dict_25, sales_dict_24, 'December', wvr1=wvr_25_months, wvr2=wvr_24_months)
 
     elif year_select == 2024:
 
-        display_metrics(sales_dict_24, sales_dict_23, wvr1=wvr_24_months, wvr2=wvr_23_months)
+            display_metrics(sales_dict_24, sales_dict_23, wvr1=wvr_24_months, wvr2=wvr_23_months)
         
-        st.header('')
-        plot_bar_chart_ms(format_for_chart_ms(sales_dict_24))
-        
-        st.divider()
-        months[0] = 'Overview'
-        focus = st.selectbox('', options=months, key='Focus24')
+            with col3:
+                
+                st.header('Sales by Month')
+                plot_bar_chart_ms(format_for_chart_ms(sales_dict_24))
 
-        if focus == 'Overview':
-            display_month_data_x(sales_dict_24, sales_dict_23)
-        elif focus == 'January':
-            display_metrics(sales_dict_24, sales_dict_23, 'January', wvr1=wvr_24_months, wvr2=wvr_23_months)
-        elif focus == 'February':
-            display_metrics(sales_dict_24, sales_dict_23, 'February', wvr1=wvr_24_months, wvr2=wvr_23_months)
-        elif focus == 'March':
-            display_metrics(sales_dict_24, sales_dict_23, 'March', wvr1=wvr_24_months, wvr2=wvr_23_months)
-        elif focus == 'April':
-            display_metrics(sales_dict_24, sales_dict_23, 'April', wvr1=wvr_24_months, wvr2=wvr_23_months)
-        elif focus == 'May':
-            display_metrics(sales_dict_24, sales_dict_23, 'May', wvr1=wvr_24_months, wvr2=wvr_23_months)
-        elif focus == 'June':
-            display_metrics(sales_dict_24, sales_dict_23, 'June', wvr1=wvr_24_months, wvr2=wvr_23_months)
-        elif focus == 'July':
-            display_metrics(sales_dict_24, sales_dict_23, 'July', wvr1=wvr_24_months, wvr2=wvr_23_months)
-        elif focus == 'August':
-            display_metrics(sales_dict_24, sales_dict_23, 'August', wvr1=wvr_24_months, wvr2=wvr_23_months)
-        elif focus == 'September':
-            display_metrics(sales_dict_24, sales_dict_23, 'September', wvr1=wvr_24_months, wvr2=wvr_23_months)
-        elif focus == 'October':
-            display_metrics(sales_dict_24, sales_dict_23, 'October', wvr1=wvr_24_months, wvr2=wvr_23_months)
-        elif focus == 'November':
-            display_metrics(sales_dict_24, sales_dict_23, 'November', wvr1=wvr_24_months, wvr2=wvr_23_months)
-        else:
-            display_metrics(sales_dict_24, sales_dict_23, 'December', wvr1=wvr_24_months, wvr2=wvr_23_months)
+                st.write('')
+                st.header('Quarterly Sales')
+                
+                col6, col7, col8 = st.columns([.3, .4, .3])
+                
+                col6.metric('**Q1 Web Sales**', '${:,}'.format(int(q1_24[0])), percent_of_change(q1_23[0], q1_24[0]))
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(q1_24[0] + q1_24[1])), percent_of_change((q1_23[0] + q1_23[1]), (q1_24[0] + q1_24[1])))
+                col8.metric('**Q1 Fulcrum Sales**', '${:,}'.format(int(q1_24[1])), percent_of_change(q1_23[1], q1_24[1]))
+                
+                col6.metric('**Q2 Web Sales**', '${:,}'.format(int(q2_24[0])), percent_of_change(q2_23[0], q2_24[0]))
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(q2_24[0] + q2_24[1])), percent_of_change((q2_23[0] + q2_23[1]), (q2_24[0] + q2_24[1])))
+                col8.metric('**Q2 Fulcrum Sales**', '${:,}'.format(int(q2_24[1])), percent_of_change(q2_23[1], q2_24[1]))
+                
+                col6.metric('**Q3 Web Sales**', '${:,}'.format(int(q3_24[0])), percent_of_change(q3_23[0], q3_24[0]))
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(q3_24[0] + q3_24[1])), percent_of_change((q3_23[0] + q3_23[1]), (q3_24[0] + q3_24[1])))
+                col8.metric('**Q3 Fulcrum Sales**', '${:,}'.format(int(q3_24[1])), percent_of_change(q3_23[1], q3_24[1]))
+
+                col6.metric('**Q4 Web Sales**', '${:,}'.format(int(q4_24[0])), percent_of_change(q4_23[0], q4_24[0]))
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(q4_24[0] + q4_24[1])), percent_of_change((q4_23[0] + q4_23[1]), (q4_24[0] + q4_24[1])))
+                col8.metric('**Q4 Fulcrum Sales**', '${:,}'.format(int(q4_24[1])), percent_of_change(q4_23[1], q4_24[1]))
+
+
+
+            months[0] = 'Overview'
+            focus = st.selectbox('', options=months, key='Focus24')
+    
+            if focus == 'Overview':
+                display_month_data_x(sales_dict_24, sales_dict_23)
+            elif focus == 'January':
+                display_metrics(sales_dict_24, sales_dict_23, 'January', wvr1=wvr_24_months, wvr2=wvr_23_months)
+            elif focus == 'February':
+                display_metrics(sales_dict_24, sales_dict_23, 'February', wvr1=wvr_24_months, wvr2=wvr_23_months)
+            elif focus == 'March':
+                display_metrics(sales_dict_24, sales_dict_23, 'March', wvr1=wvr_24_months, wvr2=wvr_23_months)
+            elif focus == 'April':
+                display_metrics(sales_dict_24, sales_dict_23, 'April', wvr1=wvr_24_months, wvr2=wvr_23_months)
+            elif focus == 'May':
+                display_metrics(sales_dict_24, sales_dict_23, 'May', wvr1=wvr_24_months, wvr2=wvr_23_months)
+            elif focus == 'June':
+                display_metrics(sales_dict_24, sales_dict_23, 'June', wvr1=wvr_24_months, wvr2=wvr_23_months)
+            elif focus == 'July':
+                display_metrics(sales_dict_24, sales_dict_23, 'July', wvr1=wvr_24_months, wvr2=wvr_23_months)
+            elif focus == 'August':
+                display_metrics(sales_dict_24, sales_dict_23, 'August', wvr1=wvr_24_months, wvr2=wvr_23_months)
+            elif focus == 'September':
+                display_metrics(sales_dict_24, sales_dict_23, 'September', wvr1=wvr_24_months, wvr2=wvr_23_months)
+            elif focus == 'October':
+                display_metrics(sales_dict_24, sales_dict_23, 'October', wvr1=wvr_24_months, wvr2=wvr_23_months)
+            elif focus == 'November':
+                display_metrics(sales_dict_24, sales_dict_23, 'November', wvr1=wvr_24_months, wvr2=wvr_23_months)
+            else:
+                display_metrics(sales_dict_24, sales_dict_23, 'December', wvr1=wvr_24_months, wvr2=wvr_23_months)
 
 
         
     if year_select == 2023:
 
-        display_metrics(sales_dict_23, sales_dict_22, wvr1=wvr_23_months)
+            with col2:
+                display_metrics(sales_dict_23, sales_dict_22, wvr1=wvr_23_months)
+                
+            with col3:
+                
+                st.header('Sales by Month')
+                plot_bar_chart_ms(format_for_chart_ms(sales_dict_23)) 
 
-        st.header('')
-        plot_bar_chart_ms(format_for_chart_ms(sales_dict_23))
-        
-        st.divider()
-        months[0] = 'Overview'
-        focus = st.selectbox('', options=months, key='Focus23')
-        
-        st.divider()
+                st.write('')
+                st.header('Quarterly Sales')
+                
+                col6, col7, col8 = st.columns([.3, .4, .3])
+                
+                col6.metric('**Q1 Web Sales**', '${:,}'.format(int(q1_23[0])), percent_of_change(q1_22[0], q1_23[0]))
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(q1_23[0] + q1_23[1])), percent_of_change((q1_22[0] + q1_22[1]), (q1_23[0] + q1_23[1])))
+                col8.metric('**Q1 Fulcrum Sales**', '${:,}'.format(int(q1_23[1])), percent_of_change(q1_22[1], q1_23[1]))
+                
+                col6.metric('**Q2 Web Sales**', '${:,}'.format(int(q2_23[0])), percent_of_change(q2_22[0], q2_23[0]))
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(q2_23[0] + q2_23[1])), percent_of_change((q2_22[0] + q2_22[1]), (q2_23[0] + q2_23[1])))
+                col8.metric('**Q2 Fulcrum Sales**', '${:,}'.format(int(q2_23[1])), percent_of_change(q2_22[1], q2_23[1]))
+                
+                col6.metric('**Q3 Web Sales**', '${:,}'.format(int(q3_23[0])), percent_of_change(q3_22[0], q3_23[0]))
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(q3_23[0] + q3_23[1])), percent_of_change((q3_22[0] + q3_22[1]), (q3_23[0] + q3_23[1])))
+                col8.metric('**Q3 Fulcrum Sales**', '${:,}'.format(int(q3_23[1])), percent_of_change(q3_22[1], q3_23[1]))
 
-        if focus == 'Overview':
-            display_month_data_x(sales_dict_23, sales_dict_22)
-        elif focus == 'January':
-            display_metrics(sales_dict_23, sales_dict_22, 'January', wvr1=wvr_23_months)
-        elif focus == 'February':
-            display_metrics(sales_dict_23, sales_dict_22, 'February', wvr1=wvr_23_months)
-        elif focus == 'March':
-            display_metrics(sales_dict_23, sales_dict_22, 'March', wvr1=wvr_23_months)
-        elif focus == 'April':
-            display_metrics(sales_dict_23, sales_dict_22, 'April', wvr1=wvr_23_months)
-        elif focus == 'May':
-            display_metrics(sales_dict_23, sales_dict_22, 'May', wvr1=wvr_23_months)
-        elif focus == 'June':
-            display_metrics(sales_dict_23, sales_dict_22, 'June', wvr1=wvr_23_months)
-        elif focus == 'July':
-            display_metrics(sales_dict_23, sales_dict_22, 'July', wvr1=wvr_23_months)
-        elif focus == 'August':
-            display_metrics(sales_dict_23, sales_dict_22, 'August', wvr1=wvr_23_months)
-        elif focus == 'September':
-            display_metrics(sales_dict_23, sales_dict_22, 'September', wvr1=wvr_23_months)
-        elif focus == 'October':
-            display_metrics(sales_dict_23, sales_dict_22, 'October', wvr1=wvr_23_months)
-        elif focus == 'November':
-            display_metrics(sales_dict_23, sales_dict_22, 'November', wvr1=wvr_23_months)
-        else:
-            display_metrics(sales_dict_23, sales_dict_22, 'December', wvr1=wvr_23_months)
+                col6.metric('**Q4 Web Sales**', '${:,}'.format(int(q4_23[0])), percent_of_change(q4_22[0], q4_23[0]))
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(q4_23[0] + q4_23[1])), percent_of_change((q4_22[0] + q4_22[1]), (q4_23[0] + q4_23[1])))
+                col8.metric('**Q4 Fulcrum Sales**', '${:,}'.format(int(q4_23[1])), percent_of_change(q4_22[1], q4_23[1]))
+                
+            with col2:
+                months[0] = 'Overview'
+                focus = st.selectbox('', options=months, key='Focus23')
+                
+        
+                if focus == 'Overview':
+                    display_month_data_x(sales_dict_23, sales_dict_22)
+                elif focus == 'January':
+                    display_metrics(sales_dict_23, sales_dict_22, 'January', wvr1=wvr_23_months)
+                elif focus == 'February':
+                    display_metrics(sales_dict_23, sales_dict_22, 'February', wvr1=wvr_23_months)
+                elif focus == 'March':
+                    display_metrics(sales_dict_23, sales_dict_22, 'March', wvr1=wvr_23_months)
+                elif focus == 'April':
+                    display_metrics(sales_dict_23, sales_dict_22, 'April', wvr1=wvr_23_months)
+                elif focus == 'May':
+                    display_metrics(sales_dict_23, sales_dict_22, 'May', wvr1=wvr_23_months)
+                elif focus == 'June':
+                    display_metrics(sales_dict_23, sales_dict_22, 'June', wvr1=wvr_23_months)
+                elif focus == 'July':
+                    display_metrics(sales_dict_23, sales_dict_22, 'July', wvr1=wvr_23_months)
+                elif focus == 'August':
+                    display_metrics(sales_dict_23, sales_dict_22, 'August', wvr1=wvr_23_months)
+                elif focus == 'September':
+                    display_metrics(sales_dict_23, sales_dict_22, 'September', wvr1=wvr_23_months)
+                elif focus == 'October':
+                    display_metrics(sales_dict_23, sales_dict_22, 'October', wvr1=wvr_23_months)
+                elif focus == 'November':
+                    display_metrics(sales_dict_23, sales_dict_22, 'November', wvr1=wvr_23_months)
+                else:
+                    display_metrics(sales_dict_23, sales_dict_22, 'December', wvr1=wvr_23_months)
             
 
     if year_select == 2022:
-
+    
         display_metrics(sales_dict_22)
 
-        st.header('')
-        plot_bar_chart_ms(format_for_chart_ms(sales_dict_22))
+        with col3:
 
-        st.divider()
+            st.header('Sales by Month')
+            plot_bar_chart_ms(format_for_chart_ms(sales_dict_22))
+
+            st.write('')
+            st.header('Quarterly Sales')
+            
+            col6, col7, col8 = st.columns([.3, .4, .3])
+            
+            col6.metric('**Q1 Web Sales**', '${:,}'.format(int(q1_22[0])))
+            col7.metric('**Q1 Total Sales**', '${:,}'.format(int(q1_22[0] + q1_22[1])))
+            col8.metric('**Q1 Fulcrum Sales**', '${:,}'.format(int(q1_22[1])))
+            
+            col6.metric('**Q2 Web Sales**', '${:,}'.format(int(q2_22[0])))
+            col7.metric('**Q2 Total Sales**', '${:,}'.format(int(q2_22[0] + q2_22[1])))
+            col8.metric('**Q2 Fulcrum Sales**', '${:,}'.format(int(q2_22[1])))
+            
+            col6.metric('**Q3 Web Sales**', '${:,}'.format(int(q3_22[0])))
+            col7.metric('**Q3 Total Sales**', '${:,}'.format(int(q3_22[0] + q3_22[1])))
+            col8.metric('**Q3 Fulcrum Sales**', '${:,}'.format(int(q3_22[1])))
+
+            col6.metric('**Q4 Web Sales**', '${:,}'.format(int(q4_22[0])))
+            col7.metric('**Q4 Total Sales**', '${:,}'.format(int(q4_22[0] + q4_22[1])))
+            col8.metric('**Q4 Fulcrum Sales**', '${:,}'.format(int(q4_22[1])))
+            
+
+
+        #st.divider()
 
         display_month_data_x(sales_dict_22)
 
