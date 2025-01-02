@@ -3094,7 +3094,7 @@ if task_choice == 'Product Reports':
                 tot_cntl_rev25 = annual_product_totals[5]['The Button'][1] + annual_product_totals[5]['Shostarter'][1] + annual_product_totals[5]['Shomaster'][1]
                 tot_cntl_prof25 = prod_profit_TB + prod_profit_SS + prod_profit_SM
                 if tot_cntl_rev25 == 0:
-                    cntl_prof_margin = 0
+                    cntl_prof_margin25 = 0
                 else:
                     cntl_prof_margin25 = (tot_cntl_prof25 / tot_cntl_rev25) * 100
     
