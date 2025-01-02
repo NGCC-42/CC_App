@@ -1418,7 +1418,7 @@ def to_date_revenue():
             if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
                 td_23[0] += df.iloc[idx].total_line_item_spend
             elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
-                td_240] += df.iloc[idx].total_line_item_spend
+                td_24[0] += df.iloc[idx].total_line_item_spend
             elif today.date() >= order_date >= beginning_of_year(today).date():
                 td_25[0] += df.iloc[idx].total_line_item_spend
             #elif order_date.year == 2025:
