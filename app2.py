@@ -1416,22 +1416,22 @@ def to_date_revenue():
         order_date = df.iloc[idx].order_date
         if df.iloc[idx].channel[0] == 'F':
             if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
-                td_22[0] += df.iloc[idx].total_line_item_spend
-            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
                 td_23[0] += df.iloc[idx].total_line_item_spend
+            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
+                td_240] += df.iloc[idx].total_line_item_spend
             elif today.date() >= order_date >= beginning_of_year(today).date():
-                td_24[0] += df.iloc[idx].total_line_item_spend
-            elif order_date.year == 2025:
-                td_25[0] += df.iloc[idx].total_line_item_spend   
+                td_25[0] += df.iloc[idx].total_line_item_spend
+            #elif order_date.year == 2025:
+                #td_25[0] += df.iloc[idx].total_line_item_spend   
         else:
             if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
-                td_22[1] += df.iloc[idx].total_line_item_spend
-            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
                 td_23[1] += df.iloc[idx].total_line_item_spend
-            elif today.date() >= order_date >= beginning_of_year(today).date():
+            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
                 td_24[1] += df.iloc[idx].total_line_item_spend
-            elif order_date.year == 2025:
-                td_25[1] += df.iloc[idx].total_line_item_spend            
+            elif today.date() >= order_date >= beginning_of_year(today).date():
+                td_25[1] += df.iloc[idx].total_line_item_spend
+            #elif order_date.year == 2025:
+                #td_25[1] += df.iloc[idx].total_line_item_spend            
 
         idx += 1
         
@@ -1455,8 +1455,8 @@ sales_dict_24 = get_monthly_sales_v2(df, 2024)
 #transaction_data_24 = extract_transaction_data(sales_dict_24)
 total_24, web_24, ful_24, avg_24, magic24 = calc_monthly_totals_v2(sales_dict_24)
 
-#sales_dict_25 = get_monthly_sales_v2(df, 2025)
-#total_25, web_25, ful_25, avg_25, magic25 = calc_monthly_totals_v2(sales_dict_25)
+sales_dict_25 = get_monthly_sales_v2(df, 2025)
+total_25, web_25, ful_25, avg_25, magic25 = calc_monthly_totals_v2(sales_dict_25)
 
 if task_choice == 'Dashboard':
 
@@ -1465,10 +1465,10 @@ if task_choice == 'Dashboard':
     
     wvr_23_months = get_monthly_sales_wvr(df, 2023)
     wvr_24_months = get_monthly_sales_wvr(df, 2024)
-    #wvr_25_months = get_monthly_sales_wvr(df, 2025)
+    wvr_25_months = get_monthly_sales_wvr(df, 2025)
     wvr_23_totals = wholesale_retail_totals(wvr_23_months)
     wvr_24_totals = wholesale_retail_totals(wvr_24_months)    
-    #wvr_25_totals = wholesale_retail_totals(wvr_25_months)
+    wvr_25_totals = wholesale_retail_totals(wvr_25_months)
     
     ### COMPILE DATA FOR SALES REPORTS ###
     total_22 = 1483458.64
@@ -1494,12 +1494,50 @@ if task_choice == 'Dashboard':
     web_avg_perc = (web_23 + web_24)/2
     ful_avg_perc = (ful_23 + ful_24)/2
 
-    year_select = ui.tabs(options=[2025, 2024, 2023, 2022], default_value=2024, key='Year')
+    year_select = ui.tabs(options=[2025, 2024, 2023, 2022], default_value=2025, key='Year')
 
     
     ### DISPLAY SALES METRICS ###
 
-    if year_select == 2024:
+    if year_select == 2025:
+
+        display_metrics(sales_dict_25, sales_dict_24, wvr1=wvr_25_months, wvr2=wvr_24_months)
+        
+        st.header('')
+        plot_bar_chart_ms(format_for_chart_ms(sales_dict_25))
+        
+        st.divider()
+        months[0] = 'Overview'
+        focus = st.selectbox('', options=months, key='Focus25')
+
+        if focus == 'Overview':
+            display_month_data_x(sales_dict_25, sales_dict_24)
+        elif focus == 'January':
+            display_metrics(sales_dict_25, sales_dict_24, 'January', wvr1=wvr_25_months, wvr2=wvr_24_months)
+        elif focus == 'February':
+            display_metrics(sales_dict_25, sales_dict_24, 'February', wvr1=wvr_25_months, wvr2=wvr_24_months)
+        elif focus == 'March':
+            display_metrics(sales_dict_25, sales_dict_24, 'March', wvr1=wvr_25_months, wvr2=wvr_24_months)
+        elif focus == 'April':
+            display_metrics(sales_dict_25, sales_dict_24, 'April', wvr1=wvr_25_months, wvr2=wvr_24_months)
+        elif focus == 'May':
+            display_metrics(sales_dict_25, sales_dict_24, 'May', wvr1=wvr_25_months, wvr2=wvr_24_months)
+        elif focus == 'June':
+            display_metrics(sales_dict_25, sales_dict_24, 'June', wvr1=wvr_25_months, wvr2=wvr_24_months)
+        elif focus == 'July':
+            display_metrics(sales_dict_25, sales_dict_24, 'July', wvr1=wvr_25_months, wvr2=wvr_24_months)
+        elif focus == 'August':
+            display_metrics(sales_dict_25, sales_dict_24, 'August', wvr1=wvr_25_months, wvr2=wvr_24_months)
+        elif focus == 'September':
+            display_metrics(sales_dict_25, sales_dict_24, 'September', wvr1=wvr_25_months, wvr2=wvr_24_months)
+        elif focus == 'October':
+            display_metrics(sales_dict_25, sales_dict_24, 'October', wvr1=wvr_25_months, wvr2=wvr_24_months)
+        elif focus == 'November':
+            display_metrics(sales_dict_25, sales_dict_24, 'November', wvr1=wvr_25_months, wvr2=wvr_24_months)
+        else:
+            display_metrics(sales_dict_25, sales_dict_24, 'December', wvr1=wvr_25_months, wvr2=wvr_24_months)
+
+    elif year_select == 2024:
 
         display_metrics(sales_dict_24, sales_dict_23, wvr1=wvr_24_months, wvr2=wvr_23_months)
         
