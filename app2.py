@@ -1724,10 +1724,9 @@ if task_choice == 'Dashboard':
                 col7.metric('**Q4 Total Sales**', '${:,}'.format(int(q4_23[0] + q4_23[1])), percent_of_change((q4_22[0] + q4_22[1]), (q4_23[0] + q4_23[1])))
                 col8.metric('**Q4 Fulcrum Sales**', '${:,}'.format(int(q4_23[1])), percent_of_change(q4_22[1], q4_23[1]))
     
-                months[0] = 'Overview'
-                focus = st.selectbox('', options=months, key='Focus23')
-                
-        
+            months[0] = 'Overview'
+            focus = st.selectbox('', options=months, key='Focus23')
+            
             if focus == 'Overview':
                 display_month_data_x(sales_dict_23, sales_dict_22)
             elif focus == 'January':
@@ -1786,9 +1785,6 @@ if task_choice == 'Dashboard':
                 col7.metric('**Q4 Total Sales**', '${:,}'.format(int(q4_22[0] + q4_22[1])))
                 col8.metric('**Q4 Fulcrum Sales**', '${:,}'.format(int(q4_22[1])))
                 
-    
-    
-            #st.divider()
     
             display_month_data_x(sales_dict_22)
 
