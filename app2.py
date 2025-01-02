@@ -3752,13 +3752,14 @@ if task_choice == 'Quote Reports':
 
 elif task_choice == 'Customer Details':
     
-
-    st.header('Customer Details')
-    #text_input = st.text_input('Search Customers')
-    text_input = st.multiselect('Search Customers', 
-                               options=unique_customer_list, 
-                               max_selections=1,
-                               placeholder='Start Typing Customer Name')
+    cola, colb, colc = st.columns([.25, .5, .25])
+    with colb:
+        st.header('Customer Details')
+        #text_input = st.text_input('Search Customers')
+        text_input = st.multiselect('Search Customers', 
+                                   options=unique_customer_list, 
+                                   max_selections=1,
+                                   placeholder='Start Typing Customer Name')
     
     if len(text_input) >= 1:
         text_input = text_input[0]
@@ -3880,85 +3881,81 @@ elif task_choice == 'Customer Details':
                 sales_order_list.append(df.iloc[idx].sales_order)
         idx += 1
         
-    #st.write(sales_order_list)
-    st.header('')
-    st.subheader('')
-    st.subheader('')
-    col3, col4, col5 = st.columns(3)
+    with colb:
+        st.header('')
+        st.subheader('')
     
-
+        ### DISPLAY PRODUCT PURCHASE SUMMARIES FOR SELECTED CUSTOMER ###
+        if len(text_input) > 1:
     
-    ### DISPLAY PRODUCT PURCHASE SUMMARIES FOR SELECTED CUSTOMER ###
-    if len(text_input) > 1:
-
-        ### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS
-        with col3:
-            st.metric('2023 Spending', '${:,.2f}'.format(spend_total_2023), '')
-    
-        with col4:
-            st.metric('2024 Spending', '${:,.2f}'.format(spend_total_2024), percent_of_change(spend_total_2023, spend_total_2024))
+            col3, col4, col5 = st.columns(3)
             
-        with col5:
-            st.metric('Total Spending', '${:,.2f}'.format(spend_total_2023 + spend_total_2024), '')
-            
-            
-        style_metric_cards()
-
+            ### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS
+            with col3:
+                st.metric('2023 Spending', '${:,.2f}'.format(spend_total_2023), '')
         
-        st.subheader('Product Totals:')
-        col6, col7, col8 = st.columns(3)
-        with col6.container(border=True):
-            for jet, totl in jet_totals_cust.items():
-                if totl > 0:
-                    st.markdown(' - **{}: {}**'.format(jet, totl))
-        with col7.container(border=True):
-            for controller, totl in controller_totals_cust.items():
-                if totl > 0:
-                    st.markdown(' - **{}: {}**'.format(controller, totl))
-            if cust_handheld_cnt > 0:
-                st.markdown(' - **Handhelds: {}**'.format(cust_handheld_cnt))
-        with col8.container(border=True):
-            if cust_LED_cnt > 0:
-                st.markdown(' - **LED Attachment II: {}**'.format(cust_LED_cnt))
-            if cust_RC_cnt > 0:
-                st.markdown(' - **Road Cases: {}**'.format(cust_RC_cnt))
+            with col4:
+                st.metric('2024 Spending', '${:,.2f}'.format(spend_total_2024), perc_change)
+                
+            with col5:
+                st.metric('Total Spending', '${:,.2f}'.format(spend_total_2023 + spend_total_2024), '')
     
-    ### DISPLAY CATEGORIES OF PRODUCTS PURCHASED BY SELECTED CUSTOMER ###
-    if len(jet_list) >= 1:
-        with st.container(border=True):
-            st.subheader('Stationary Jets:')
-            for item in jet_list:
-                st.markdown(item)
-    if len(controller_list) >= 1:
-        with st.container(border=True):
-            st.subheader('Controllers:')
-            for item in controller_list:
-                st.markdown(item)
-    if len(handheld_list) >= 1:
-        with st.container(border=True):
-            st.subheader('Handhelds:')
-            for item in handheld_list:
-                st.markdown(item)
-    if len(hose_list) >= 1:
-        with st.container(border=True):
-            st.subheader('Hoses:')
-            for item in hose_list:
-                st.markdown(item)
-    if len(fittings_accessories_list) >= 1:
-        with st.container(border=True):
-            st.subheader('Fittings & Accessories:')
-            for item in fittings_accessories_list:
-                st.markdown(item)
-    if len(misc_list) >= 1:
-        with st.container(border=True):
-            st.subheader('Misc:')
-            for item in misc_list:
-                st.markdown(item)
-    if len(magic_list):
-        with st.container(border=True):
-            st.subheader('Magic FX:')
-            for item in magic_list:
-                st.markdown(item)
+            style_metric_cards()       
+            
+            st.subheader('Product Totals:')
+            col6, col7, col8 = st.columns(3)
+            with col6.container(border=True):
+                for jet, totl in jet_totals_cust.items():
+                    if totl > 0:
+                        st.markdown(' - **{}: {}**'.format(jet, totl))
+            with col7.container(border=True):
+                for controller, totl in controller_totals_cust.items():
+                    if totl > 0:
+                        st.markdown(' - **{}: {}**'.format(controller, totl))
+                if cust_handheld_cnt > 0:
+                    st.markdown(' - **Handhelds: {}**'.format(cust_handheld_cnt))
+            with col8.container(border=True):
+                if cust_LED_cnt > 0:
+                    st.markdown(' - **LED Attachment II: {}**'.format(cust_LED_cnt))
+                if cust_RC_cnt > 0:
+                    st.markdown(' - **Road Cases: {}**'.format(cust_RC_cnt))
+    
+        ### DISPLAY CATEGORIES OF PRODUCTS PURCHASED BY SELECTED CUSTOMER ###
+        if len(jet_list) >= 1:
+            with st.container(border=True):
+                st.subheader('Stationary Jets:')
+                for item in jet_list:
+                    st.markdown(item)
+        if len(controller_list) >= 1:
+            with st.container(border=True):
+                st.subheader('Controllers:')
+                for item in controller_list:
+                    st.markdown(item)
+        if len(handheld_list) >= 1:
+            with st.container(border=True):
+                st.subheader('Handhelds:')
+                for item in handheld_list:
+                    st.markdown(item)
+        if len(hose_list) >= 1:
+            with st.container(border=True):
+                st.subheader('Hoses:')
+                for item in hose_list:
+                    st.markdown(item)
+        if len(fittings_accessories_list) >= 1:
+            with st.container(border=True):
+                st.subheader('Fittings & Accessories:')
+                for item in fittings_accessories_list:
+                    st.markdown(item)
+        if len(misc_list) >= 1:
+            with st.container(border=True):
+                st.subheader('Misc:')
+                for item in misc_list:
+                    st.markdown(item)
+        if len(magic_list):
+            with st.container(border=True):
+                st.subheader('Magic FX:')
+                for item in magic_list:
+                    st.markdown(item)
 
     
     ### CREATE LISTS OF CATEGORIES FROM DATAFRAME ###
