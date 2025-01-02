@@ -2818,7 +2818,10 @@ def calculate_product_metrics(annual_product_totals, prod_select, key, bom_dict)
 
     if (prod_select in jet_list or prod_select in control_list) and (key in [0, 1, 2, 3, 4, 5]):
         wholesale_sales = annual_product_totals[key][prod_select][2]
-        wholesale_percentage = (annual_product_totals[key][prod_select][2] / annual_product_totals[key][prod_select][0]) * 100
+        if annual_product_totals[key][prod_select][0] == 0:
+            wholesale_percentage = 0
+        else:
+            wholesale_percentage = (annual_product_totals[key][prod_select][2] / annual_product_totals[key][prod_select][0]) * 100
         
         if key not in no_prior_list:
             wholesale_delta = wholesale_percentage - ((annual_product_totals[key-1][prod_select][2] / annual_product_totals[key-1][prod_select][0]) * 100)
