@@ -17,12 +17,16 @@ from streamlit_option_menu import option_menu
 ### SET WEB APP CONFIGURATIONS
 st.set_page_config(page_title='Club Cannon Database', 
 		   page_icon='club-cannon-icon-black.png',
-                   layout='centered',
+                   layout='wide',
 		   initial_sidebar_state='collapsed')
 
 ### SET HEADER IMAGE
 #image = 'club-cannon-logo-bbb.png'
-st.image('logo.png', use_container_width=False)
+col1, col2, col3 = st.columns(3)
+col2.image(image, 
+        use_container_width=True)
+
+st.header('')
 
 st.divider()
 
