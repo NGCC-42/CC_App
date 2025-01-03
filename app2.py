@@ -2423,7 +2423,7 @@ sales_dict_25 = get_monthly_sales_v2(df, 2025)
 total_25, web_25, ful_25, avg_25, magic25 = calc_monthly_totals_v2(sales_dict_25)
 
 
-profit_25 = profit_by_type(['2025'], ['Jet', 'Control', 'Handheld', 'Hose', 'Accessory'])
+#profit_25 = profit_by_type(['2025'], ['Jet', 'Control', 'Handheld', 'Hose', 'Accessory'])
 profit_24 = profit_by_type(['2024'], ['Jet', 'Control', 'Handheld', 'Hose', 'Accessory']) + mfx_profit
 profit_23 = profit_by_type(['2023'], ['Jet', 'Control', 'Handheld', 'Hose', 'Accessory'])
 
