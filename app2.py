@@ -2523,8 +2523,8 @@ if task_choice == 'Dashboard':
     web_avg_perc = (web_23 + web_24)/2
     ful_avg_perc = (ful_23 + ful_24)/2
 
-    col1, col2, col3 = st.columns([.28, .44, .28], gap='medium')
-    colx, coly, colz = st.columns([.28, .44, .28], gap='medium')
+    col1, col2, col3 = st.columns([.29, .42, .29], gap='medium')
+    colx, coly, colz = st.columns([.29, .42, .29], gap='medium')
     
     col1.header('Annual Comparison')
     col1.pyplot(fig)
