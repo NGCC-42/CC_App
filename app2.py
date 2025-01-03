@@ -2026,7 +2026,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
                 db2.metric('**Total Sales**', '${:,}'.format(int(data1[5])), var)
                 db2.metric('**Monthly Average**', '${:,}'.format(int(avg_month1)), avg_per_month)
                 db2.metric('**Total Transactions**', '{:,}'.format(data1[8]), transaction_ct)
-                db2.metric('**Gross Profit**', '${:,.0f}'.format(profit_24), percent_of_change(profit_23, profit_24)
+                db2.metric('**Gross Profit**', '${:,.0f}'.format(profit_24), percent_of_change(profit_23, profit_24))
                 db2.metric(f':red[**MagicFX Sales**]', '${:,}'.format(int(magic_sales1)), magic_delta)
                 
                 db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
