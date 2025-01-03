@@ -2879,7 +2879,7 @@ if task_choice == 'Product Reports':
     # CALCULATE ANNUAL PRODUCT TOTALS
     annual_product_totals = product_annual_totals([jet23, jet24, jet25, control23, control24, control25, handheld23, handheld24, handheld25, hose23, hose24, hose25, acc23, acc24, acc25])
 
-    col1, col2, col3 = st.columns([.3, .4, .3], gap='medium')
+    col1, col2, col3 = st.columns([.25, .5, .25], gap='medium')
 
     with col2:
         # NAVIGATION TABS
