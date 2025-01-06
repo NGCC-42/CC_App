@@ -921,6 +921,17 @@ def get_monthly_sales_wvr(df, year):
 	
     return sales_dict
 
+
+def beginning_of_year(dt: datetime) -> datetime:
+    return datetime(dt.year, 1, 1)
+
+    
+today = datetime.now()
+#today = datetime(2024, 3, 5)
+one_year_ago = today - timedelta(days=365)
+two_years_ago = today - timedelta(days=730)
+three_years_ago = today - timedelta(days=1095)
+
 	
 ### FOR DASHBOARD ###  
 @st.cache_data
@@ -953,7 +964,76 @@ def get_monthly_sales_v2(df, year):
         idx += 1
     
     return sales_dict
-	
+
+@st.cache_data
+def get_monthly_sales_ytd():
+
+    unique_sales_orders = []
+    unique_sales_orders_minus1 = []
+    unique_sales_orders_minus2 = []
+
+    sales_dict = {'January': [[0, 0], [0, 0], [0]], 'February': [[0, 0], [0, 0], [0]], 'March': [[0, 0], [0, 0], [0]], 'April': [[0, 0], [0, 0], [0]], 'May': [[0, 0], [0, 0], [0]], 'June': [[0, 0], [0, 0], [0]], 'July': [[0, 0], [0, 0], [0]], 'August': [[0, 0], [0, 0], [0]], 'September': [[0, 0], [0, 0], [0]], 'October': [[0, 0], [0, 0], [0]], 'November': [[0, 0], [0, 0], [0]], 'December': [[0, 0], [0, 0], [0]]}
+    sales_dict_minus1 = {'January': [[0, 0], [0, 0], [0]], 'February': [[0, 0], [0, 0], [0]], 'March': [[0, 0], [0, 0], [0]], 'April': [[0, 0], [0, 0], [0]], 'May': [[0, 0], [0, 0], [0]], 'June': [[0, 0], [0, 0], [0]], 'July': [[0, 0], [0, 0], [0]], 'August': [[0, 0], [0, 0], [0]], 'September': [[0, 0], [0, 0], [0]], 'October': [[0, 0], [0, 0], [0]], 'November': [[0, 0], [0, 0], [0]], 'December': [[0, 0], [0, 0], [0]]}
+    sales_dict_minus2 = {'January': [[0, 0], [0, 0], [0]], 'February': [[0, 0], [0, 0], [0]], 'March': [[0, 0], [0, 0], [0]], 'April': [[0, 0], [0, 0], [0]], 'May': [[0, 0], [0, 0], [0]], 'June': [[0, 0], [0, 0], [0]], 'July': [[0, 0], [0, 0], [0]], 'August': [[0, 0], [0, 0], [0]], 'September': [[0, 0], [0, 0], [0]], 'October': [[0, 0], [0, 0], [0]], 'November': [[0, 0], [0, 0], [0]], 'December': [[0, 0], [0, 0], [0]]}
+
+    idx = 0
+
+    for sale in df.sales_order:
+    
+        
+        order_date = df.iloc[idx].order_date
+        month = num_to_month(df.iloc[idx].order_date.month)
+            
+        if df.iloc[idx].channel[0] == 'F':
+            if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
+                sales_dict_minus2[month][0][0] += df.iloc[idx].total_line_item_spend
+                if sale not in unique_sales_orders_minus2:
+                    sales_dict_minus2[month][0][1] += 1
+                    unique_sales_orders_minus2.append(sale)
+                    
+            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
+                sales_dict_minus1[month][0][0] += df.iloc[idx].total_line_item_spend
+                if sale not in unique_sales_orders_minus1:
+                    sales_dict_minus1[month][0][1] += 1
+                    unique_sales_orders_minus1.append(sale)
+                    
+            elif today.date() >= order_date >= beginning_of_year(today).date():
+                sales_dict[month][0][0] += df.iloc[idx].total_line_item_spend
+                if sale not in unique_sales_orders:
+                    sales_dict[month][0][1] += 1
+                    unique_sales_orders.append(sale)
+
+        else:
+            if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
+                sales_dict_minus2[month][1][0] += df.iloc[idx].total_line_item_spend 
+                if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX':
+                    sales_dict_minus2[month][2][0] += df.iloc[idx].total_line_item_spend
+                if sale not in unique_sales_orders_minus2:
+                    sales_dict_minus2[month][1][1] += 1
+                    unique_sales_orders_minus2.append(sale)
+                    
+            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
+                sales_dict_minus1[month][1][0] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX':
+                    sales_dict_minus1[month][2][0] += df.iloc[idx].total_line_item_spend
+                if sale not in unique_sales_orders_minus1:
+                    sales_dict_minus1[month][1][1] += 1
+                    unique_sales_orders_minus1.append(sale)
+                    
+            elif today.date() >= order_date >= beginning_of_year(today).date():
+                sales_dict[month][1][0] += df.iloc[idx].total_line_item_spend
+                if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX':
+                    sales_dict[month][2][0] += df.iloc[idx].total_line_item_spend
+                if sale not in unique_sales_orders:
+                    sales_dict[month][1][1] += 1
+                    unique_sales_orders.append(sale)
+
+        idx += 1
+
+    return sales_dict, sales_dict_minus1, sales_dict_minus2
+
+
+
 @st.cache_data
 def calc_monthly_totals_v2(sales_dict, months=['All']):
 
@@ -2124,17 +2204,6 @@ def wholesale_retail_totals(monthly_sales_wVr):
     return wholesale_totals, retail_totals
 
 
-def beginning_of_year(dt: datetime) -> datetime:
-    return datetime(dt.year, 1, 1)
-
-
-
-    
-today = datetime.now()
-#today = datetime(2024, 3, 5)
-one_year_ago = today - timedelta(days=365)
-two_years_ago = today - timedelta(days=730)
-three_years_ago = today - timedelta(days=1095)
 
 
 @st.cache_data
@@ -2777,27 +2846,6 @@ if task_choice == 'Dashboard':
                 
             with coly:
                 display_month_data_x(sales_dict_22)
-
-
-### REVISED PRODUCT REPORTS
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-   
 
 
 
