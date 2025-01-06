@@ -932,6 +932,43 @@ one_year_ago = today - timedelta(days=365)
 two_years_ago = today - timedelta(days=730)
 three_years_ago = today - timedelta(days=1095)
 
+
+@st.cache_data
+def get_monthly_sales_wvr_ytd():
+
+    sales_dict = {'January': [0, 0], 'February': [0, 0], 'March': [0, 0], 'April': [0, 0], 'May': [0, 0], 'June': [0, 0], 'July': [0, 0], 'August': [0, 0], 'September': [0, 0], 'October': [0, 0], 'November': [0, 0], 'December': [0, 0]}
+    sales_dict_minus1 = {'January': [0, 0], 'February': [0, 0], 'March': [0, 0], 'April': [0, 0], 'May': [0, 0], 'June': [0, 0], 'July': [0, 0], 'August': [0, 0], 'September': [0, 0], 'October': [0, 0], 'November': [0, 0], 'December': [0, 0]}
+    sales_dict_minus2 = {'January': [0, 0], 'February': [0, 0], 'March': [0, 0], 'April': [0, 0], 'May': [0, 0], 'June': [0, 0], 'July': [0, 0], 'August': [0, 0], 'September': [0, 0], 'October': [0, 0], 'November': [0, 0], 'December': [0, 0]}
+
+    idx = 0
+
+    for cust in df.customer:
+
+        order_date = df.iloc[idx].order_date
+        month = num_to_month(df.iloc[idx].order_date.month)
+    
+        if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
+            if cust in wholesale_list:
+                sales_dict_minus2[month][0] += df.iloc[idx].total_line_item_spend
+            else:
+                sales_dict_minus2[month][1] += df.iloc[idx].total_line_item_spend 
+                
+        elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
+            if cust in wholesale_list:
+                sales_dict_minus1[month][0] += df.iloc[idx].total_line_item_spend
+            else:
+                sales_dict_minus1[month][1] += df.iloc[idx].total_line_item_spend 
+                
+        elif today.date() >= order_date >= beginning_of_year(today).date():
+            if cust in wholesale_list:
+                sales_dict[month][0] += df.iloc[idx].total_line_item_spend
+            else:
+                sales_dict[month][1] += df.iloc[idx].total_line_item_spend 
+                
+        idx += 1
+	
+    return sales_dict, sales_dict_minus1, sales_dict_minus2
+
 	
 ### FOR DASHBOARD ###  
 @st.cache_data
