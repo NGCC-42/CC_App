@@ -2677,14 +2677,14 @@ if task_choice == 'Dashboard':
     with col2:
         year_select = ui.tabs(options=[2025, 2024, 2023, 2022], default_value=2024, key='Year')     
     
-        #tot_vs_ytd = ui.tabs(options=['Totals', 'YTD'], default_value='Totals')
+        tot_vs_ytd = ui.tabs(options=['Totals', 'YTD'], default_value='Totals')
 
     
     ### DISPLAY SALES METRICS ###
 
         if year_select == 2025:
-        
-            display_metrics(sales_dict_25, sales_dict_24, wvr1=wvr_25_months, wvr2=wvr_24_months)
+            
+            display_metrics(sales_dict_25, td_sales24, wvr1=wvr_25_months, wvr2=wvr_24_ytd)
     
             with col3:
                 
@@ -2745,8 +2745,11 @@ if task_choice == 'Dashboard':
                     display_metrics(sales_dict_25, sales_dict_24, 'December', wvr1=wvr_25_months, wvr2=wvr_24_months)
 
         elif year_select == 2024:
-    
-            display_metrics(sales_dict_24, sales_dict_23, wvr1=wvr_24_months, wvr2=wvr_23_months)
+
+            if tot_vs_ytd == 'Totals':
+                display_metrics(sales_dict_24, sales_dict_23, wvr1=wvr_24_months, wvr2=wvr_23_months)
+            else:
+                display_metrics(td_sales24, td_sales23, wvr1=wvr_24_ytd, wvr2=wvr_23_ytd)
         
             with col3:
                 
@@ -2808,8 +2811,11 @@ if task_choice == 'Dashboard':
 
 
         elif year_select == 2023:
-    
-            display_metrics(sales_dict_23, sales_dict_22, wvr1=wvr_23_months)
+
+            if tot_vs_ytd == 'Totals':
+                display_metrics(sales_dict_23, sales_dict_22, wvr1=wvr_23_months)
+            else:
+                display_metrics(td_sales23, sales_dict_22, wvr1=wvr_23_ytd)
                 
             with col3:
                 
