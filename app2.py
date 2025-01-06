@@ -2573,9 +2573,28 @@ if task_choice == 'Dashboard':
     wvr_23_months = get_monthly_sales_wvr(df, 2023)
     wvr_24_months = get_monthly_sales_wvr(df, 2024)
     wvr_25_months = get_monthly_sales_wvr(df, 2025)
+    wvr_25_ytd, wvr_24_ytd, wvr_23_ytd = get_monthly_sales_wvr_ytd()
+    
     wvr_23_totals = wholesale_retail_totals(wvr_23_months)
-    wvr_24_totals = wholesale_retail_totals(wvr_24_months)    
-    wvr_25_totals = wholesale_retail_totals(wvr_25_months)
+    wvr_23_totals_ytd = wholesale_retail_totals(wvr_23_ytd)
+    wvr_24_totals = wholesale_retail_totals(wvr_24_months)  
+    wvr_23_totals_ytd = wholesale_retail_totals(wvr_24_ytd)
+    wvr_24_totals = wholesale_retail_totals(wvr_24_months)
+    wvr_25_totals_ytd = wholesale_retail_totals(wvr_25_ytd)
+
+    #sales_dict_23 = get_monthly_sales_v2(df, 2023)
+    #total_23, web_23, ful_23, avg_23, magic23 = calc_monthly_totals_v2(sales_dict_23)
+    
+    #sales_dict_24 = get_monthly_sales_v2(df, 2024)
+    #total_24, web_24, ful_24, avg_24, magic_24 = calc_monthly_totals_v2(sales_dict_24)
+
+    #sales_dict_25 = get_monthly_sales_v2(df, 2025)
+    #total_25, web_25, ful_25, avg_25, magic_25 = calc_monthly_totals_v2(sales_dict_25)
+
+    td_sales25, td_sales24, td_sales23 = get_monthly_sales_ytd()
+
+    #td_total23, td_web_23, td_ful_23, td_avg_23, td_magic_23 = calc_monthly_totals_v2(td_sales23)
+    #td_total24, td_web_24, td_ful_24, td_avg_24, td_magic_24 = calc_monthly_totals_v2(td_sales24)
     
     ### COMPILE DATA FOR SALES REPORTS ###
     total_22 = 1483458.64
