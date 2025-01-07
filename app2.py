@@ -3828,7 +3828,7 @@ if task_choice == 'Product Reports':
     elif prod_cat == 'Accessories':
 
         with col2:
-            acc_scope = ui.tabs(options=['Overview', 'Details'], default_value='Overview', key='Acc Metric Scope')
+            acc_scope = ui.tabs(options=['Overview', 'Profit'], default_value='Overview', key='Acc Metric Scope')
 
         if acc_scope == 'Overview':
 
