@@ -3159,11 +3159,6 @@ def display_hose_data(hose_details1, hose_details2, hose_details3):
 
 def display_acc_data():
     
-    cola, colb, colc, cold, cole, colf, colg = st.columns([.1,.1,.2,.2,.2,.1,.1])
-    colc.subheader('2025')
-    cold.subheader('2024')
-    cole.subheader('2023')
-    
     with colc:
         for item, value in annual_product_totals[-1].items():
             if item == 'CC-RC-2430':
