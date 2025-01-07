@@ -3830,6 +3830,11 @@ if task_choice == 'Product Reports':
         with col2:
             acc_scope = ui.tabs(options=['Overview', 'Profit'], default_value='Overview', key='Acc Metric Scope')
 
+        cola, colb, colc, cold, cole, colf, colg = st.columns([.1,.1,.2,.2,.2,.1,.1])
+        colc.subheader('2025')
+        cold.subheader('2024')
+        cole.subheader('2023')
+
         if acc_scope == 'Overview':
 
             display_acc_data()
