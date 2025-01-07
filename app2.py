@@ -3156,6 +3156,72 @@ def display_hose_data(hose_details1, hose_details2, hose_details3):
         
     return None
 
+def display_hose_data_profit(hose_details1, hose_details2, hose_details3):
+
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.subheader('2025')
+        idx = 0
+        for group in hose_details1[:7]:
+            group_profit = 0
+
+            with st.container(border=True):
+                for hose, vals in group.items():
+                    prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, hose, 11, bom_cost_hose)
+                    group_profit += prod_profit
+
+                    ui.metric_card(title=hose, content='Profit: ${:,.2f}'.format(prod_profit), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit))
+                if idx == 0:
+                    st.markdown('**Group Total: ${:,.2f}**'.format(group_profit))
+                else:
+                    st.markdown('**Group Total: ${:,.2f}**'.format(group_profit))
+                            
+            idx += 1
+        prod_profit100, profit_per_unit100, prod_profit_last100, avg_price100, avg_price_last100 = calculate_product_metrics(annual_product_totals, '100FT STD', 11, bom_cost_hose)
+        ui.metric_card(title='100FT STD', content='Profit: ${:,.2f}'.format(prod_profit100), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit100), key='2025')
+        
+    with col2:
+        st.subheader('2024')
+        idx2 = 0
+        for group2 in hose_details2[:7]:
+            group2_profit = 0
+
+            with st.container(border=True):
+                for hose2, vals2 in group2.items():
+                    prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, hose2, 10, bom_cost_hose)
+                    group2_profit += prod_profit
+
+                    ui.metric_card(title=hose2, content='Profit: ${:,.2f}'.format(prod_profit), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit))
+                if idx2 == 0:
+                    st.markdown('**Group Total: ${:,.2f}**'.format(group2_profit))
+                else:
+                    st.markdown('**Group Total: ${:,.2f}**'.format(group2_profit))
+            idx2 += 1
+        prod_profit100, profit_per_unit100, prod_profit_last100, avg_price100, avg_price_last100 = calculate_product_metrics(annual_product_totals, '100FT STD', 10, bom_cost_hose)    
+        ui.metric_card(title='100FT STD', content='Profit: ${:,.2f}'.format(prod_profit100), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit100), key='2024')
+
+        with col3:
+            st.subheader('2023')
+            idx3 = 0
+            for group3 in hose_details3[:7]:
+                group3_profit = 0
+
+                with st.container(border=True):
+                    for hose3, vals3 in group3.items():
+                        prod_profit, profit_per_unit, avg_price = calculate_product_metrics(annual_product_totals, hose3, 9, bom_cost_hose)
+                        group3_profit += prod_profit
+
+                        ui.metric_card(title=hose3, content='Profit: ${:,.2f}'.format(prod_profit), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit))
+                    if idx3 == 0:
+                        st.markdown('**Group Total: ${:,.2f}**'.format(group3_profit))
+                    else:
+                        st.markdown('**Group Total: ${:,.2f}**'.format(group3_profit))
+                idx3 += 1
+            prod_profit100, profit_per_unit100, avg_price100  = calculate_product_metrics(annual_product_totals, '100FT STD', 9, bom_cost_hose)
+            ui.metric_card(title='100FT STD', content='Profit: ${:,.2f}'.format(prod_profit100), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit100), key='2023')
+        
+    return None
 
 def display_acc_data():
     
@@ -3818,7 +3884,12 @@ if task_choice == 'Product Reports':
             cola, colb, colc = st.columns([.2, .6, .2])
             with colb:
                 display_hose_data(hose_detail25, hose_detail24, hose_detail23)
-        
+                
+        if hose_scope == 'Profit':
+            
+            cola, colb, colc = st.columns([.2, .6, .2])
+            with colb:
+                display_hose_data_profit(hose_detail25, hose_detail24, hose_detail23)
           
     elif prod_cat == 'Accessories':
 
