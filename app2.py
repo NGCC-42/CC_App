@@ -2147,7 +2147,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
                 
                 db3.metric('**Fulcrum Sales**', '${:,}'.format(int(data1[4])), fulcrum_sales)
                 db3.metric('**Fulcrum Transactions**', '{:,}'.format(data1[7]), fulcrum_trans)
-                db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[1])), fulcrum_avg_sale)
+                db3.metric('**Fulcrum Average Sale**', '${:,}'.format(int(data1[4)/data1[7)), fulcrum_avg_sale)
                 db3.metric('**Wholesale Revenue**', '${:,}'.format(int(wholesale_sales1)), '')
                 
 
