@@ -3156,6 +3156,42 @@ def display_hose_data(hose_details1, hose_details2, hose_details3):
         
     return None
 
+
+def display_acc_data():
+    
+    cola, colb, colc, cold, cole, colf, colg = st.columns([.1,.1,.2,.2,.2,.1,.1])
+    colc.subheader('2025')
+    cold.subheader('2024')
+    cole.subheader('2023')
+    
+    with colc:
+        for item, value in annual_product_totals[-1].items():
+            if item == 'CC-RC-2430':
+                ui.metric_card(title='{}'.format(item), content='{} (PJ: {}, LA: {}, QJ: {})'.format(int(value[0]), int(value[2]), int(value[3]), int(value[4])), description='${:,.2f} in Revenue'.format(value[1]))
+            else:
+                value[0] = int(value[0])
+                ui.metric_card(title='{}'.format(item), content='{}'.format(value[0]), description='${:,.2f} in Revenue'.format(value[1])) 
+    with cold:
+        for item_last, value_last in annual_product_totals[-2].items():
+            if item_last == 'CC-RC-2430':
+                ui.metric_card(title='{}'.format(item_last), content='{} (PJ: {}, LA: {}, QJ: {})'.format(int(value_last[0]), int(value_last[2]), int(value_last[3]), int(value_last[4])), description='${:,.2f} in Revenue'.format(value_last[1]))
+            else:
+                value_last[0] = int(value_last[0])
+                ui.metric_card(title='{}'.format(item_last), content='{}'.format(value_last[0]), description='${:,.2f} in Revenue'.format(value_last[1]))
+    with cole:
+        key = 'a'
+        for item_last2, value_last2 in annual_product_totals[-3].items():
+            if item_last2 == 'CC-RC-2430':
+                ui.metric_card(title='{}'.format(item_last2), content='{} (PJ: {}, LA: {})'.format(int(value_last2[0]), int(value_last2[2]), int(value_last2[3])), description='${:,.2f} in Revenue'.format(value_last2[1]))
+            else:
+                value_last2[0] = int(value_last2[0])
+                ui.metric_card(title='{}'.format(item_last2), content='{}'.format(value_last2[0]), description='${:,.2f} in Revenue'.format(value_last2[1]))
+
+            
+    return None
+
+
+
 def calculate_product_metrics(annual_product_totals, prod_select, key, bom_dict):
 
     jet_list = ['Pro Jet', 'Quad Jet', 'Micro Jet', 'Cryo Clamp']
@@ -3788,37 +3824,9 @@ if task_choice == 'Product Reports':
             acc_scope = ui.tabs(options=['Overview', 'Details'], default_value='Overview', key='Acc Metric Scope')
 
         if acc_scope == 'Overview':
-        
-            cola, colb, colc, cold, cole, colf, colg = st.columns([.1,.1,.2,.2,.2,.1,.1])
-            colc.subheader('2025')
-            cold.subheader('2024')
-            cole.subheader('2023')
-            
-            with colc:
-                for item, value in annual_product_totals[-1].items():
-                    if item == 'CC-RC-2430':
-                        ui.metric_card(title='{}'.format(item), content='{} (PJ: {}, LA: {}, QJ: {})'.format(int(value[0]), int(value[2]), int(value[3]), int(value[4])), description='${:,.2f} in Revenue'.format(value[1]))
-                    else:
-                        value[0] = int(value[0])
-                        ui.metric_card(title='{}'.format(item), content='{}'.format(value[0]), description='${:,.2f} in Revenue'.format(value[1])) 
-            with cold:
-                key = 'un'
-                for item_last, value_last in annual_product_totals[-2].items():
-                    if item_last == 'CC-RC-2430':
-                        ui.metric_card(title='{}'.format(item_last), content='{} (PJ: {}, LA: {}, QJ: {})'.format(int(value_last[0]), int(value_last[2]), int(value_last[3]), int(value_last[4])), description='${:,.2f} in Revenue'.format(value_last[1]))
-                    else:
-                        value_last[0] = int(value_last[0])
-                        ui.metric_card(title='{}'.format(item_last), content='{}'.format(value_last[0]), description='${:,.2f} in Revenue'.format(value_last[1]), key=key)
-                    key += 'zzgh'
-            with cole:
-                key = 'a'
-                for item_last2, value_last2 in annual_product_totals[-3].items():
-                    if item_last2 == 'CC-RC-2430':
-                        ui.metric_card(title='{}'.format(item_last2), content='{} (PJ: {}, LA: {})'.format(int(value_last2[0]), int(value_last2[2]), int(value_last2[3])), description='${:,.2f} in Revenue'.format(value_last2[1]), key=key)
-                    else:
-                        value_last2[0] = int(value_last2[0])
-                        ui.metric_card(title='{}'.format(item_last2), content='{}'.format(value_last2[0]), description='${:,.2f} in Revenue'.format(value_last2[1]), key=key)
-                    key += 'ba1'
+
+            display_acc_data()
+
 
         
         
