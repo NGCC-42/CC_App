@@ -1672,7 +1672,7 @@ def extract_acc_data(df):
              elif line[:9] == 'CC-AC-LA2':
                  dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-LA2'][0] += df.iloc[idx].quantity
                  dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-LA2'][1] += df.iloc[idx].total_line_item_spend
-            elif line[:9] == 'CC-SW-05':
+             elif line[:9] == 'CC-SW-05':
                 dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-SW-05'][0] += df.iloc[idx].quantity
                 dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-SW-05'][1] += df.iloc[idx].total_line_item_spend
              elif line[:5] == 'CC-RC':
