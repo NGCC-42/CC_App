@@ -3210,8 +3210,12 @@ def calculate_product_metrics(annual_product_totals, prod_select, key, bom_dict)
         avg_price = annual_product_totals[key][prod_select][1] / annual_product_totals[key][prod_select][0]
     
     if key not in no_prior_list:
-        avg_price_last = annual_product_totals[key-1][prod_select][1] / annual_product_totals[key-1][prod_select][0]
-        prod_profit_last = (annual_product_totals[key-1][prod_select][1]) - (annual_product_totals[key-1][prod_select][0] * bom_dict[prod_select])
+        if annual_product_totals[key-1][prod_select][0] == 0:
+            avg_price_last = 0
+            prod_profit_last = 0
+        else:
+            avg_price_last = annual_product_totals[key-1][prod_select][1] / annual_product_totals[key-1][prod_select][0]
+            prod_profit_last = (annual_product_totals[key-1][prod_select][1]) - (annual_product_totals[key-1][prod_select][0] * bom_dict[prod_select])
 
     if (prod_select in jet_list or prod_select in control_list) and (key in [0, 1, 2, 3, 4, 5]):
         wholesale_sales = annual_product_totals[key][prod_select][2]
@@ -3813,7 +3817,7 @@ if task_choice == 'Product Reports':
     elif prod_cat == 'Hoses':
 
         with col2:
-            hose_scope = ui.tabs(options=['Overview', 'Details'], default_value='Overview', key='Hose Metric Scope')
+            hose_scope = ui.tabs(options=['Overview', 'Profit'], default_value='Overview', key='Hose Metric Scope')
 
         if hose_scope == 'Overview':
             cola, colb, colc = st.columns([.2, .6, .2])
@@ -3829,6 +3833,37 @@ if task_choice == 'Product Reports':
         if acc_scope == 'Overview':
 
             display_acc_data()
+
+        if acc_scope == 'Profit':
+            with colc:
+                for item, value in annual_product_totals[-1].items():
+                    prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, item, 14, bom_cost_acc) 
+                    if item == 'CC-RC-2430':
+                        ui.metric_card(title='{}'.format(item), content='Total Profit: ${:,.2f}'.format(prod_profit), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit))
+                    else:
+                        value[0] = int(value[0])
+                        ui.metric_card(title='{}'.format(item), content='Total Profit: ${:,.2f}'.format(prod_profit), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit)) 
+            with cold:
+                key = '9jasdig'
+                for item_last, value_last in annual_product_totals[-2].items():
+                    prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, item_last, 13, bom_cost_acc)
+                    if item_last == 'CC-RC-2430':
+                        ui.metric_card(title='{}'.format(item_last), content='Total Profit: ${:,.2f}'.format(prod_profit), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit))
+                    else:
+                        value_last[0] = int(value_last[0])
+                        ui.metric_card(title='{}'.format(item_last), content='Total Profit: ${:,.2f}'.format(prod_profit), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit), key=key)
+                    key += 'adsg2f'
+            with cole:
+                key2 = 'a'
+                for item_last2, value_last2 in annual_product_totals[-3].items():
+                    prod_profit, profit_per_unit, avg_price = calculate_product_metrics(annual_product_totals, item_last2, 12, bom_cost_acc)
+                    if item_last2 == 'CC-RC-2430':
+                        ui.metric_card(title='{}'.format(item_last2), content='Total Profit: ${:,.2f}'.format(prod_profit), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit), key=key2)
+                    else:
+                        value_last2[0] = int(value_last2[0])
+                        ui.metric_card(title='{}'.format(item_last2), content='Total Profit: ${:,.2f}'.format(prod_profit), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit), key=key2)
+                    key2 += 'ba'
+
 
 
         
