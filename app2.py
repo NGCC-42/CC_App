@@ -3172,20 +3172,23 @@ def display_acc_data():
                 value[0] = int(value[0])
                 ui.metric_card(title='{}'.format(item), content='{}'.format(value[0]), description='${:,.2f} in Revenue'.format(value[1])) 
     with cold:
+        key = 'anvienial23'
         for item_last, value_last in annual_product_totals[-2].items():
             if item_last == 'CC-RC-2430':
-                ui.metric_card(title='{}'.format(item_last), content='{} (PJ: {}, LA: {}, QJ: {})'.format(int(value_last[0]), int(value_last[2]), int(value_last[3]), int(value_last[4])), description='${:,.2f} in Revenue'.format(value_last[1]))
+                ui.metric_card(title='{}'.format(item_last), content='{} (PJ: {}, LA: {}, QJ: {})'.format(int(value_last[0]), int(value_last[2]), int(value_last[3]), int(value_last[4])), description='${:,.2f} in Revenue'.format(value_last[1]), key=key)
             else:
                 value_last[0] = int(value_last[0])
-                ui.metric_card(title='{}'.format(item_last), content='{}'.format(value_last[0]), description='${:,.2f} in Revenue'.format(value_last[1]))
+                ui.metric_card(title='{}'.format(item_last), content='{}'.format(value_last[0]), description='${:,.2f} in Revenue'.format(value_last[1]), key=key)
+            key += '64sdg5as'
     with cole:
-        key = 'a'
+        key2 = 'a'
         for item_last2, value_last2 in annual_product_totals[-3].items():
             if item_last2 == 'CC-RC-2430':
-                ui.metric_card(title='{}'.format(item_last2), content='{} (PJ: {}, LA: {})'.format(int(value_last2[0]), int(value_last2[2]), int(value_last2[3])), description='${:,.2f} in Revenue'.format(value_last2[1]))
+                ui.metric_card(title='{}'.format(item_last2), content='{} (PJ: {}, LA: {})'.format(int(value_last2[0]), int(value_last2[2]), int(value_last2[3])), description='${:,.2f} in Revenue'.format(value_last2[1]), key=key2)
             else:
                 value_last2[0] = int(value_last2[0])
-                ui.metric_card(title='{}'.format(item_last2), content='{}'.format(value_last2[0]), description='${:,.2f} in Revenue'.format(value_last2[1]))
+                ui.metric_card(title='{}'.format(item_last2), content='{}'.format(value_last2[0]), description='${:,.2f} in Revenue'.format(value_last2[1]), key=key2)
+            key2 += 'niane7'
 
             
     return None
