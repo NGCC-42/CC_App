@@ -3242,7 +3242,7 @@ if task_choice == 'Product Reports':
     with col2:
         # NAVIGATION TABS
         prod_cat = ui.tabs(options=['Jets', 'Controllers', 'Handhelds', 'Hoses', 'Accessories'], default_value='Jets', key='Product Categories')
-        year = ui.tabs(options=[2025, 2024, 2023], default_value=2024, key='Products Year Select')
+        #year = ui.tabs(options=[2025, 2024, 2023], default_value=2024, key='Products Year Select')
 
 
     
@@ -3252,6 +3252,9 @@ if task_choice == 'Product Reports':
         mj_td23, mj_td24 = to_date_product('CC-MJMK')
         qj_td23, qj_td24 = to_date_product('CC-QJ')
         cc_td23, cc_td24 = to_date_product('CC-CC2')
+
+        with col2:
+            year = ui.tabs(options=[2025, 2024, 2023], default_value=2024, key='Jet Year Select')
 
         if year == 2025:
             
@@ -3431,6 +3434,9 @@ if task_choice == 'Product Reports':
 
     elif prod_cat == 'Controllers':
 
+        with col2:
+            year = ui.tabs(options=[2025, 2024, 2023], default_value=2024, key='Control Year Select')
+
         if year == 2025:
 
             total_cntl_rev = annual_product_totals[5]['The Button'][1] + annual_product_totals[5]['Shostarter'][1] + annual_product_totals[5]['Shomaster'][1]
@@ -3581,6 +3587,9 @@ if task_choice == 'Product Reports':
             
 
     elif prod_cat == 'Handhelds':
+
+        with col2:
+            year = ui.tabs(options=[2025, 2024, 2023], default_value=2024, key='Handheld Year Select')
 
         if year == 2025:
 
@@ -3763,40 +3772,51 @@ if task_choice == 'Product Reports':
                 display_month_data_prod(prod_select, handheld23)
         
     elif prod_cat == 'Hoses':
-        
-        col1, col2, col3 = st.columns([.2, .6, .2])
+
         with col2:
-            display_hose_data(hose_detail25, hose_detail24, hose_detail23)
+            hose_scope = ui.tabs(options=['Overview', 'Details'], default_value='Overview', key='Hose Metric Scope')
+
+        if hose_scope == 'Overview':
+            cola, colb, colc = st.columns([.2, .6, .2])
+            with colb:
+                display_hose_data(hose_detail25, hose_detail24, hose_detail23)
         
           
     elif prod_cat == 'Accessories':
-        col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
-        col3.subheader('2025')
-        col4.subheader('2024')
-        col5.subheader('2023')
-        with col3:
-            for item, value in annual_product_totals[-1].items():
-                if item == 'CC-RC-2430':
-                    ui.metric_card(title='{}'.format(item), content='{} (PJ: {}, LA: {}, QJ: {})'.format(int(value[0]), int(value[2]), int(value[3]), int(value[4])), description='${:,.2f} in Revenue'.format(value[1]))
-                else:
-                    value[0] = int(value[0])
-                    ui.metric_card(title='{}'.format(item), content='{}'.format(value[0]), description='${:,.2f} in Revenue'.format(value[1])) 
-        with col4:
-            for item_last, value_last in annual_product_totals[-2].items():
-                if item_last == 'CC-RC-2430':
-                    ui.metric_card(title='{}'.format(item_last), content='{} (PJ: {}, LA: {}, QJ: {})'.format(int(value_last[0]), int(value_last[2]), int(value_last[3]), int(value_last[4])), description='${:,.2f} in Revenue'.format(value_last[1]))
-                else:
-                    value_last[0] = int(value_last[0])
-                    ui.metric_card(title='{}'.format(item_last), content='{}'.format(value_last[0]), description='${:,.2f} in Revenue'.format(value_last[1]))
-        with col5:
-            key = 'a'
-            for item_last2, value_last2 in annual_product_totals[-3].items():
-                if item_last2 == 'CC-RC-2430':
-                    ui.metric_card(title='{}'.format(item_last2), content='{} (PJ: {}, LA: {})'.format(int(value_last2[0]), int(value_last2[2]), int(value_last2[3])), description='${:,.2f} in Revenue'.format(value_last2[1]), key=key)
-                else:
-                    value_last2[0] = int(value_last2[0])
-                    ui.metric_card(title='{}'.format(item_last2), content='{}'.format(value_last2[0]), description='${:,.2f} in Revenue'.format(value_last2[1]), key=key)
-                key += 'ba'
+
+        with col2:
+            acc_scope = ui.tabs(options=['Overview', 'Details'], default_value='Overview', key='Acc Metric Scope')
+
+        if acc_scope == 'Overview':
+        
+            cola, colb, colc, cold, cole, colf, colg = st.columns([.1,.1,.2,.2,.2,.1,.1])
+            colc.subheader('2025')
+            cold.subheader('2024')
+            cole.subheader('2023')
+            
+            with colc:
+                for item, value in annual_product_totals[-1].items():
+                    if item == 'CC-RC-2430':
+                        ui.metric_card(title='{}'.format(item), content='{} (PJ: {}, LA: {}, QJ: {})'.format(int(value[0]), int(value[2]), int(value[3]), int(value[4])), description='${:,.2f} in Revenue'.format(value[1]))
+                    else:
+                        value[0] = int(value[0])
+                        ui.metric_card(title='{}'.format(item), content='{}'.format(value[0]), description='${:,.2f} in Revenue'.format(value[1])) 
+            with cold:
+                for item_last, value_last in annual_product_totals[-2].items():
+                    if item_last == 'CC-RC-2430':
+                        ui.metric_card(title='{}'.format(item_last), content='{} (PJ: {}, LA: {}, QJ: {})'.format(int(value_last[0]), int(value_last[2]), int(value_last[3]), int(value_last[4])), description='${:,.2f} in Revenue'.format(value_last[1]))
+                    else:
+                        value_last[0] = int(value_last[0])
+                        ui.metric_card(title='{}'.format(item_last), content='{}'.format(value_last[0]), description='${:,.2f} in Revenue'.format(value_last[1]))
+            with cole:
+                key = 'a'
+                for item_last2, value_last2 in annual_product_totals[-3].items():
+                    if item_last2 == 'CC-RC-2430':
+                        ui.metric_card(title='{}'.format(item_last2), content='{} (PJ: {}, LA: {})'.format(int(value_last2[0]), int(value_last2[2]), int(value_last2[3])), description='${:,.2f} in Revenue'.format(value_last2[1]), key=key)
+                    else:
+                        value_last2[0] = int(value_last2[0])
+                        ui.metric_card(title='{}'.format(item_last2), content='{}'.format(value_last2[0]), description='${:,.2f} in Revenue'.format(value_last2[1]), key=key)
+                    key += 'ba'
 
         
         
