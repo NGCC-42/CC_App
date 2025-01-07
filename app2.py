@@ -3816,7 +3816,7 @@ if task_choice == 'Product Reports':
                     else:
                         value_last2[0] = int(value_last2[0])
                         ui.metric_card(title='{}'.format(item_last2), content='{}'.format(value_last2[0]), description='${:,.2f} in Revenue'.format(value_last2[1]), key=key)
-                    key += 'ba'
+                    key += 'ba1'
 
         
         
