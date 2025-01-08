@@ -186,6 +186,7 @@ def fix_names(df):
     df.replace('CHRISTOPHER BARTOSIK', 'Christopher Bartosik', inplace=True)
     df.replace('Jon Ballog', 'Blair Entertainment / Pearl AV', inplace=True)
     df.replace('Jack Bermo', 'Jack Bermeo', inplace=True)
+    df.replace('Tonz of Fun', 'Eric Walker', inplace=True)
 
     return df
 
