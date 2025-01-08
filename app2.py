@@ -4398,12 +4398,10 @@ if task_choice == 'Leaderboards':
     
     cola, colb, colc = st.columns([.25, .5, .25])
 
-    with colb:
-        
-        st.header('Customer Leaderboards')	
+    colb.header('Customer Leaderboards')	
 
-        spend_year = st.selectbox('Choose Year', ['2024', '2023'])
-    	ranking_number = st.selectbox('Choose Leaderboard Length', [5, 10, 15, 20, 25, 50])
+    spend_year = colb.selectbox('Choose Year', ['2024', '2023'])
+    ranking_number = colb.selectbox('Choose Leaderboard Length', [5, 10, 15, 20, 25, 50])
 	
 	cust_spend_dict_2023 = {}
 	cust_spend_dict_2024 = {}
