@@ -4397,7 +4397,7 @@ def sort_top_20(dict, number):
 
 if task_choice == 'Leaderboards':
 
-    colx, coly, colz = st.columns([.25, .5, .25])
+    colx, coly, colz = st.columns([.15, .7, .15])
     coly.header('Customer Leaderboards')
     coly.subheader('')
     #spend_year = st.selectbox('Choose Year', 
