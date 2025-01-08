@@ -4410,12 +4410,13 @@ elif task_choice == 'Leaderboards':
 		
 		return sorted_leaderboard[:number]
 	
-	
-	spend_year = st.selectbox('Choose Year', 
-			     ['2024', '2023'])
-	
-	ranking_number = st.selectbox('Choose Leaderboard Length',
-				 [5, 10, 15, 20, 25, 50])
+	cola, colb, colc = st.columns([.2, .6, .2])
+    with colb:
+    	spend_year = st.selectbox('Choose Year', 
+    			     ['2024', '2023'])
+    	
+    	ranking_number = st.selectbox('Choose Leaderboard Length',
+    				 [5, 10, 15, 20, 25, 50])
 	
 	cust_spend_dict_2023 = {}
 	cust_spend_dict_2024 = {}
@@ -4427,7 +4428,7 @@ elif task_choice == 'Leaderboards':
 		cust_spend_dict_2024[cust] = 0
 	
 	idx = 0
-	cola, colb, colc = st.columns([.2, .6, .2])
+	
 	for customer in df.customer:
 	
 		if df.iloc[idx].ordered_year == '2023':
