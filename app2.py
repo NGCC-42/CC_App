@@ -226,7 +226,6 @@ def create_dataframe_csv(file):
 					usecols=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
 	return df
 
-df_csv = create_dataframe_csv(sales_sum_csv)
 
 ### CREATE DATE LISTS ###
 
