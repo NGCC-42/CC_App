@@ -4392,7 +4392,8 @@ def sort_top_20(dict, number):
     
     return sorted_leaderboard[:number]
 
-
+cust_spend_dict_2023 = {}
+cust_spend_dict_2024 = {}
     
 if task_choice == 'Leaderboards':
     
@@ -4403,10 +4404,7 @@ if task_choice == 'Leaderboards':
     spend_year = colb.selectbox('Choose Year', ['2024', '2023'])
     ranking_number = colb.selectbox('Choose Leaderboard Length', [5, 10, 15, 20, 25, 50])
 	
-	cust_spend_dict_2023 = {}
-	cust_spend_dict_2024 = {}
-	
-    
+
     
 	for cust in unique_customer_list:
 		cust_spend_dict_2023[cust] = 0
@@ -4423,6 +4421,7 @@ if task_choice == 'Leaderboards':
 		idx += 1
 	
 	rank = 1
+
 	if spend_year == '2023':
 	
 		result = sort_top_20(cust_spend_dict_2023, ranking_number)
