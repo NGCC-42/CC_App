@@ -4399,7 +4399,7 @@ if task_choice == 'Leaderboards':
 
     colx, coly, colz = st.columns([.25, .5, .25])
     coly.header('Customer Leaderboards')
-    
+    coly.subheader('')
     #spend_year = st.selectbox('Choose Year', 
                              #['2024', '2023'])
     with coly:
