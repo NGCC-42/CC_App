@@ -39,12 +39,12 @@ hsd_ss = 'HSD 11.8.24.xlsx'
 
 quote_ss = 'Quote Report 10.23.24.xlsx'
 
-sales_sum_csv = 'Total Summary-2022 - Present.csv'
+#sales_sum_csv = 'Total Summary-2022 - Present.csv'
 
 shipstat_ss_24 = '2024 SR 11.01.24.xlsx'
 shipstat_ss_23 = '2023 SR.xlsx'
 
-prod_sales = 'Product Sales Data.xlsx'
+#prod_sales = 'Product Sales Data.xlsx'
 
 wholesale_cust = 'wholesale_customers.xlsx'
 
@@ -218,25 +218,6 @@ def gen_product_df_from_excel(ss, sheet_name, cols=None):
 
 
 
-df_acc_2024 = gen_product_df_from_excel(prod_sales, acc_2024, cols='a:m')
-
-df_cntl_2024 = gen_product_df_from_excel(prod_sales, cntl_2024, cols='a:m')
-
-df_jet_2024 = gen_product_df_from_excel(prod_sales, jet_2024, cols='a:m')
-
-df_hh_2024 = gen_product_df_from_excel(prod_sales, hh_2024, cols='a:m')
-
-df_hose_2024 = gen_product_df_from_excel(prod_sales, hose_2024, cols='a:m')
-
-df_acc_2023 = gen_product_df_from_excel(prod_sales, acc_2023, cols='a:m')
-
-df_cntl_2023 = gen_product_df_from_excel(prod_sales, cntl_2023, cols='a:m')
-
-df_jet_2023 = gen_product_df_from_excel(prod_sales, jet_2023, cols='a:m')
-
-df_hh_2023 = gen_product_df_from_excel(prod_sales, hh_2023, cols='a:m')
-
-df_hose_2023 = gen_product_df_from_excel(prod_sales, hose_2023, cols='a:m')
 
 ### READ IN SALES SUMMARY CSV ###
 @st.cache_data
@@ -483,41 +464,6 @@ def clean_df_prof(df, row1, row2):
 	return clean_df
 
 
-### SEPARATE SALES AND REVENUE ###
-
-df_jet2023_unt = clean_df_std(df_jet_2023, 0, 4)
-df_jet2023_rev = clean_df_std(df_jet_2023, 13, 17)
-df_jet2023_prof = clean_df_prof(df_jet_2023, 20, 24)
-
-df_cntl23_unt = clean_df_std(df_cntl_2023, 0, 3)
-df_cntl23_rev = clean_df_std(df_cntl_2023, 11, 14)
-df_cntl23_prof = clean_df_prof(df_cntl_2023, 17, 20)
-
-df_h23_unt = clean_df_std(df_hose_2023, 0, 22)
-df_h23_rev = clean_df_std(df_hose_2023, 48, 70)
-
-df_ac23_unt = clean_df_std(df_acc_2023, 0, 30)
-df_ac23_rev = clean_df_std(df_acc_2023, 58, 85)
-
-df_hh23_unt = clean_df_std(df_hh_2023, 0, 4)
-df_hh23_rev = clean_df_std(df_hh_2023, 13, 17)
-
-df_jet2024_unt = clean_df_std(df_jet_2024, 0, 4)
-df_jet2024_rev = clean_df_std(df_jet_2024, 13, 17)
-df_jet2024_prof = clean_df_prof(df_jet_2024, 20, 24)
-
-df_cntl24_unt = clean_df_std(df_cntl_2024, 0, 3)
-df_cntl24_rev = clean_df_std(df_cntl_2024, 11, 14)
-df_cntl24_prof = clean_df_prof(df_cntl_2024, 17, 20)
-                                        
-df_h24_unt = clean_df_std(df_hose_2024, 0, 22)
-df_h24_rev = clean_df_std(df_hose_2024, 48, 70)
-
-df_ac24_unt = clean_df_std(df_acc_2024, 0, 30)
-df_ac24_rev = clean_df_std(df_acc_2024, 59, 86)
-
-df_hh24_unt = clean_df_std(df_hh_2024, 0, 4)
-df_hh24_rev = clean_df_std(df_hh_2024, 13, 17)
 
 
 ### CREATE LISTS OF CATEGORIES FROM DATAFRAME ###
@@ -527,11 +473,6 @@ def create_product_list(df):
 	prod_list = df['Product'].unique().tolist()
 	return prod_list
 
-jets = create_product_list(df_jet2023_unt)
-controllers = create_product_list(df_cntl23_unt)
-hoses = create_product_list(df_h23_unt)
-acc = create_product_list(df_ac23_unt)
-hh = create_product_list(df_hh23_unt)
 
 
 ### DEFINE A FUNCTION TO CALCULATE PERCENTAGE OF A TOTAL ###
@@ -683,41 +624,6 @@ def sales_channel(year, month=['All']):
         return None
 
 
-### MAKE DICTIONARIES OF PRODUCT SALES FOR CHARTING ###
-
-#jet_dict_2023 = {'Pro Jet': 0,
-#                'Quad Jet': 0,
-#               'Micro Jet': 0,
-#               'Cryo Clamp': 0}
-#jet_dict_2024 = {'Pro Jet': 0,
-#                'Quad Jet': 0,
-#                'Micro Jet': 0,
-#                'Cryo Clamp': 0}
-#control_dict_2023 = {'The Button': 0,
-#                     'Shostarter': 0,
-#                     'Shomaster': 0}
-#control_dict_2024 = {'The Button': 0,
-#                     'Shostarter': 0,
-#                     'Shomaster': 0}
-#handheld_dict_2023 = {'8FT - No Case': 0,
-#                     '8FT - Travel Case': 0,
-#                     '15FT - No Case': 0,
-#                     '15FT - Travel Case': 0}
-#handheld_dict_2024 = {'8FT - No Case': 0,
-#                     '8FT - Travel Case': 0,
-#                     '15FT - No Case': 0,
-#                     '15FT - Travel Case': 0}
-
-#idx = 0
-#for line_item in df.line_item:
-#    if line_item[:6] == 'CC-PRO':
-#        if df.iloc[idx].ordered_year == '2023':
-#            jet_dict_2023['Pro Jet'] += df.iloc[idx].quantity
-#        elif df.iloc[idx].ordered_year == '2024':
-#            jet_dict_2024['Pro Jet'] += df.iloc[idx].quantity
-#        else:
-#            pass
-#    idx += 1
 
 
 
@@ -4490,300 +4396,7 @@ elif task_choice == 'Customer Details':
     years = ['2022', '2023', '2024']
         
     
-    
 
-
-######################################################################### PRODUCT SALES DATABASE ###########################################################################
-
-
-elif task_choice == 'Product Sales Reports v1':
-    st.header('Product Sales')
-    
-    
-    ### INSERT SELECTION MENU FOR CATEGORY ###
-    
-    year_select_prod = st.selectbox('Select Year:', 
-                                   options=['All', '2023', '2024'])
-    
-    date_range = st.multiselect('Months:',
-                                placeholder='Select Months',
-                                options=months,
-                                help='If ALL is selected do not add other months.')
-    
-    if date_range == ['All']:
-        date_range = months_x
-    
-    
-    product_type_selection = st.selectbox('Select Product Type:', 
-                                         options=product_types)
-    
-    ### INSERT SELECTION MENU FOR PRODUCT TYPE ###
-    
-    if product_type_selection == 'Jets':
-    
-        
-        jet_selection = st.selectbox('Jets:',
-                                      options=jets,
-                                      placeholder='Select Product')
-        
-    ### REVENUE CHECKBOX ###
-    
-        revenue_view = st.checkbox('Show Revenue Data')
-        
-        
-        
-    ### FILTER DATAFRAME BY SELECTION
-    
-        mask_jet_23 = df_jet2023_unt.loc[df_jet2023_unt['Product'] == jet_selection][date_range]
-        mask_jet_24 = df_jet2024_unt.loc[df_jet2024_unt['Product'] == jet_selection][date_range]
-        
-        
-    ### ASSIGN INDEX NUMBERS FOR ROWS ###
-        j_idx = 0
-    
-        ct_j = 0
-        for z in jets:
-            if jet_selection == z:
-                j_idx = ct_j
-            ct_j +=1
-    
-    ### LOCATE AND DISPLAY RESULTS ###
-    
-        if year_select_prod == 'All':
-            
-            st.subheader(sum(mask_jet_23.loc[j_idx][date_range])+sum(mask_jet_24.loc[j_idx][date_range]))  
-    
-            if revenue_view == True and date_range == months_x:
-                prod_rev_share, prod_rev, type_rev = multiyear_product_revenue([df_jet2023_rev, df_jet2024_rev])
-                st.write(' - Total Revenue:  $' + '{:,.2f}'.format(prod_rev[jet_selection]) + ' - ' + '{:,.2f}'.format(prod_rev_share[jet_selection]) + '% of revenue from jets')
-     
-                
-                #st.write(dataframe_from_dict(multiyear_product_revenue([df_jet2023_rev, df_jet2024_rev])))
-                
-            
-        elif year_select_prod == '2023':
-            avg_per_month = {}
-            mbd_display_jet = st.checkbox('Display Monthly Breakdown')
-            st.subheader(sum(mask_jet_23.loc[j_idx][date_range]))
-            if revenue_view == True and date_range == months_x:
-                prod_rev_share, prod_rev, type_rev = multiyear_product_revenue([df_jet2023_rev])
-                st.write(' - 2023 Revenue:  $' + '{:,.2f}'.format(prod_rev[jet_selection]) + ' - ' + '{:,.2f}'.format(prod_rev_share[jet_selection]) + '% of revenue from jets')
-                display_profit_data(df_jet2023_prof, jet_selection)
-            if mbd_display_jet == True:
-                for month in date_range:
-                    avg_per_month[month] = mask_jet_23.loc[j_idx][month]
-                    st.write(month + ' - ' + str(mask_jet_23.loc[j_idx][month]))
-                st.write('( - Average per month: ' + str(avg_month(avg_per_month)) + ' - )')
-                plot_bar_chart(format_for_chart(df_jet2023_unt.iloc[j_idx]))
-    
-        else:
-            avg_per_month = {}
-            mbd_display_jet = st.checkbox('Display Monthly Breakdown')
-            st.subheader(sum(mask_jet_24.loc[j_idx][date_range]))
-            if revenue_view == True and date_range == months_x:
-                prod_rev_share, prod_rev, type_rev = multiyear_product_revenue([df_jet2024_rev])
-                st.write(' - 2024 Revenue:  $' + '{:,.2f}'.format(prod_rev[jet_selection]) + ' - ' + '{:,.2f}'.format(prod_rev_share[jet_selection]) + '% of revenue from jets')
-                display_profit_data(df_jet2024_prof, jet_selection)
-            if mbd_display_jet == True:
-                for month in date_range:
-                    avg_per_month[month] = mask_jet_24.loc[j_idx][month]
-                    st.write(month + ' - ' + str(mask_jet_24.loc[j_idx][month]))
-                st.write('( - Average per month: ' + str(avg_month(avg_per_month)) + ' - )')
-                plot_bar_chart(format_for_chart(df_jet2024_unt.iloc[j_idx]))
-    
-            
-    elif product_type_selection == 'Controllers':
-    
-        control_selection = st.selectbox('Controllers:',
-                                      options=controllers,
-                                      placeholder='Choose an Option')
-    ### REVENUE CHECKBOX ###
-    
-        revenue_view = st.checkbox('Show Revenue Data')
-        
-        mask_cntl_23 = df_cntl23_unt.loc[df_cntl23_unt['Product'] == control_selection][date_range]
-        mask_cntl_24 = df_cntl24_unt.loc[df_cntl24_unt['Product'] == control_selection][date_range]
-    
-        
-        cntl_idx = 0
-        if control_selection == 'ShoStarter':
-            cntl_idx += 1
-        if control_selection == 'ShoMaster':
-            cntl_idx += 2
-            
-        if year_select_prod == '2023':
-            avg_per_month = {}
-            mbd_display = st.checkbox('Display Monthly Breakdown')
-            st.subheader(sum(mask_cntl_23.loc[cntl_idx][date_range]))
-            if revenue_view == True and date_range == months_x:
-                prod_rev_share, prod_rev, type_rev = multiyear_product_revenue([df_cntl23_rev])
-                st.write(' - 2023 Revenue:  $' + '{:,.2f}'.format(prod_rev[control_selection]) + ' - ' + '{:,.2f}'.format(prod_rev_share[control_selection]) + '% of revenue from controllers')
-                display_profit_data(df_cntl23_prof, control_selection)
-    
-    
-            if mbd_display == True:
-                for month in date_range:
-                    avg_per_month[month] = mask_cntl_23.loc[cntl_idx][month]
-                    st.write(month + ' - ' + str(mask_cntl_23.loc[cntl_idx][month]))
-                st.write('( - Average per month: ' + str(avg_month(avg_per_month)) + ' - )')
-                plot_bar_chart(format_for_chart(df_cntl23_unt.iloc[cntl_idx]))
-    
-            
-        elif year_select_prod == '2024':
-            avg_per_month = {}
-            mbd_display_cntl = st.checkbox('Display Monthly Breakdown')
-            st.subheader(sum(mask_cntl_24.loc[cntl_idx][date_range]))
-            if revenue_view == True and date_range == months_x:
-                prod_rev_share, prod_rev, type_rev = multiyear_product_revenue([df_cntl24_rev])
-                st.write(' - 2024 Revenue:  $' + '{:,.2f}'.format(prod_rev[control_selection]) + ' - ' + '{:,.2f}'.format(prod_rev_share[control_selection]) + '% of revenue from controllers')
-                display_profit_data(df_cntl24_prof, control_selection)
-    
-    
-            if mbd_display_cntl == True:
-                for month in date_range:
-                    avg_per_month[month] = mask_cntl_24.loc[cntl_idx][month]
-                    st.write(month + ' - ' + str(mask_cntl_24.loc[cntl_idx][month]))
-                st.write('( - Average per month: ' + str(avg_month(avg_per_month)) + ' - )')
-                plot_bar_chart(format_for_chart(df_cntl24_unt.iloc[cntl_idx]))
-    
-        
-        else:
-            st.subheader(sum(mask_cntl_23.loc[cntl_idx][date_range])+sum(mask_cntl_24.loc[cntl_idx][date_range]))
-            if revenue_view == True and date_range == months_x:
-                prod_rev_share, prod_rev, type_rev = multiyear_product_revenue([df_cntl23_rev, df_cntl24_rev])
-                st.write(' - Total Revenue:  $' + '{:,.2f}'.format(prod_rev[control_selection]) + ' - ' + '{:,.2f}'.format(prod_rev_share[control_selection]) + '% of revenue from controllers')
-    
-    
-            
-    
-        
-    elif product_type_selection == 'Hoses':   
-        
-        hose_selection = st.multiselect('Hoses:',
-                                      options=hoses,
-                                      placeholder='Choose an Option')
-            
-        hose_sum = 0
-        
-        if len(hose_selection) < 1:
-            pass
-        else:
-            if year_select_prod == '2023':
-                for x in hose_selection:
-    
-                    mask_hose = df_h23_unt.loc[df_h23_unt['Product'] == x][date_range]
-                    
-                    for y in mask_hose:
-                        hose_sum += int(mask_hose[y])
-                        
-            elif year_select_prod == '2024':
-                for x in hose_selection:
-                    
-                    mask_hose = df_h24_unt.loc[df_h24_unt['Product'] == x][date_range]
-                    
-                    for y in mask_hose:
-                        hose_sum += int(mask_hose[y])
-                        
-            else:
-                for x in hose_selection:
-                    
-                    mask_hose_23 = df_h23_unt.loc[df_h23_unt['Product'] == x][date_range]
-                    mask_hose_24 = df_h24_unt.loc[df_h24_unt['Product'] == x][date_range]
-                    
-                    for y in mask_hose_23:
-                        hose_sum += int(mask_hose_23[y]) + int(mask_hose_24[y])
-                        
-                    
-                
-            st.subheader(hose_sum)
-    
-    
-        
-    elif product_type_selection == 'Accessories':
-        
-        acc_selection = st.selectbox('Accessories:',
-                                      options=acc,
-                                      placeholder='Choose an Option')
-    
-        
-    
-        mask_acc_23 = df_ac23_unt.loc[df_ac23_unt['Product'] == acc_selection][date_range]
-        mask_acc_24 = df_ac24_unt.loc[df_ac24_unt['Product'] == acc_selection][date_range]
-        
-        ac_idx = 0
-    
-        ct_ac = 0
-        
-        for y in acc:
-            if acc_selection == y:
-                ac_idx = ct_ac
-            else:
-                ct_ac += 1
-    
-        if year_select_prod == '2023':
-            avg_per_month = {}
-            mbd_display_acc = st.checkbox('Display Monthly Breakdown')
-            if mbd_display_acc == True:
-                for month in date_range:
-                    avg_per_month[month] = mask_acc_23.loc[ac_idx][month]
-                    st.write(month + ' - ' + str(mask_acc_23.loc[ac_idx][month]))
-                st.write('( - Average per month: ' + str(avg_month(avg_per_month)) + ' - )')
-            st.subheader(sum(mask_acc_23.loc[ac_idx][date_range]))     
-            
-        elif year_select_prod == '2024':
-            avg_per_month = {}
-            mbd_display_acc = st.checkbox('Display Monthly Breakdown')
-            if mbd_display_acc == True:
-                for month in date_range:
-                    avg_per_month[month] = mask_acc_24.loc[ac_idx][month]
-                    st.write(month + ' - ' + str(mask_acc_24.loc[ac_idx][month]))
-                st.write('( - Average per month: ' + str(avg_month(avg_per_month)) + ' - )')
-            st.subheader(sum(mask_acc_24.loc[ac_idx][date_range]))
-        
-        else:
-            st.subheader(sum(mask_acc_23.loc[ac_idx][date_range])+sum(mask_acc_24.loc[ac_idx][date_range]))
-            
-    elif product_type_selection == 'Handhelds':
-    
-        hh_selection = st.multiselect('Handhelds:',
-                                      options=hh,
-                                      placeholder='Choose an Option')
-            
-        hh_sum = 0
-        
-        if len(hh_selection) < 1:
-            pass
-        else:
-            if year_select_prod == '2023':
-                for x in hh_selection:
-    
-                    mask_hh = df_hh23_unt.loc[df_hh23_unt['Product'] == x][date_range]
-                    
-                    for y in mask_hh:
-                        hh_sum += int(mask_hh[y])
-                        
-            elif year_select_prod == '2024':
-                for x in hh_selection:
-                    
-                    mask_hh = df_hh24_unt.loc[df_hh24_unt['Product'] == x][date_range]
-                    
-                    for y in mask_hh:
-                        hh_sum += int(mask_hh[y])
-                        
-            else:
-                for x in hh_selection:
-                    
-                    mask_hh_23 = df_hh23_unt.loc[df_hh23_unt['Product'] == x][date_range]
-                    mask_hh_24 = df_hh24_unt.loc[df_hh24_unt['Product'] == x][date_range]
-                    
-                    for y in mask_hh_23:
-                        hh_sum += int(mask_hh_23[y]) + int(mask_hh_24[y])
-                                      
-                
-            st.subheader(hh_sum)
-            
-    
-    st.divider()
 
     
 
