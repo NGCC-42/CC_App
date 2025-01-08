@@ -4396,7 +4396,9 @@ def sort_top_20(dict, number):
 
 
 if task_choice == 'Leaderboards':
-    st.header('Customer Leaderboards')
+
+    colx, coly, colz = st.columns([.25, .5, .25])
+    coly.header('Customer Leaderboards')
     
     #spend_year = st.selectbox('Choose Year', 
                              #['2024', '2023'])
@@ -4424,28 +4426,30 @@ if task_choice == 'Leaderboards':
 
     result24 = sort_top_20(cust_spend_dict_2024, ranking_number)
     result23 = sort_top_20(cust_spend_dict_2023, ranking_number)
-    
-    col1, col2 = st.columns(2)
 
-    col1.subheader('2024')
-    col2.subheader('2023')
-    
-    rank = 1    
-    for leader in result23:
-        #st.subheader(str(rank) + ')  ' + leader[0] + ': ${:,.2f}'.format(leader[1]))
-        col2.metric('**${:,.2f}**'.format(leader[1]), '{}) {}'.format(rank, leader[0]), '0%')
-        #col2.markdown('**{}) {}  \n  \t${:,.2f}**'.format(rank, leader[0], leader[1]))
+    with coly:
         
-        rank += 1
+        col1, col2 = st.columns(2)
+    
+        col1.subheader('2024')
+        col2.subheader('2023')
         
-    rank = 1
-    for leader in result24:
-        #st.subheader(str(rank) + ')  ' + leader[0] + ': ${:,.2f}'.format(leader[1]))
-        col1.metric('**{}) {}**'.format(rank, leader[0]), '${:,.2f}'.format(leader[1]), percent_of_change(cust_spend_dict_2023[leader[0]], cust_spend_dict_2024[leader[0]]))
-    
-        rank += 1
-    
-    style_metric_cards()
+        rank = 1    
+        for leader in result23:
+            #st.subheader(str(rank) + ')  ' + leader[0] + ': ${:,.2f}'.format(leader[1]))
+            col2.metric('**${:,.2f}**'.format(leader[1]), '{}'.format( leader[0]), '0%')
+            #col2.markdown('**{}) {}  \n  \t${:,.2f}**'.format(rank, leader[0], leader[1]))
+            
+            rank += 1
+            
+        rank = 1
+        for leader in result24:
+            #st.subheader(str(rank) + ')  ' + leader[0] + ': ${:,.2f}'.format(leader[1]))
+            col1.metric('**${:,.2f}**'.format(leader[1]), '{}'.format(leader[0]), percent_of_change(cust_spend_dict_2023[leader[0]], cust_spend_dict_2024[leader[0]]))
+        
+            rank += 1
+        
+        style_metric_cards()
     
 
 
