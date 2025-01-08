@@ -4168,7 +4168,7 @@ if task_choice == 'Quote Reports':
     style_metric_cards()
 
 
-elif task_choice == 'Customer Details':
+if task_choice == 'Customer Details':
     
     cola, colb, colc = st.columns([.25, .5, .25])
     with colb:
@@ -4389,32 +4389,26 @@ elif task_choice == 'Customer Details':
         
     
 
+def sort_top_20(dict, number):
 
+    leaderboard_list = []
     
+    for key, value in dict.items():
+        if value >= 2500:
+            leaderboard_list.append((key, value))
 
-	
-
-elif task_choice == 'Leaderboards':
+    sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
     
-    cola, colb, colc = st.columns([.2, .6, .2])
+    return sorted_leaderboard[:number]
+    
+if task_choice == 'Leaderboards':
+    
+    
+    cola, colb, colc = st.columns([.25, .5, .25])
 
     with colb:
         st.header('Customer Leaderboards')	
-	
-	def sort_top_20(dict, number):
 
-		leaderboard_list = []
-	    
-		for key, value in dict.items():
-			if value >= 2500:
-				leaderboard_list.append((key, value))
-	
-		sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
-		
-		return sorted_leaderboard[:number]
-	
-	
-    with colb:
         spend_year = st.selectbox('Choose Year', 
     			     ['2024', '2023'])
     	
