@@ -4408,11 +4408,13 @@ if task_choice == 'Leaderboards':
     
     cust_spend_dict_2023 = {}
     cust_spend_dict_2024 = {}
+    cust_spend_dict_2025 = {}
     
     
     for cust in unique_customer_list:
         cust_spend_dict_2023[cust] = 0
         cust_spend_dict_2024[cust] = 0
+        cust_spend_dict_2025[cust] = 0
     
     idx = 0
     
@@ -4422,22 +4424,27 @@ if task_choice == 'Leaderboards':
             cust_spend_dict_2023[customer] += float(df.iloc[idx].total_line_item_spend)
         elif df.iloc[idx].ordered_year == '2024':
             cust_spend_dict_2024[customer] += float(df.iloc[idx].total_line_item_spend)
+        elif df.iloc[idx].ordered_year == '2025':
+            cust_spend_dict_2025[customer] += float(df.iloc[idx].total_line_item_spend)
+        
         idx += 1
 
+    result25 = sort_top_20(cust_spend_dict_2025, ranking_number)
     result24 = sort_top_20(cust_spend_dict_2024, ranking_number)
     result23 = sort_top_20(cust_spend_dict_2023, ranking_number)
 
     with coly:
         
-        col1, col2 = st.columns(2)
-    
-        col1.subheader('2024')
-        col2.subheader('2023')
+        col1, col2, col3 = st.columns(3)
+
+        col1.subheader('2025')
+        col2.subheader('2024')
+        col3.subheader('2023')
         
         rank = 1    
         for leader in result23:
             #st.subheader(str(rank) + ')  ' + leader[0] + ': ${:,.2f}'.format(leader[1]))
-            col2.metric('**${:,.2f}**'.format(leader[1]), '{}'.format( leader[0]), '0%')
+            col3.metric('**${:,.2f}**'.format(leader[1]), '{}) {}'.format(rank, leader[0]), '0%')
             #col2.markdown('**{}) {}  \n  \t${:,.2f}**'.format(rank, leader[0], leader[1]))
             
             rank += 1
@@ -4445,7 +4452,14 @@ if task_choice == 'Leaderboards':
         rank = 1
         for leader in result24:
             #st.subheader(str(rank) + ')  ' + leader[0] + ': ${:,.2f}'.format(leader[1]))
-            col1.metric('**${:,.2f}**'.format(leader[1]), '{}'.format(leader[0]), percent_of_change(cust_spend_dict_2023[leader[0]], cust_spend_dict_2024[leader[0]]))
+            col2.metric('**${:,.2f}**'.format(leader[1]), '{}) {}'.format(rank, leader[0]), percent_of_change(cust_spend_dict_2023[leader[0]], cust_spend_dict_2024[leader[0]]))
+        
+            rank += 1
+
+        rank = 1
+        for leader in result25:
+            #st.subheader(str(rank) + ')  ' + leader[0] + ': ${:,.2f}'.format(leader[1]))
+            col2.metric('**${:,.2f}**'.format(leader[1]), '{}) {}'.format(rank, leader[0]), percent_of_change(cust_spend_dict_2024[leader[0]], cust_spend_dict_2025[leader[0]]))
         
             rank += 1
         
