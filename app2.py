@@ -4379,8 +4379,6 @@ if task_choice == 'Customer Details':
 
     
 
-    
-    
 
 def sort_top_20(dict, number):
 
@@ -4443,6 +4441,8 @@ if task_choice == 'Leaderboards':
 	    
 	    
     
+
+
   
 
 
