@@ -4340,7 +4340,7 @@ if task_choice == 'Customer Details':
                 if cust_RC_cnt > 0:
                     st.markdown(' - **Road Cases: {}**'.format(cust_RC_cnt))
     
-        ### DISPLAY CATEGORIES OF PRODUCTS PURCHASED BY SELECTED CUSTOMER ###
+### DISPLAY CATEGORIES OF PRODUCTS PURCHASED BY SELECTED CUSTOMER ###
         if len(jet_list) >= 1:
             with st.container(border=True):
                 st.subheader('Stationary Jets:')
@@ -4393,6 +4393,8 @@ def sort_top_20(dict, number):
     sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
     
     return sorted_leaderboard[:number]
+
+
     
 if task_choice == 'Leaderboards':
     
