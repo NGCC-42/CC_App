@@ -4171,9 +4171,10 @@ if task_choice == 'Quote Reports':
 if task_choice == 'Customer Details':
     
     cola, colb, colc = st.columns([.25, .5, .25])
+    
     with colb:
         st.header('Customer Details')
-        #text_input = st.text_input('Search Customers')
+
         text_input = st.multiselect('Search Customers', 
                                    options=unique_customer_list, 
                                    max_selections=1,
@@ -4218,7 +4219,6 @@ if task_choice == 'Customer Details':
     for customer in df.customer:
         
         if customer.upper() == text_input.upper():
-            #sales_order_list.append(df.iloc[idx].sales_order)
             
             ### LOCATE AND PULL SPEND TOTALS FOR SELECTED CUSTOMER AND ADD TO LISTS ###
             if df.iloc[idx].ordered_year == '2023':
@@ -4403,8 +4403,6 @@ if task_choice == 'Leaderboards':
 
     spend_year = colb.selectbox('Choose Year', ['2024', '2023'])
     ranking_number = colb.selectbox('Choose Leaderboard Length', [5, 10, 15, 20, 25, 50])
-	
-
     
 	for cust in unique_customer_list:
 		cust_spend_dict_2023[cust] = 0
