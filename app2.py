@@ -4378,14 +4378,7 @@ elif task_choice == 'Customer Details':
                     st.markdown(item)
 
     
-    ### CREATE LISTS OF CATEGORIES FROM DATAFRAME ###
-    
-    jets = df_jet2023_unt['Product'].unique().tolist()
-    controllers = df_cntl23_unt['Product'].unique().tolist()
-    hoses = df_h23_unt['Product'].unique().tolist()
-    acc = df_ac23_unt['Product'].unique().tolist()
-    hh = df_hh23_unt['Product'].unique().tolist()
-    
+
     
     
     ### CREATE DATE LISTS ###
