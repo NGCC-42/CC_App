@@ -4420,14 +4420,14 @@ elif task_choice == 'Leaderboards':
 	cust_spend_dict_2023 = {}
 	cust_spend_dict_2024 = {}
 	
-    cola, colb, colc = st.columns([.2, .6, .2])
+    
     
 	for cust in unique_customer_list:
 		cust_spend_dict_2023[cust] = 0
 		cust_spend_dict_2024[cust] = 0
 	
 	idx = 0
-	
+	cola, colb, colc = st.columns([.2, .6, .2])
 	for customer in df.customer:
 	
 		if df.iloc[idx].ordered_year == '2023':
