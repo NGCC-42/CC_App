@@ -4395,8 +4395,11 @@ elif task_choice == 'Customer Details':
 	
 
 elif task_choice == 'Leaderboards':
-	
-	st.header('Customer Leaderboards')	
+    
+    cola, colb, colc = st.columns([.2, .6, .2])
+
+    with colb:
+        st.header('Customer Leaderboards')	
 	
 	def sort_top_20(dict, number):
 
@@ -4410,9 +4413,9 @@ elif task_choice == 'Leaderboards':
 		
 		return sorted_leaderboard[:number]
 	
-	cola, colb, colc = st.columns([.2, .6, .2])
+	
     with colb:
-    	spend_year = st.selectbox('Choose Year', 
+        spend_year = st.selectbox('Choose Year', 
     			     ['2024', '2023'])
     	
     	ranking_number = st.selectbox('Choose Leaderboard Length',
