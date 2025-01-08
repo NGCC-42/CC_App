@@ -4170,6 +4170,7 @@ if task_choice == 'Quote Reports':
 
 if task_choice == 'Customer Details':
     
+    
     cola, colb, colc = st.columns([.25, .5, .25])
     
     with colb:
@@ -4428,13 +4429,13 @@ if task_choice == 'Leaderboards':
 		    
 			rank += 1
 		    
-	elif spend_year == '2024':
+	if spend_year == '2024':
 	
 		result = sort_top_20(cust_spend_dict_2024, ranking_number)
 		for leader in result:
 			colb.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
 		
-			rank += 1
+		    rank += 1
 	    
 	    
     
