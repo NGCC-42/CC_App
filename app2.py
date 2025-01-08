@@ -4420,7 +4420,8 @@ elif task_choice == 'Leaderboards':
 	cust_spend_dict_2023 = {}
 	cust_spend_dict_2024 = {}
 	
-	
+    cola, colb, colc = st.columns([.2, .6, .2])
+    
 	for cust in unique_customer_list:
 		cust_spend_dict_2023[cust] = 0
 		cust_spend_dict_2024[cust] = 0
@@ -4440,7 +4441,7 @@ elif task_choice == 'Leaderboards':
 	
 		result = sort_top_20(cust_spend_dict_2023, ranking_number)
 		for leader in result:
-			st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
+			colb.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
 		    
 			rank += 1
 		    
@@ -4448,7 +4449,7 @@ elif task_choice == 'Leaderboards':
 	
 		result = sort_top_20(cust_spend_dict_2024, ranking_number)
 		for leader in result:
-			st.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
+			colb.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
 		
 			rank += 1
 	    
