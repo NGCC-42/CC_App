@@ -4381,13 +4381,6 @@ if task_choice == 'Customer Details':
 
     
     
-    ### CREATE DATE LISTS ###
-    
-    months = ['All', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    months_x = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    years = ['2022', '2023', '2024']
-        
-    
 
 def sort_top_20(dict, number):
 
@@ -4403,10 +4396,10 @@ def sort_top_20(dict, number):
     
 if task_choice == 'Leaderboards':
     
-    
     cola, colb, colc = st.columns([.25, .5, .25])
 
     with colb:
+        
         st.header('Customer Leaderboards')	
 
         spend_year = st.selectbox('Choose Year', ['2024', '2023'])
