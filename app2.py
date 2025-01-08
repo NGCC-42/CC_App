@@ -4381,6 +4381,7 @@ if task_choice == 'Customer Details':
     
 
 
+    
 def sort_top_20(dict, number):
 
     leaderboard_list = []
@@ -4390,54 +4391,61 @@ def sort_top_20(dict, number):
             leaderboard_list.append((key, value))
 
     sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
-    
+
     return sorted_leaderboard[:number]
 
-cust_spend_dict_2023 = {}
-cust_spend_dict_2024 = {}
-    
-if task_choice == 'Leaderboards':
-    
-    cola, colb, colc = st.columns([.25, .5, .25])
 
-    colb.header('Customer Leaderboards')	
-    with colb:
-        spend_year = st.selectbox('Choose Year', ['2024', '2023'])
-        ranking_number = st.selectbox('Choose Leaderboard Length', [5, 10, 15, 20, 25, 50])
+if task_choice == 'Leaderboards':
+    st.header('Customer Leaderboards')
+    
+    #spend_year = st.selectbox('Choose Year', 
+                             #['2024', '2023'])
+    
+    ranking_number = st.selectbox('Choose Leaderboard Length',
+                                 [5, 10, 15, 20, 25, 50])
+    
+    cust_spend_dict_2023 = {}
+    cust_spend_dict_2024 = {}
+    
     
     for cust in unique_customer_list:
         cust_spend_dict_2023[cust] = 0
-		cust_spend_dict_2024[cust] = 0
-	
-	idx = 0
-	
-	for customer in df.customer:
-	
-		if df.iloc[idx].ordered_year == '2023':
-			cust_spend_dict_2023[customer] += float(df.iloc[idx].total_line_item_spend)
-		elif df.iloc[idx].ordered_year == '2024':
-			cust_spend_dict_2024[customer] += float(df.iloc[idx].total_line_item_spend)
-		idx += 1
-	
-	rank = 1
+        cust_spend_dict_2024[cust] = 0
+    
+    idx = 0
+    
+    for customer in df.customer:
 
-	if spend_year == '2023':
-	
-		result = sort_top_20(cust_spend_dict_2023, ranking_number)
-		for leader in result:
-			colb.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
-		    
-			rank += 1
-		    
-	if spend_year == '2024':
-	
-		result = sort_top_20(cust_spend_dict_2024, ranking_number)
-		for leader in result:
-			colb.subheader(str(rank) + ')  ' + leader[0] + ' : $' + '{:,.2f}'.format(leader[1]))
-		
-		    rank += 1
-	    
-	    
+        if df.iloc[idx].ordered_year == '2023':
+            cust_spend_dict_2023[customer] += float(df.iloc[idx].total_line_item_spend)
+        elif df.iloc[idx].ordered_year == '2024':
+            cust_spend_dict_2024[customer] += float(df.iloc[idx].total_line_item_spend)
+        idx += 1
+
+    result24 = sort_top_20(cust_spend_dict_2024, ranking_number)
+    result23 = sort_top_20(cust_spend_dict_2023, ranking_number)
+    
+    col1, col2 = st.columns(2)
+
+    col1.subheader('2024')
+    col2.subheader('2023')
+    
+    rank = 1    
+    for leader in result23:
+        #st.subheader(str(rank) + ')  ' + leader[0] + ': ${:,.2f}'.format(leader[1]))
+        col2.metric('**${:,.2f}**'.format(leader[1]), '{}) {}'.format(rank, leader[0]), '0%')
+        #col2.markdown('**{}) {}  \n  \t${:,.2f}**'.format(rank, leader[0], leader[1]))
+        
+        rank += 1
+        
+    rank = 1
+    for leader in result24:
+        #st.subheader(str(rank) + ')  ' + leader[0] + ': ${:,.2f}'.format(leader[1]))
+        col1.metric('**{}) {}**'.format(rank, leader[0]), '${:,.2f}'.format(leader[1]), percent_of_change(cust_spend_dict_2023[leader[0]], cust_spend_dict_2024[leader[0]]))
+    
+        rank += 1
+    
+    style_metric_cards()
     
 
 
