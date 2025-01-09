@@ -1581,16 +1581,16 @@ def extract_acc_data(df):
              elif line[:8] == 'CC-SW-05':
                 dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-SW-05'][0] += df.iloc[idx].quantity
                 dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-SW-05'][1] += df.iloc[idx].total_line_item_spend
-            elif line[:14] == 'CC-NPTC-06-STD':
+             elif line[:14] == 'CC-NPTC-06-STD':
                 dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-NPTC-06-STD'][0] += df.iloc[idx].quantity
                 dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-NPTC-06-STD'][1] += df.iloc[idx].total_line_item_spend
-            elif line[:14] == 'CC-NPTC-10-DSY':
+             elif line[:14] == 'CC-NPTC-10-DSY':
                 dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-NPTC-10-DSY'][0] += df.iloc[idx].quantity
                 dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-NPTC-10-DSY'][1] += df.iloc[idx].total_line_item_spend
-            elif line[:14] == 'CC-NPTC-15-DSY':
+             elif line[:14] == 'CC-NPTC-15-DSY':
                 dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-NPTC-15-DSY'][0] += df.iloc[idx].quantity
                 dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-NPTC-15-DSY'][1] += df.iloc[idx].total_line_item_spend
-            elif line[:14] == 'CC-NPTC-25-DSY':
+             elif line[:14] == 'CC-NPTC-25-DSY':
                 dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-NPTC-25-DSY'][0] += df.iloc[idx].quantity
                 dict_25[num_to_month(df.iloc[idx].order_date.month)]['CC-NPTC-25-DSY'][1] += df.iloc[idx].total_line_item_spend
              elif line[:5] == 'CC-RC':
