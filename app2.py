@@ -4192,6 +4192,7 @@ if task_choice == 'Quote Reports':
     coly.header('')
 
     if len(quote_cust) < 1:
+        coly.subheader('Totals:')
         with coly:
             cola, colb, colc, cold = st.columns(4)
     
