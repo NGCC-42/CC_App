@@ -4451,7 +4451,7 @@ def sort_top_20(dict, number):
     leaderboard_list = []
     
     for key, value in dict.items():
-        if value >= 2500:
+        if value >= 2000:
             leaderboard_list.append((key, value))
 
     sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
