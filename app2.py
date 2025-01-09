@@ -4124,12 +4124,15 @@ if task_choice == 'Shipping Reports':
 ### QUOTE REPORTS ###
 if task_choice == 'Quote Reports':
 
-    st.header('Quote Reports')
-    
-    quote_cust = st.multiselect('Search Customers',
-                            options=quote_cust_list, 
-                            max_selections=1,
-                            placeholder='Start Typing Customer Name')
+    colx, coly, colz = st.columns([.2, .6, .2])
+
+    with coly:
+        st.header('Quote Reports')
+        
+        quote_cust = st.multiselect('Search Customers',
+                                options=quote_cust_list, 
+                                max_selections=1,
+                                placeholder='Start Typing Customer Name')
 
     if len(quote_cust) >= 1:
         quote_cust = quote_cust[0]
@@ -4175,34 +4178,34 @@ if task_choice == 'Quote Reports':
         idx += 1
 
     if len(quote_cust) > 1:
-        st.header('')
-        st.header('')
-        
-        col1, col2, col3, col4 = st.columns(4)
-        with st.container(border=True):        
-            col1.metric('**Quotes Won**', str(cust_won_count), '${:,.2f}'.format(cust_won_total)) 
-            
-        with st.container(border=True):
-            col4.metric('**Quotes Lost / Open**', str(cust_lost_count), '-${:,.2f}'.format(cust_lost_total))
-        
-        if cust_lost_count >= 1 and cust_won_count >= 1:
-            col2.metric('**Conversion Percentage**', '{:,.2f}%'.format((cust_won_count / (cust_lost_count + cust_won_count)) * 100))
-            col3.metric('**Potential Rev. Collected**', '{:,.2f}%'.format((cust_won_total / (cust_lost_total + cust_won_total)) * 100))
-            
-            st.divider()
-
-            col1, col2 = st.columns(2)
-            col1.subheader('Won')
-            col2.subheader('Lost')
-            with st.container(border=True):
-                for quote in cust_won_list:
-                    col1.markdown(' - {}'.format(quote))
-            with st.container(border=True):
-                for quote in cust_lost_list:
-                    col2.markdown(' - {}'.format(quote))
+        coly.header('')
+        coly.header('')
+        with coly:
+            col1, col2, col3, col4 = st.columns(4)
+            with st.container(border=True):        
+                col1.metric('**Quotes Won**', str(cust_won_count), '${:,.2f}'.format(cust_won_total)) 
                 
-
-    style_metric_cards()
+            with st.container(border=True):
+                col4.metric('**Quotes Lost / Open**', str(cust_lost_count), '-${:,.2f}'.format(cust_lost_total))
+            
+            if cust_lost_count >= 1 and cust_won_count >= 1:
+                col2.metric('**Conversion Percentage**', '{:,.2f}%'.format((cust_won_count / (cust_lost_count + cust_won_count)) * 100))
+                col3.metric('**Potential Rev. Collected**', '{:,.2f}%'.format((cust_won_total / (cust_lost_total + cust_won_total)) * 100))
+                
+                st.divider()
+    
+                col1, col2 = st.columns(2)
+                col1.subheader('Won')
+                col2.subheader('Lost')
+                with st.container(border=True):
+                    for quote in cust_won_list:
+                        col1.markdown(' - {}'.format(quote))
+                with st.container(border=True):
+                    for quote in cust_lost_list:
+                        col2.markdown(' - {}'.format(quote))
+                    
+    
+        style_metric_cards()
 
 
 if task_choice == 'Customer Details':
