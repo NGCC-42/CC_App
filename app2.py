@@ -4147,8 +4147,19 @@ if task_choice == 'Quote Reports':
     cust_won_count = 0
     cust_lost_total = 0
     cust_lost_count = 0
+    won_total = 0
+    lost_total = 0
+    won_count = 0
+    lost_count = 0
 
     for customer in df_quotes.customer:
+        
+        if df_quotes.iloc[idx].status == 'Won':
+            won_total += df_quotes.iloc[idx].total
+            won_count += 1
+        else:
+            lost_total += df_quotes.iloc[idx].total
+            lost_count += 1 
 
         if customer.upper() == quote_cust.upper():
     
@@ -4177,9 +4188,20 @@ if task_choice == 'Quote Reports':
 
         idx += 1
 
+    coly.header('')
+    coly.header('')
+
+    with coly:
+        cola, colb, colc, cold = st.columns(4)
+
+        cola.metric('**Quotes Won**', str(won_count), '${:,.2f}'.format(won_total))
+        colb.metric('**Conversion Percentage**', '{:,.2f}%'.format((won_count / (lost_count + won_count)) * 100))
+        colc.metric('**Potential Rev. Collected**', '{:,.2f}%'.format((won_total / (lost_total + won_total)) * 100))
+        cold.metric('**Quotes Lost**', str(lost_count), '-${:,.2f}'.format(lost_total))
+        style_metric_cards()
+    
     if len(quote_cust) > 1:
-        coly.header('')
-        coly.header('')
+
         with coly:
             col1, col2, col3, col4 = st.columns(4)
             with st.container(border=True):        
