@@ -4191,14 +4191,15 @@ if task_choice == 'Quote Reports':
     coly.header('')
     coly.header('')
 
-    with coly:
-        cola, colb, colc, cold = st.columns(4)
-
-        cola.metric('**Quotes Won**', str(won_count), '${:,.2f}'.format(won_total))
-        colb.metric('**Conversion Percentage**', '{:,.2f}%'.format((won_count / (lost_count + won_count)) * 100))
-        colc.metric('**Potential Rev. Collected**', '{:,.2f}%'.format((won_total / (lost_total + won_total)) * 100))
-        cold.metric('**Quotes Lost**', str(lost_count), '-${:,.2f}'.format(lost_total))
-        style_metric_cards()
+    if len(quote_cust) < 1:
+        with coly:
+            cola, colb, colc, cold = st.columns(4)
+    
+            cola.metric('**Quotes Won**', str(won_count), '${:,.2f}'.format(won_total))
+            colb.metric('**Conversion Percentage**', '{:,.2f}%'.format((won_count / (lost_count + won_count)) * 100))
+            colc.metric('**Potential Rev. Collected**', '{:,.2f}%'.format((won_total / (lost_total + won_total)) * 100))
+            cold.metric('**Quotes Lost**', str(lost_count), '-${:,.2f}'.format(lost_total))
+            style_metric_cards()
     
     if len(quote_cust) > 1:
 
