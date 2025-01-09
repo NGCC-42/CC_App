@@ -642,7 +642,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 with st.sidebar:
-    task_choice = option_menu(None, ["Dashboard", "Product Reports",  "Customer Details", "Leaderboards", "Shipping Reports", "Quote Reports"], 
+    task_choice = option_menu(None, ["Dashboard", "Product Reports",  "Customer Details", "Leaderboards", "Quote Reports"], 
         icons=['house', 'projector', 'person-circle', 'box-seam', 'shadows', 'trophy'], 
         menu_icon="cast", default_index=0, orientation="vertical",
         styles={
