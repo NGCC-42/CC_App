@@ -4523,7 +4523,7 @@ if task_choice == 'Leaderboards':
         rank = 1
         for leader in result25:
             #st.subheader(str(rank) + ')  ' + leader[0] + ': ${:,.2f}'.format(leader[1]))
-            col2.metric('**${:,.2f}**'.format(leader[1]), '{}) {}'.format(rank, leader[0]), percent_of_change(cust_spend_dict_2024[leader[0]], cust_spend_dict_2025[leader[0]]))
+            col1.metric('**${:,.2f}**'.format(leader[1]), '{}) {}'.format(rank, leader[0]), percent_of_change(cust_spend_dict_2024[leader[0]], cust_spend_dict_2025[leader[0]]))
         
             rank += 1
         
