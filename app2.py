@@ -4274,9 +4274,10 @@ if task_choice == 'Customer Details':
     cust_RC_cnt = 0
     
     ### LISTS OF HISTORICAL SALES FOR CUSTOMER ###
-    spend_total = {2023: None, 2024: None}
+    spend_total = {2023: None, 2024: None, 2025: None}
     spend_total_2023 = 0.0
     spend_total_2024 = 0.0
+    spend_total_2025 = 0.0
     sales_order_list = []
     
     idx = 0
@@ -4364,7 +4365,8 @@ if task_choice == 'Customer Details':
                 sales_order_list.append(df.iloc[idx].sales_order)
         idx += 1
         
-    perc_change = percent_of_change(spend_total_2023, spend_total_2024)    
+    perc_change = percent_of_change(spend_total_2023, spend_total_2024)   
+    perc_change2 = percent_of_change(spend_total_2024, spend_total_2025)
     
     with colb:
         st.header('')
@@ -4373,7 +4375,7 @@ if task_choice == 'Customer Details':
         ### DISPLAY PRODUCT PURCHASE SUMMARIES FOR SELECTED CUSTOMER ###
         if len(text_input) > 1:
     
-            col3, col4, col5 = st.columns(3)
+            col3, col4, col5, col6 = st.columns(4)
             
             ### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS
             with col3:
@@ -4381,8 +4383,11 @@ if task_choice == 'Customer Details':
         
             with col4:
                 st.metric('2024 Spending', '${:,.2f}'.format(spend_total_2024), perc_change)
-                
+
             with col5:
+                st.metric('2025 Spending', '${:,.2f}'.format(spend_total_2025), perc_change2)
+                
+            with col6:
                 st.metric('Total Spending', '${:,.2f}'.format(spend_total_2023 + spend_total_2024), '')
     
             style_metric_cards()       
