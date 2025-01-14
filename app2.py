@@ -13,6 +13,8 @@ import openpyxl
 import streamlit_shadcn_ui as ui
 from streamlit_extras.metric_cards import style_metric_cards
 from streamlit_option_menu import option_menu
+from fpdf import FPDF
+import base64
 
 ### SET WEB APP CONFIGURATIONS
 st.set_page_config(page_title='Club Cannon Database', 
@@ -233,7 +235,45 @@ def create_dataframe_csv(file):
 months = ['All', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 months_x = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 years = ['2022', '2023', '2024']
+
+
+# DEFINE A FUNCITON TO CREATE A PDF FROM A DICTIONARY
+def create_pdf(data):
     
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+
+    for key, value in data.items():
+        pdf.cell(200, 10, txt=f"{key}: {value}", ln=1)
+
+    return pdf.output(dest="S").encode("latin-1")
+
+def create_pdf_list(data):
+    
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+
+    for item in data:
+        pdf.cell(200, 10, txt=f"{item[0]}: {item[1]}", ln=1)
+
+    return pdf.output(dest="S").encode("latin-1")
+
+def gen_pdf(data):
+    
+    if st.button("Generate PDF"):
+        if isinstance(data, dict):
+            pdf_bytes = create_pdf(data)
+        elif isinstance(data, list):
+            pdf_bytes = create_pdf_list(data)
+            
+        st.download_button(
+            label="Download PDF",
+            data=pdf_bytes,
+            file_name="data.pdf",
+            mime="application/pdf")
+   
     
 ### DEFINE FUNCTION TO RENAME COLUMNS FOR CHART AXIS SORTING ###
 @st.cache_data
