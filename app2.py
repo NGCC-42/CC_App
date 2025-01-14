@@ -2648,7 +2648,7 @@ if task_choice == 'Dashboard':
         style_metric_cards()
     
     with col2:
-        year_select = ui.tabs(options=[2025, 2024, 2023, 2022], default_value=2024, key='Year')     
+        year_select = ui.tabs(options=[2025, 2024, 2023, 2022], default_value=2025, key='Year')     
     
         #tot_vs_ytd = ui.tabs(options=['Totals', 'YTD'], default_value='Totals')
 
