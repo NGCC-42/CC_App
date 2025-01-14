@@ -9,3 +9,5 @@ openpyxl
 streamlit_shadcn_ui
 timedelta
 streamlit_option_menu
+fpdf
+base64
