@@ -1993,7 +1993,7 @@ def organize_hose_data(dict):
 def magic_sales(year):
 
     count = 0
-    magic_list = []
+    magic_products = {'MagicFX Commander': [0,0], 'Magic FX Smoke Bubble Blaster': [0,0], 'MagicFX ARM SFX SAFETY TERMINATOR': [0,0], 'MagicFX Device Updater': [0,0], 'MagicFX PSYCO2JET': [0,0], 'MagicFX Red Button': [0,0], 'MagicFX Replacement Keys': [0,0], 'MagicFX SFX Safety ARM Controller': [0,0], 'MagicFX SPARXTAR': [0,0], 'MagicFX Sparxtar powder': [0,0], 'MagicFX StadiumBlaster': [0,0], 'MagicFX StadiumBlower': [0,0], 'MagicFX StadiumShot III': [0,0], 'MagicFX SuperBlaster II': [0,0], 'MagicFX Swirl Fan II': [0,0], 'MagicFX Switchpack II': [0,0], 'MFX-AC-SBRV': [0,0], 'MFX-E2J-230': [0,0], 'MFX-E2J-2LFA': [0,0], 'MFX-E2J-5LFCB': [0,0], 'MFX-E2J-F-ID': [0,0], 'MFX-E2J-F-OD': [0,0], 'MFX-E2J-FC': [0,0], 'MFX-E2J-FEH-1M': [0,0], 'MFX-E2J-FEH-2M': [0,0], 'MFX-E2J-OB': [0,0], 'MFX-ECO2JET-BKT': [0,0], 'MFX-SS3-RB': [0,0]}
 
     idx = 0
 
@@ -2001,11 +2001,14 @@ def magic_sales(year):
         if df.iloc[idx].ordered_year == year:
             if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX':
                 count += df.iloc[idx].total_line_item_spend
-                magic_list.append('{} x {}'.format(df.iloc[idx].line_item, df.iloc[idx].quantity))
+                for prod, key in magic_products.items():
+                    if df.iloc[idx].line_item[:len(prod)] == prod:
+                        key[0] += df.iloc[idx].quantity
+                        key[1] += df.iloc[idx].total_line_item_spend
 
         idx += 1
 
-    return count
+    return count, magic_products
 
 def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=None):
 
