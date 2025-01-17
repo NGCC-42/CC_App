@@ -913,6 +913,77 @@ def get_monthly_sales_v2(df, year):
     
     return sales_dict
 
+
+def daily_sales(month):
+
+    daily_sales23 = []
+    daily_sales24 = []
+    daily_sales25 = []
+                
+    month_num = month_to_num(month)
+
+    for i in range(days_in_month(month)):
+        daily_sales23.append(0)
+        daily_sales24.append(0)
+        daily_sales25.append(0)
+        
+    idx = 0 
+    
+    for sale in df.sales_order:
+        if df.iloc[idx].order_date.month == int(month_num):
+            if df.iloc[idx].order_date.year == 2025:
+                daily_sales25[(df.iloc[idx].order_date.day) - 1] += df.iloc[idx].total_line_item_spend
+            if df.iloc[idx].order_date.year == 2024:
+                daily_sales24[(df.iloc[idx].order_date.day) - 1] += df.iloc[idx].total_line_item_spend
+            if df.iloc[idx].order_date.year == 2023:
+                daily_sales23[(df.iloc[idx].order_date.day) - 1] += df.iloc[idx].total_line_item_spend
+
+        idx += 1
+            
+    return daily_sales23, daily_sales24, daily_sales25
+
+
+
+
+def range_sales(num):
+
+    daily_sales23 = []
+    daily_sales24 = []
+    daily_sales25 = []
+
+    delta_range = timedelta(days=num)
+    
+    for i in range(num):
+        daily_sales23.append(0)
+        daily_sales24.append(0)
+        daily_sales25.append(0)
+
+
+        
+    idx = 0 
+    
+    for sale in df.sales_order:
+        if today.date() >= df.iloc[idx].order_date >= (today - delta_range).date():
+            daily_sales25[-((today.date() - (df.iloc[idx].order_date)).days)] += df.iloc[idx].total_line_item_spend
+            
+        elif one_year_ago.date() >= df.iloc[idx].order_date >= (one_year_ago - delta_range).date():
+            daily_sales24[-((one_year_ago.date() - (df.iloc[idx].order_date)).days)] += df.iloc[idx].total_line_item_spend
+            
+        elif two_years_ago.date() >= df.iloc[idx].order_date >= (two_years_ago - delta_range).date():
+            daily_sales23[-((two_years_ago.date() - (df.iloc[idx].order_date)).days)] += df.iloc[idx].total_line_item_spend
+
+
+        idx += 1
+
+    daily_sales23.reverse()
+    daily_sales24.reverse()
+    daily_sales25.reverse()
+    
+            
+    return daily_sales23, daily_sales24, daily_sales25
+
+
+
 @st.cache_data
 def get_monthly_sales_ytd():
 
