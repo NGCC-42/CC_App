@@ -296,7 +296,93 @@ def plot_bar_chart(df):
     ).properties(height=500, width=750).configure_mark(
         color='limegreen'
     ))
+
+
+def display_daily_plot(month, years=['All']):
     
+    daily23, daily24, daily25 = daily_sales(month)
+    col1.write(daily23)
+
+    x = [i for i in range(len(daily24))]
+
+    fig, ax = plt.subplots()
+
+    if years == ['All']:
+    
+        ax.plot(x, daily23, label='2023', color='darkgreen', linewidth=2)
+        ax.plot(x, daily24, label='2024', color='white', linewidth=2)
+        ax.plot(x, daily25, label='2025', color='limegreen', linewidth=2)
+        ax.set_facecolor('#000000')
+        fig.set_facecolor('#000000')
+        plt.yticks([1000, 2500, 5000, 7500, 10000, 15000, 20000, 25000])
+        plt.tick_params(axis='x', colors='white')
+        plt.tick_params(axis='y', colors='white')
+        plt.ylim(0, 20000)
+        #plt.fill_between(x, daily23, color='darkgreen')
+        #plt.fill_between(x, daily24, color='white', alpha=0.7)
+        #plt.fill_between(x, daily25, color='limegreen')
+        #plt.title('Annual Comparison', color='green')
+        plt.figure(figsize=(10,10))
+    
+        fig.legend()
+        
+        col2.pyplot(fig)
+
+    elif years == ['2025']:
+        
+        ax.plot(x, daily25, label='2025', color='limegreen', linewidth=2)
+        ax.set_facecolor('#000000')
+        fig.set_facecolor('#000000')
+        plt.yticks([1000, 2500, 5000, 7500, 10000, 15000, 20000, 25000])
+   
+        plt.tick_params(axis='x', colors='white')
+        plt.tick_params(axis='y', colors='white')
+        plt.ylim(0, 20000)
+        plt.fill_between(x, daily25, color='limegreen')
+        #plt.title('Annual Comparison', color='green')
+        plt.figure(figsize=(10,10))
+    
+        #fig.legend()
+
+        col2.pyplot(fig)
+        
+    elif years == ['2024']:
+        
+        ax.plot(x, daily24, label='2024', color='limegreen', linewidth=2)
+        ax.set_facecolor('#000000')
+        fig.set_facecolor('#000000')
+        plt.yticks([1000, 2500, 5000, 7500, 10000, 15000, 20000, 25000])
+   
+        plt.tick_params(axis='x', colors='white')
+        plt.tick_params(axis='y', colors='white')
+        plt.ylim(0, 20000)
+        plt.fill_between(x, daily24, color='limegreen')
+        #plt.title('Annual Comparison', color='green')
+        plt.figure(figsize=(10,10))
+    
+        #fig.legend()
+
+        col2.pyplot(fig)
+
+    elif years == ['2023']:
+        
+        ax.plot(x, daily23, label='2023', color='limegreen', linewidth=2)
+        ax.set_facecolor('#000000')
+        fig.set_facecolor('#000000')
+        plt.yticks([1000, 2500, 5000, 7500, 10000, 15000, 20000, 25000])
+   
+        plt.tick_params(axis='x', colors='white')
+        plt.tick_params(axis='y', colors='white')
+        plt.ylim(0, 20000)
+        plt.fill_between(x, daily23, color='limegreen')
+        #plt.title('Annual Comparison', color='green')
+        plt.figure(figsize=(10,10))
+    
+        #fig.legend()
+
+        col2.pyplot(fig)
+    
+    return None
 
 ### CREATE AVG FUNCTION ###
 
