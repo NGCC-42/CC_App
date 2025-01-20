@@ -1185,23 +1185,21 @@ def calc_monthly_totals_v2(sales_dict, months=['All']):
     return total_sales, total_web_perc, total_fulcrum_perc, avg_month, magic_sales
 
 ### FUNCTIONS FOR PLOTTING CHARTS ###
-def format_for_chart_ms(dict):
-	
-	temp_dict = {'Months': months_x,
-				'Total Sales': []}
-	
-	for month, sales in dict.items():
-		if len(temp_dict['Total Sales']) >= 12:
-			pass
-		else:
+def format_for_chart_ms(data_dict, note=None):
+    temp_dict = {'Months': months_x, 'Total Sales': []}
+    
+    for month, sales in data_dict.items():
+        if len(temp_dict['Total Sales']) >= 12:
+            pass
+        else:
             if note is None:
                 temp_dict['Total Sales'].append(sales[0][0] + sales[1][0])
             else:
                 temp_dict['Total Sales'].append(sales[0])
                 
-	df = pd.DataFrame(temp_dict)
-	
-	return df
+    df = pd.DataFrame(temp_dict)
+    
+    return df
 
 def plot_bar_chart_ms(df):
 	st.write(alt.Chart(df).mark_bar().encode(
