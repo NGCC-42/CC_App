@@ -37,6 +37,8 @@ st.divider()
 ### LOAD FILES
 sod_ss = 'SOD 1.17.25.xlsx'
 
+hist_ss = 'CC Historical Sales.xlsx'
+
 hsd_ss = 'HSD 11.8.24.xlsx'
 
 quote_ss = 'Quote Report 10.23.24.xlsx'
@@ -82,6 +84,9 @@ def create_dataframe(ss):
 
 
 df = create_dataframe(sod_ss)
+
+df_hist = create_dataframe(hist_ss)
+df_hist.fillna(0, inplace=True)
 
 df_quotes = create_dataframe(quote_ss)
 
@@ -197,6 +202,8 @@ df = fix_names(df)
 
 ### CREATE A LIST OF UNIQUE CUSTOMERS ###
 unique_customer_list = df.customer.unique().tolist()
+hist_customer_list = df_hist.customer.unique().tolist()
+master_customer_list = list(set(unique_customer_list) | set(hist_customer_list))
 
 ### DEFINE FUNCTION TO CREATE PRODUCT DATAFRAME FROM EXCEL SPREADSHEET ###
 
@@ -1187,7 +1194,11 @@ def format_for_chart_ms(dict):
 		if len(temp_dict['Total Sales']) >= 12:
 			pass
 		else:
-			temp_dict['Total Sales'].append(sales[0][0] + sales[1][0])
+            if note is None:
+                temp_dict['Total Sales'].append(sales[0][0] + sales[1][0])
+            else:
+                temp_dict['Total Sales'].append(sales[0])
+                
 	df = pd.DataFrame(temp_dict)
 	
 	return df
@@ -1302,7 +1313,7 @@ def extract_transaction_data(sales_dict, month='All'):
 
 
 ### USE METRIC CARDS TO DISPLAY MONTHLY SALES DATA ###
-def display_month_data_x(sales_dict1, sales_dict2=None):
+def display_month_data_x(sales_dict1, sales_dict2=None, note=None):
 
     dBoard1 = st.columns(3)
     dBoard2 = st.columns(3)
@@ -1312,55 +1323,152 @@ def display_month_data_x(sales_dict1, sales_dict2=None):
     idx1 = 0
     idx2 = 0
     idx3 = 0
-    for x in months_x:
 
-        try:
-            var = ''
-            diff = (sales_dict1[x][0][0] + sales_dict1[x][1][0]) - (sales_dict2[x][1][0] + sales_dict2[x][0][0])
-            if diff > 0:
-                var = '+'
-            elif diff < 0:
-                var = '-'
+    if note == None:
+        for x in months_x:
+    
+            try:
+                var = ''
+                diff = (sales_dict1[x][0][0] + sales_dict1[x][1][0]) - (sales_dict2[x][1][0] + sales_dict2[x][0][0])
+                if diff > 0:
+                    var = '+'
+                elif diff < 0:
+                    var = '-'
+                    
+                if idx < 3:
+                    with dBoard1[idx]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                elif idx >=3 and idx < 6:
+                    with dBoard2[idx1]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                        idx1 += 1
+                elif idx >= 6 and idx < 9:
+                    with dBoard3[idx2]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                        idx2 += 1
+                else:
+                    with dBoard4[idx3]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                        idx3 += 1
+        
+                idx += 1
                 
-            if idx < 3:
-                with dBoard1[idx]:
-                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
-            elif idx >=3 and idx < 6:
-                with dBoard2[idx1]:
-                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
-                    idx1 += 1
-            elif idx >= 6 and idx < 9:
-                with dBoard3[idx2]:
-                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
-                    idx2 += 1
-            else:
-                with dBoard4[idx3]:
-                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
-                    idx3 += 1
-    
-            idx += 1
+            except:
+                
+                if idx < 3:
+                    with dBoard1[idx]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='')
+                elif idx >=3 and idx < 6:
+                    with dBoard2[idx1]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='')
+                        idx1 += 1
+                elif idx >= 6 and idx < 9:
+                    with dBoard3[idx2]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='')
+                        idx2 += 1
+                else:
+                    with dBoard4[idx3]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='')
+                        idx3 += 1
+        
+                idx += 1
             
-        except:
-            
-            if idx < 3:
-                with dBoard1[idx]:
-                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='')
-            elif idx >=3 and idx < 6:
-                with dBoard2[idx1]:
-                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='')
-                    idx1 += 1
-            elif idx >= 6 and idx < 9:
-                with dBoard3[idx2]:
-                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='')
-                    idx2 += 1
-            else:
-                with dBoard4[idx3]:
-                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0][0] + sales_dict1[x][1][0])), description='')
-                    idx3 += 1
-    
-            idx += 1
+    else:
+        
+        for x in months_x:
+        
+            try:
+                var = ''
+                diff = (sales_dict1[x][0] - sales_dict2[x][0])
+                if diff > 0:
+                    var = '+'
+                elif diff < 0:
+                    var = '-'
+                    
+                if idx < 3:
+                    with dBoard1[idx]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                elif idx >=3 and idx < 6:
+                    with dBoard2[idx1]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                        idx1 += 1
+                elif idx >= 6 and idx < 9:
+                    with dBoard3[idx2]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                        idx2 += 1
+                else:
+                    with dBoard4[idx3]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                        idx3 += 1
+        
+                idx += 1
 
+            except:
+                
+                if idx < 3:
+                    with dBoard1[idx]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0])), description='')
+                elif idx >=3 and idx < 6:
+                    with dBoard2[idx1]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0])), description='')
+                        idx1 += 1
+                elif idx >= 6 and idx < 9:
+                    with dBoard3[idx2]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0])), description='')
+                        idx2 += 1
+                else:
+                    with dBoard4[idx3]:
+                        ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][0])), description='')
+                        idx3 += 1
+        
+                idx += 1
+                
     return None
+
+
+@st.cache_data
+def calc_hist_metrics(sales_dict1, sales_dict2=None):
+
+    sd1_tot = 0
+    sd2_tot = 0
+    sd1_trans = 0
+    sd2_trans = 0
+    sd1_avg_trans = 0
+    sd2_avg_trans = 0
+    sd1_avg_month = 0
+    sd2_avg_month = 0 
+    
+    if sales_dict2 != None:
+
+        for month, val in sales_dict1.items():
+            sd1_tot += val[0]
+            sd1_trans += val[1]
+    
+    
+        for month, val in sales_dict2.items():
+            sd2_tot += val[0]
+            sd2_trans += val[1]
+    
+    
+        sd1_avg_trans = sd1_tot / sd1_trans
+        sd2_avg_trans = sd2_tot / sd2_trans
+        sd1_avg_month = sd1_tot / 12
+        sd2_avg_month = sd2_tot / 12
+
+        return sd1_tot, sd1_trans, sd1_avg_month, sd1_avg_trans, sd2_tot, sd2_trans, sd2_avg_month, sd2_avg_trans
+
+    else:     
+
+        for month, val in sales_dict1.items():
+            sd1_tot += val[0]
+            sd1_trans += val[1]
+
+        
+        sd1_avg_trans = sd1_tot / sd1_trans    
+        sd1_avg_month = sd1_tot / 5
+
+        return sd1_tot, sd1_trans, sd1_avg_month, sd1_avg_trans
+
 
 
 @st.cache_data
@@ -2172,10 +2280,10 @@ def magic_sales(year):
 
     return count, magic_products
 
-def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=None):
+def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=None, note=None):
 
 
-    if sales_dict2 == None:
+    if sales_dict2 == None and note == None:
         
         data = extract_transaction_data(sales_dict1)
         total_sales, total_web_perc, total_fulcrum_perc, avg_month, magic_sales = calc_monthly_totals_v2(sales_dict1)
@@ -2195,7 +2303,34 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
         db3.metric(label='**Fulcrum Average Sale**', value='${:,}'.format(int(data[1])), delta='')
         
         style_metric_cards()
+
+    if note != None:
         
+        db1, db2, db3 = st.columns([.3, .4, .3], gap='medium')
+        
+        if sales_dict2 == None:
+
+            sd1_tot, sd1_trans, sd1_avg_month, sd1_avg_trans = calc_hist_metrics(sales_dict1)
+            
+            db1.metric(label='**Average Sale Amount**', value='${:,}'.format(int(sd1_avg_trans)), delta='')
+        
+            db2.metric(label='**Total Sales**', value='${:,}'.format(int(sd1_tot)), delta='')
+            db2.metric(label='**Monthly Average**', value='${:,}'.format(int(sd1_avg_month)), delta='')
+            
+            db3.metric(label='**Total Transactions**', value='{:,}'.format(sd1_trans), delta='')
+
+        else:
+
+            sd1_tot, sd1_trans, sd1_avg_month, sd1_avg_trans, sd2_tot, sd2_trans, sd2_avg_month, sd2_avg_trans = calc_hist_metrics(sales_dict1, sales_dict2)
+            
+            db1.metric(label='**Average Sale Amount**', value='${:,}'.format(int(sd1_avg_trans)), delta=percent_of_change(sd2_avg_trans, sd1_avg_trans))
+        
+            db2.metric(label='**Total Sales**', value='${:,}'.format(int(sd1_tot)), delta=percent_of_change(sd2_tot, sd1_tot))
+            db2.metric(label='**Monthly Average**', value='${:,}'.format(int(sd1_avg_month)), delta=percent_of_change(sd2_avg_month, sd1_avg_month))
+            
+            db3.metric(label='**Total Transactions**', value='{:,}'.format(sd1_trans), delta=percent_of_change(sd2_trans, sd1_trans))   
+
+    style_metric_cards()
     
     elif month == 'All':
 
@@ -2653,11 +2788,301 @@ def magic_sales_data():
 mfx_rev, mfx_costs, mfx_profit = magic_sales_data()
 
 
+def daily_sales(month):
+
+    daily_sales23 = []
+    daily_sales24 = []
+    daily_sales25 = []
+                
+    month_num = month_to_num(month)
+
+    for i in range(days_in_month(month)):
+        daily_sales23.append(0)
+        daily_sales24.append(0)
+        daily_sales25.append(0)
+        
+    idx = 0 
+    
+    for sale in df.sales_order:
+        if df.iloc[idx].order_date.month == int(month_num):
+            if df.iloc[idx].order_date.year == 2025:
+                daily_sales25[(df.iloc[idx].order_date.day) - 1] += df.iloc[idx].total_line_item_spend
+            if df.iloc[idx].order_date.year == 2024:
+                daily_sales24[(df.iloc[idx].order_date.day) - 1] += df.iloc[idx].total_line_item_spend
+            if df.iloc[idx].order_date.year == 2023:
+                daily_sales23[(df.iloc[idx].order_date.day) - 1] += df.iloc[idx].total_line_item_spend
+
+        idx += 1
+            
+    return daily_sales23, daily_sales24, daily_sales25
+
+def range_sales(num):
+
+    daily_sales23 = []
+    daily_sales24 = []
+    daily_sales25 = []
+
+    delta_range = timedelta(days=num)
+    
+    for i in range(num):
+        daily_sales23.append(0)
+        daily_sales24.append(0)
+        daily_sales25.append(0)
+
+
+        
+    idx = 0 
+    
+    for sale in df.sales_order:
+        if today.date() >= df.iloc[idx].order_date >= (today - delta_range).date():
+            daily_sales25[-((today.date() - (df.iloc[idx].order_date)).days)] += df.iloc[idx].total_line_item_spend
+            
+        elif one_year_ago.date() >= df.iloc[idx].order_date >= (one_year_ago - delta_range).date():
+            daily_sales24[-((one_year_ago.date() - (df.iloc[idx].order_date)).days)] += df.iloc[idx].total_line_item_spend
+            
+        elif two_years_ago.date() >= df.iloc[idx].order_date >= (two_years_ago - delta_range).date():
+            daily_sales23[-((two_years_ago.date() - (df.iloc[idx].order_date)).days)] += df.iloc[idx].total_line_item_spend
+
+
+        idx += 1
+
+    daily_sales23.reverse()
+    daily_sales24.reverse()
+    daily_sales25.reverse()
+    
+            
+    return daily_sales23, daily_sales24, daily_sales25
+
+
+def range_sales(num):
+
+    daily_sales23 = []
+    daily_sales24 = []
+    daily_sales25 = []
+
+    delta_range = timedelta(days=num)
+    
+    for i in range(num):
+        daily_sales23.append(0)
+        daily_sales24.append(0)
+        daily_sales25.append(0)
+
+
+        
+    idx = 0 
+    
+    for sale in df.sales_order:
+        if today.date() >= df.iloc[idx].order_date >= (today - delta_range).date():
+            daily_sales25[-((today.date() - (df.iloc[idx].order_date)).days)] += df.iloc[idx].total_line_item_spend
+            
+        elif one_year_ago.date() >= df.iloc[idx].order_date >= (one_year_ago - delta_range).date():
+            daily_sales24[-((one_year_ago.date() - (df.iloc[idx].order_date)).days)] += df.iloc[idx].total_line_item_spend
+            
+        elif two_years_ago.date() >= df.iloc[idx].order_date >= (two_years_ago - delta_range).date():
+            daily_sales23[-((two_years_ago.date() - (df.iloc[idx].order_date)).days)] += df.iloc[idx].total_line_item_spend
+
+
+        idx += 1
+
+    daily_sales23.reverse()
+    daily_sales24.reverse()
+    daily_sales25.reverse()
+    
+            
+    return daily_sales23, daily_sales24, daily_sales25
+
+
+def display_daily_plot(month, years=['All']):
+    
+    daily23, daily24, daily25 = daily_sales(month)
+    col1.write(daily23)
+
+    x = [i for i in range(len(daily24))]
+
+    fig, ax = plt.subplots()
+
+    if years == ['All']:
+    
+        ax.plot(x, daily23, label='2023', color='darkgreen', linewidth=2)
+        ax.plot(x, daily24, label='2024', color='white', linewidth=2)
+        ax.plot(x, daily25, label='2025', color='limegreen', linewidth=2)
+        ax.set_facecolor('#000000')
+        fig.set_facecolor('#000000')
+        plt.yticks([1000, 2500, 5000, 7500, 10000, 15000, 20000, 25000])
+        plt.tick_params(axis='x', colors='white')
+        plt.tick_params(axis='y', colors='white')
+        plt.ylim(0, 20000)
+        #plt.fill_between(x, daily23, color='darkgreen')
+        #plt.fill_between(x, daily24, color='white', alpha=0.7)
+        #plt.fill_between(x, daily25, color='limegreen')
+        #plt.title('Annual Comparison', color='green')
+        plt.figure(figsize=(10,10))
+    
+        fig.legend()
+        
+        col2.pyplot(fig)
+
+    elif years == ['2025']:
+        
+        ax.plot(x, daily25, label='2025', color='limegreen', linewidth=2)
+        ax.set_facecolor('#000000')
+        fig.set_facecolor('#000000')
+        plt.yticks([1000, 2500, 5000, 7500, 10000, 15000, 20000, 25000])
+   
+        plt.tick_params(axis='x', colors='white')
+        plt.tick_params(axis='y', colors='white')
+        plt.ylim(0, 20000)
+        plt.fill_between(x, daily25, color='limegreen')
+        #plt.title('Annual Comparison', color='green')
+        plt.figure(figsize=(10,10))
+    
+        #fig.legend()
+
+        col2.pyplot(fig)
+        
+    elif years == ['2024']:
+        
+        ax.plot(x, daily24, label='2024', color='limegreen', linewidth=2)
+        ax.set_facecolor('#000000')
+        fig.set_facecolor('#000000')
+        plt.yticks([1000, 2500, 5000, 7500, 10000, 15000, 20000, 25000])
+   
+        plt.tick_params(axis='x', colors='white')
+        plt.tick_params(axis='y', colors='white')
+        plt.ylim(0, 20000)
+        plt.fill_between(x, daily24, color='limegreen')
+        #plt.title('Annual Comparison', color='green')
+        plt.figure(figsize=(10,10))
+    
+        #fig.legend()
+
+        col2.pyplot(fig)
+
+    elif years == ['2023']:
+        
+        ax.plot(x, daily23, label='2023', color='limegreen', linewidth=2)
+        ax.set_facecolor('#000000')
+        fig.set_facecolor('#000000')
+        plt.yticks([1000, 2500, 5000, 7500, 10000, 15000, 20000, 25000])
+   
+        plt.tick_params(axis='x', colors='white')
+        plt.tick_params(axis='y', colors='white')
+        plt.ylim(0, 20000)
+        plt.fill_between(x, daily23, color='limegreen')
+        #plt.title('Annual Comparison', color='green')
+        plt.figure(figsize=(10,10))
+    
+        #fig.legend()
+
+        col2.pyplot(fig)
+    
+    return None
+
+df_hist['order_date'] = pd.to_datetime(df_hist['order_date'])
+
+
+@st.cache_data
+def hist_cust_sales():
+    cust_dict = {cust: 0 for cust in master_customer_list}  # Initialize dictionary
+
+    for cust, sale in zip(df_hist.customer, df_hist.total_sale):  # Iterate over rows
+        try:
+            cust_dict[cust] += float(sale)  # Add sale amount to the correct customer
+        except:
+            pass  # Skip invalid entries
+    
+    return cust_dict
+
+@st.cache_data
+def hist_annual_sales():
+
+    
+    sales13 = {'January': [0,0], 'February': [0,0], 'March': [0,0], 'April': [0,0], 'May': [0,0], 'June': [0,0], 'July': [0,0], 'August': [0,0], 'September': [0,0], 'October': [0,0], 'November': [0,0], 'December': [0,0]}
+    sales14 = {'January': [0,0], 'February': [0,0], 'March': [0,0], 'April': [0,0], 'May': [0,0], 'June': [0,0], 'July': [0,0], 'August': [0,0], 'September': [0,0], 'October': [0,0], 'November': [0,0], 'December': [0,0]}
+    sales15 = {'January': [0,0], 'February': [0,0], 'March': [0,0], 'April': [0,0], 'May': [0,0], 'June': [0,0], 'July': [0,0], 'August': [0,0], 'September': [0,0], 'October': [0,0], 'November': [0,0], 'December': [0,0]}
+    sales16 = {'January': [0,0], 'February': [0,0], 'March': [0,0], 'April': [0,0], 'May': [0,0], 'June': [0,0], 'July': [0,0], 'August': [0,0], 'September': [0,0], 'October': [0,0], 'November': [0,0], 'December': [0,0]}
+    sales17 = {'January': [0,0], 'February': [0,0], 'March': [0,0], 'April': [0,0], 'May': [0,0], 'June': [0,0], 'July': [0,0], 'August': [0,0], 'September': [0,0], 'October': [0,0], 'November': [0,0], 'December': [0,0]}
+    sales18 = {'January': [0,0], 'February': [0,0], 'March': [0,0], 'April': [0,0], 'May': [0,0], 'June': [0,0], 'July': [0,0], 'August': [0,0], 'September': [0,0], 'October': [0,0], 'November': [0,0], 'December': [0,0]}
+    sales19 = {'January': [0,0], 'February': [0,0], 'March': [0,0], 'April': [0,0], 'May': [0,0], 'June': [0,0], 'July': [0,0], 'August': [0,0], 'September': [0,0], 'October': [0,0], 'November': [0,0], 'December': [0,0]}
+    sales20 = {'January': [0,0], 'February': [0,0], 'March': [0,0], 'April': [0,0], 'May': [0,0], 'June': [0,0], 'July': [0,0], 'August': [0,0], 'September': [0,0], 'October': [0,0], 'November': [0,0], 'December': [0,0]}
+    sales21 = {'January': [0,0], 'February': [0,0], 'March': [0,0], 'April': [0,0], 'May': [0,0], 'June': [0,0], 'July': [0,0], 'August': [0,0], 'September': [0,0], 'October': [0,0], 'November': [0,0], 'December': [0,0]}
+    sales22 = {'January': [0,0], 'February': [0,0], 'March': [0,0], 'April': [0,0], 'May': [0,0], 'June': [0,0], 'July': [0,0], 'August': [0,0], 'September': [0,0], 'October': [0,0], 'November': [0,0], 'December': [0,0]}
+    
+    idx = 0
+
+    
+    for sale in df_hist.customer:
+
+
+        if df_hist.iloc[idx].order_date.date().year == 2013:
+            sales13[num_to_month(df_hist.iloc[idx].order_date.date().month)][0] += float(df_hist.iloc[idx].total_sale)
+            sales13[num_to_month(df_hist.iloc[idx].order_date.date().month)][1] += 1
+
+        if df_hist.iloc[idx].order_date.date().year == 2014:
+            sales14[num_to_month(df_hist.iloc[idx].order_date.date().month)][0] += float(df_hist.iloc[idx].total_sale)
+            sales14[num_to_month(df_hist.iloc[idx].order_date.date().month)][1] += 1
+
+        if df_hist.iloc[idx].order_date.date().year == 2015:
+            sales15[num_to_month(df_hist.iloc[idx].order_date.date().month)][0] += float(df_hist.iloc[idx].total_sale)
+            sales15[num_to_month(df_hist.iloc[idx].order_date.date().month)][1] += 1
+
+        if df_hist.iloc[idx].order_date.date().year == 2016:
+            sales16[num_to_month(df_hist.iloc[idx].order_date.date().month)][0] += float(df_hist.iloc[idx].total_sale)
+            sales16[num_to_month(df_hist.iloc[idx].order_date.date().month)][1] += 1
+
+        if df_hist.iloc[idx].order_date.date().year == 2017:
+            sales17[num_to_month(df_hist.iloc[idx].order_date.date().month)][0] += float(df_hist.iloc[idx].total_sale)
+            sales17[num_to_month(df_hist.iloc[idx].order_date.date().month)][1] += 1
+
+        if df_hist.iloc[idx].order_date.date().year == 2018:
+            sales18[num_to_month(df_hist.iloc[idx].order_date.date().month)][0] += float(df_hist.iloc[idx].total_sale)
+            sales18[num_to_month(df_hist.iloc[idx].order_date.date().month)][1] += 1
+
+        if df_hist.iloc[idx].order_date.date().year == 2019:
+            sales19[num_to_month(df_hist.iloc[idx].order_date.date().month)][0] += float(df_hist.iloc[idx].total_sale)
+            sales19[num_to_month(df_hist.iloc[idx].order_date.date().month)][1] += 1
+
+        if df_hist.iloc[idx].order_date.date().year == 2020:
+            sales20[num_to_month(df_hist.iloc[idx].order_date.date().month)][0] += float(df_hist.iloc[idx].total_sale)
+            sales20[num_to_month(df_hist.iloc[idx].order_date.date().month)][1] += 1
+
+        if df_hist.iloc[idx].order_date.date().year == 2021:
+            sales21[num_to_month(df_hist.iloc[idx].order_date.date().month)][0] += float(df_hist.iloc[idx].total_sale)
+            sales21[num_to_month(df_hist.iloc[idx].order_date.date().month)][1] += 1
+            
+        if df_hist.iloc[idx].order_date.date().year == 2022:
+            sales22[num_to_month(df_hist.iloc[idx].order_date.date().month)][0] += float(df_hist.iloc[idx].total_sale)
+            sales22[num_to_month(df_hist.iloc[idx].order_date.date().month)][1] += 1
+
+        idx += 1
+        
+    return sales13, sales14, sales15, sales16, sales17, sales18, sales19, sales20, sales21, sales22
+
+
+@st.cache_data
+def hist_quarterly_sales():
+    
+    qs13 = [(sales13['January'][0]+ sales13['February'][0] + sales13['March'][0]), (sales13['April'][0]+ sales13['May'][0] + sales13['June'][0]), (sales13['July'][0]+ sales13['August'][0] + sales13['September'][0]), (sales13['October'][0]+ sales13['November'][0] + sales13['December'][0])]
+    qs14 = [(sales14['January'][0]+ sales14['February'][0] + sales14['March'][0]), (sales14['April'][0]+ sales14['May'][0] + sales14['June'][0]), (sales14['July'][0]+ sales14['August'][0] + sales14['September'][0]), (sales14['October'][0]+ sales14['November'][0] + sales14['December'][0])]
+    qs15 = [(sales15['January'][0]+ sales15['February'][0] + sales15['March'][0]), (sales15['April'][0]+ sales15['May'][0] + sales15['June'][0]), (sales15['July'][0]+ sales15['August'][0] + sales15['September'][0]), (sales15['October'][0]+ sales15['November'][0] + sales15['December'][0])]
+    qs16 = [(sales16['January'][0]+ sales16['February'][0] + sales16['March'][0]), (sales16['April'][0]+ sales16['May'][0] + sales16['June'][0]), (sales16['July'][0]+ sales16['August'][0] + sales16['September'][0]), (sales16['October'][0]+ sales16['November'][0] + sales16['December'][0])]
+    qs17 = [(sales17['January'][0]+ sales17['February'][0] + sales17['March'][0]), (sales17['April'][0]+ sales17['May'][0] + sales17['June'][0]), (sales17['July'][0]+ sales17['August'][0] + sales17['September'][0]), (sales17['October'][0]+ sales17['November'][0] + sales17['December'][0])]
+    qs18 = [(sales18['January'][0]+ sales18['February'][0] + sales18['March'][0]), (sales18['April'][0]+ sales18['May'][0] + sales18['June'][0]), (sales18['July'][0]+ sales18['August'][0] + sales18['September'][0]), (sales18['October'][0]+ sales18['November'][0] + sales18['December'][0])]
+    qs19 = [(sales19['January'][0]+ sales19['February'][0] + sales19['March'][0]), (sales19['April'][0]+ sales19['May'][0] + sales19['June'][0]), (sales19['July'][0]+ sales19['August'][0] + sales19['September'][0]), (sales19['October'][0]+ sales19['November'][0] + sales19['December'][0])]
+    qs20 = [(sales20['January'][0]+ sales20['February'][0] + sales20['March'][0]), (sales20['April'][0]+ sales20['May'][0] + sales20['June'][0]), (sales20['July'][0]+ sales20['August'][0] + sales20['September'][0]), (sales20['October'][0]+ sales20['November'][0] + sales20['December'][0])]
+    qs21 = [(sales21['January'][0]+ sales21['February'][0] + sales21['March'][0]), (sales21['April'][0]+ sales21['May'][0] + sales21['June'][0]), (sales21['July'][0]+ sales21['August'][0] + sales21['September'][0]), (sales21['October'][0]+ sales21['November'][0] + sales21['December'][0])]
+    qs22 = [(sales22['January'][0]+ sales22['February'][0] + sales22['March'][0]), (sales22['April'][0]+ sales22['May'][0] + sales22['June'][0]), (sales22['July'][0]+ sales22['August'][0] + sales22['September'][0]), (sales22['October'][0]+ sales22['November'][0] + sales22['December'][0])]
+    
+    return qs13, qs14, qs15, qs16, qs17, qs18, qs19, qs20, qs21, qs22
+
+
+
+# HISTORICAL SALES DATA
+sales13, sales14, sales15, sales16, sales17, sales18, sales19, sales20, sales21, sales22 = hist_annual_sales()    
+
+
 
 # MAKE TO-DATE REV GLOBAL FOR USE WITH PRODUCTS
-
-
-
 jet23, jet24, jet25, control23, control24, control25, handheld23, handheld24, handheld25, hose23, hose24, hose25, acc23, acc24, acc25 = collect_product_data(df)
 hose_detail25 = organize_hose_data(hose25)
 hose_detail24 = organize_hose_data(hose24)
@@ -2701,7 +3126,8 @@ if task_choice == 'Dashboard':
     q1_25, q2_25, q3_25, q4_25 = quarterly_sales(2025)
     q1_24, q2_24, q3_24, q4_24 = quarterly_sales(2024)
     q1_23, q2_23, q3_23, q4_23 = quarterly_sales(2023)
-    q1_22, q2_22, q3_22, q4_22 = [52371, 52371], [222874.37, 222874.38], [246693.76, 246693.76], [219790.14, 219790.14]
+    qs13, qs14, qs15, qs16, qs17, qs18, qs19, qs20, qs21, qs22 = hist_quarterly_sales()
+    #q1_22, q2_22, q3_22, q4_22 = [52371, 52371], [222874.37, 222874.38], [246693.76, 246693.76], [219790.14, 219790.14]
     
     ### WHOLESALE VS RETAIL MONTHLY TOTALS
     
@@ -3018,37 +3444,275 @@ if task_choice == 'Dashboard':
                 
 
         if year_select == 2022:
-        
-            display_metrics(sales_dict_22)
     
+            display_metrics(sales22, sales21, note='22')
+
             with col3:
-    
+
                 st.header('Sales by Month')
-                plot_bar_chart_ms(format_for_chart_ms(sales_dict_22))
-    
+                plot_bar_chart_ms(format_for_chart_ms(sales22, note='22'))
+
             with colz:
+                
                 st.header('Quarterly Sales')
                 
                 col6, col7, col8 = st.columns([.3, .4, .3])
                 
-                col6.metric('**Q1 Web Sales**', '${:,}'.format(int(q1_22[0])))
-                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(q1_22[0] + q1_22[1])))
-                col8.metric('**Q1 Fulcrum Sales**', '${:,}'.format(int(q1_22[1])))
-                
-                col6.metric('**Q2 Web Sales**', '${:,}'.format(int(q2_22[0])))
-                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(q2_22[0] + q2_22[1])))
-                col8.metric('**Q2 Fulcrum Sales**', '${:,}'.format(int(q2_22[1])))
-                
-                col6.metric('**Q3 Web Sales**', '${:,}'.format(int(q3_22[0])))
-                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(q3_22[0] + q3_22[1])))
-                col8.metric('**Q3 Fulcrum Sales**', '${:,}'.format(int(q3_22[1])))
-    
-                col6.metric('**Q4 Web Sales**', '${:,}'.format(int(q4_22[0])))
-                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(q4_22[0] + q4_22[1])))
-                col8.metric('**Q4 Fulcrum Sales**', '${:,}'.format(int(q4_22[1])))
-                
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(qs22[0])), percent_of_change(qs21[0], qs22[0]))
+
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(qs22[1])), percent_of_change(qs21[1], qs22[1]))
+        
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(qs22[2])), percent_of_change(qs21[2], qs22[2]))
+
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(qs22[3])), percent_of_change(qs21[3], qs22[3]))  
+                    
+            #st.divider()
             with coly:
-                display_month_data_x(sales_dict_22)
+                display_month_data_x(sales22, sales21, note='twentytwo')
+
+        if year_select == 2021:
+    
+            display_metrics(sales21, sales20, note='21')
+
+            with col3:
+
+                st.header('Sales by Month')
+                plot_bar_chart_ms(format_for_chart_ms(sales21, note='21'))
+
+            with colz:
+                
+                st.header('Quarterly Sales')
+                
+                col6, col7, col8 = st.columns([.3, .4, .3])
+                
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(qs21[0])), percent_of_change(qs20[0], qs21[0]))
+
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(qs21[1])), percent_of_change(qs20[1], qs21[1]))
+        
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(qs21[2])), percent_of_change(qs20[2], qs21[2]))
+
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(qs21[3])), percent_of_change(qs20[3], qs21[3]))                
+
+            #st.divider()
+            with coly:
+                display_month_data_x(sales21, sales20, note='twentyone')
+
+        if year_select == 2020:
+    
+            display_metrics(sales20, sales19, note='20')
+
+            with col3:
+
+                st.header('Sales by Month')
+                plot_bar_chart_ms(format_for_chart_ms(sales20, note='20'))
+
+            with colz:
+                
+                st.header('Quarterly Sales')
+                
+                col6, col7, col8 = st.columns([.3, .4, .3])
+                
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(qs20[0])), percent_of_change(qs19[0], qs20[0]))
+
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(qs20[1])), percent_of_change(qs19[1], qs20[1]))
+                
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(qs20[2])), percent_of_change(qs19[2], qs20[2]))
+
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(qs20[3])), percent_of_change(qs19[3], qs20[3]))
+                
+            #st.divider()
+            with coly:
+                display_month_data_x(sales20, sales19, note='twenty')
+
+        if year_select == 2019:
+    
+            display_metrics(sales19, sales18, note='19')
+
+            with col3:
+
+                st.header('Sales by Month')
+                plot_bar_chart_ms(format_for_chart_ms(sales19, note='19'))
+
+            with colz:
+                
+                st.header('Quarterly Sales')
+                
+                col6, col7, col8 = st.columns([.3, .4, .3])
+                
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(qs19[0])), percent_of_change(qs18[0], qs19[0]))
+
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(qs19[1])), percent_of_change(qs18[1], qs19[1]))
+                
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(qs19[2])), percent_of_change(qs18[2], qs19[2]))
+
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(qs19[3])), percent_of_change(qs18[3], qs19[3]))
+                
+            #st.divider()
+            with coly:
+                display_month_data_x(sales19, sales18, note='nineteen')
+
+        if year_select == 2018:
+    
+            display_metrics(sales18, sales17, note='18')
+
+            with col3:
+
+                st.header('Sales by Month')
+                plot_bar_chart_ms(format_for_chart_ms(sales18, note='18'))
+
+            with colz:
+                
+                st.header('Quarterly Sales')
+                
+                col6, col7, col8 = st.columns([.3, .4, .3])
+                
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(qs18[0])), percent_of_change(qs17[0], qs18[0]))
+
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(qs18[1])), percent_of_change(qs17[1], qs18[1]))
+                
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(qs18[2])), percent_of_change(qs17[2], qs18[2]))
+
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(qs18[3])), percent_of_change(qs17[3], qs18[3]))
+    
+            #st.divider()
+            with coly:
+                display_month_data_x(sales18, sales17, note='eighteen')
+
+        if year_select == 2017:
+    
+            display_metrics(sales17, sales16, note='17')
+
+            with col3:
+
+                st.header('Sales by Month')
+                plot_bar_chart_ms(format_for_chart_ms(sales17, note='17'))
+
+            with colz:
+                
+                st.header('Quarterly Sales')
+                
+                col6, col7, col8 = st.columns([.3, .4, .3])
+                
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(qs17[0])), percent_of_change(qs16[0], qs17[0]))
+
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(qs17[1])), percent_of_change(qs16[1], qs17[1]))
+                
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(qs17[2])), percent_of_change(qs16[2], qs17[2]))
+
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(qs17[3])), percent_of_change(qs16[3], qs17[3]))
+                    
+            #st.divider()
+            with coly:
+                display_month_data_x(sales17, sales16, note='seventeen')
+
+        if year_select == 2016:
+    
+            display_metrics(sales16, sales15, note='16')
+
+            with col3:
+
+                st.header('Sales by Month')
+                plot_bar_chart_ms(format_for_chart_ms(sales16, note='16'))
+
+            with colz:
+                
+                st.header('Quarterly Sales')
+                
+                col6, col7, col8 = st.columns([.3, .4, .3])
+                
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(qs16[0])), percent_of_change(qs15[0], qs16[0]))
+
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(qs16[1])), percent_of_change(qs15[1], qs16[1]))
+                
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(qs16[2])), percent_of_change(qs15[2], qs16[2]))
+
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(qs16[3])), percent_of_change(qs15[3], qs16[3]))
+    
+            #st.divider()
+            with coly:
+                display_month_data_x(sales16, sales15, note='sixteen')
+
+        if year_select == 2015:
+    
+            display_metrics(sales15, sales14, note='15')
+
+            with col3:
+
+                st.header('Sales by Month')
+                plot_bar_chart_ms(format_for_chart_ms(sales15, note='15'))
+
+            with colz:
+                
+                st.header('Quarterly Sales')
+                
+                col6, col7, col8 = st.columns([.3, .4, .3])
+                
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(qs15[0])), percent_of_change(qs14[0], qs15[0]))
+
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(qs15[1])), percent_of_change(qs14[1], qs15[1]))
+                
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(qs15[2])), percent_of_change(qs14[2], qs15[2]))
+
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(qs15[3])), percent_of_change(qs14[3], qs15[3]))
+                
+            #st.divider()
+            with coly:
+                display_month_data_x(sales15, sales14, note='fifteen')
+
+        if year_select == 2014:
+    
+            display_metrics(sales14, sales13, note='14')
+
+            with col3:
+
+                st.header('Sales by Month')
+                plot_bar_chart_ms(format_for_chart_ms(sales14, note='14'))
+
+            with colz:
+                
+                st.header('Quarterly Sales')
+                
+                col6, col7, col8 = st.columns([.3, .4, .3])
+                
+                
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(qs14[0])), percent_of_change(qs13[0], qs14[0]))
+
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(qs14[1])), percent_of_change(qs13[1], qs14[1]))
+                
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(qs14[2])), percent_of_change(qs13[2], qs14[2]))
+
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(qs14[3])), percent_of_change(qs13[3], qs14[3]))
+                
+            #st.divider()
+            with coly:
+                display_month_data_x(sales14, sales13, note='fourteen')
+
+        if year_select == 2013:
+    
+            display_metrics(sales13, note='13')
+
+            with col3:
+
+                st.header('Sales by Month')
+                plot_bar_chart_ms(format_for_chart_ms(sales13, note='13'))
+
+            with colz:
+                
+                st.header('Quarterly Sales')
+                
+                col6, col7, col8 = st.columns([.3, .4, .3])
+                
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(qs13[0])))
+
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(qs13[1])))
+                
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(qs13[2])))
+
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(qs13[3])))
+    
+            #st.divider()
+            with coly:
+                display_month_data_x(sales13, note='thirteen')
 
 
 
