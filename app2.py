@@ -2328,7 +2328,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
             
             db3.metric(label='**Total Transactions**', value='{:,}'.format(sd1_trans), delta=percent_of_change(sd2_trans, sd1_trans))   
 
-    style_metric_cards()
+        style_metric_cards()
     
     elif month == 'All':
 
