@@ -4677,6 +4677,140 @@ if task_choice == 'Product Reports':
                 style_metric_cards()
                 
                 display_month_data_prod(prod_select, control23)
+
+        elif year == 2022:
+
+            total_cntl = dmx_cntl_annual['2022'] + lcd_cntl_annual['2022'] + tbmk1_annual['2022'] + tbmk2_annual['2022'] + sm_annual['2022'] + pwr_cntl_annual['2022']
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+                
+                cola.subheader('Shomaster')
+                cola.metric('', '{}'.format(sm_annual['2022']), sm_annual['2022'] - sm_annual['2021'])
+                cola.subheader('The Button MK1')
+                cola.metric('', '{}'.format(tbmk1_annual['2022']), tbmk1_annual['2022'] - tbmk1_annual['2021'])
+                colb.subheader('LCD Controller')
+                colb.metric('', '{}'.format(lcd_cntl_annual['2022']), lcd_cntl_annual['2022'] - lcd_cntl_annual['2021'])
+                colb.subheader('Total Controllers')
+                colb.metric('', '{}'.format(total_cntl), total_cntl - (dmx_cntl_annual['2021'] + lcd_cntl_annual['2021'] + tbmk1_annual['2021'] + tbmk2_annual['2021'] + sm_annual['2021'] + pwr_cntl_annual['2021']))
+                colc.subheader('DMX Controller')
+                colc.metric('', '{}'.format(dmx_cntl_annual['2022']), dmx_cntl_annual['2022'] - dmx_cntl_annual['2021'])
+                colc.subheader('The Button')
+                colc.metric('', '{}'.format(tbmk2_annual['2022']), 'N/A')
+    
+                style_metric_cards()
+
+        elif year == 2021:
+
+            total_cntl = dmx_cntl_annual['2021'] + lcd_cntl_annual['2021'] + tbmk1_annual['2021'] + tbmk2_annual['2021'] + sm_annual['2021'] + pwr_cntl_annual['2021']
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+                
+                cola.subheader('Shomaster')
+                cola.metric('', '{}'.format(sm_annual['2021']), 'N/A')
+                cola.subheader('The Button MK1')
+                cola.metric('', '{}'.format(tbmk1_annual['2021']), tbmk1_annual['2021'] - tbmk1_annual['2020'])
+                colb.subheader('LCD Controller')
+                colb.metric('', '{}'.format(lcd_cntl_annual['2021']), lcd_cntl_annual['2021'] - lcd_cntl_annual['2020'])
+                colb.subheader('Total Controllers')
+                colb.metric('', '{}'.format(total_cntl), total_cntl - (dmx_cntl_annual['2020'] + lcd_cntl_annual['2020'] + tbmk1_annual['2020'] + tbmk2_annual['2020'] + sm_annual['2020'] + pwr_cntl_annual['2020']))
+                colc.subheader('DMX Controller')
+                colc.metric('', '{}'.format(dmx_cntl_annual['2021']), dmx_cntl_annual['2021'] - dmx_cntl_annual['2020'])
+                colc.subheader('Power Controller')
+                colc.metric('', '{}'.format(pwr_cntl_annual['2021']), pwr_cntl_annual['2021'] - pwr_cntl_annual['2020'])
+    
+                style_metric_cards()
+
+        elif year == 2020:
+
+            total_cntl = dmx_cntl_annual['2020'] + lcd_cntl_annual['2020'] + tbmk1_annual['2020'] + tbmk2_annual['2020'] + sm_annual['2020'] + pwr_cntl_annual['2020']
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+                
+                cola.subheader('LCD Controller')
+                cola.metric('', '{}'.format(lcd_cntl_annual['2020']), lcd_cntl_annual['2020'] - lcd_cntl_annual['2019'])
+                colb.subheader('DMX Controller')
+                colb.metric('', '{}'.format(dmx_cntl_annual['2020']), dmx_cntl_annual['2020'] - dmx_cntl_annual['2019'])
+                colb.subheader('Total Controllers')
+                colb.metric('', '{}'.format(total_cntl), total_cntl - (dmx_cntl_annual['2019'] + lcd_cntl_annual['2019'] + tbmk1_annual['2019'] + tbmk2_annual['2019'] + sm_annual['2019'] + pwr_cntl_annual['2019']))
+                colc.subheader('Power Controller')
+                colc.metric('', '{}'.format(pwr_cntl_annual['2020']), pwr_cntl_annual['2020'] - pwr_cntl_annual['2019'])
+    
+                style_metric_cards()
+
+        elif year == 2019:
+
+            total_cntl = dmx_cntl_annual['2019'] + lcd_cntl_annual['2019'] + tbmk1_annual['2019'] + tbmk2_annual['2019'] + sm_annual['2019'] + pwr_cntl_annual['2019']
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+
+                cola.subheader('LCD Controller')
+                cola.metric('', '{}'.format(lcd_cntl_annual['2019']), lcd_cntl_annual['2019'] - lcd_cntl_annual['2018'])
+                colb.subheader('DMX Controller')
+                colb.metric('', '{}'.format(dmx_cntl_annual['2019']), dmx_cntl_annual['2019'] - dmx_cntl_annual['2018'])
+                colb.subheader('Total Controllers')
+                colb.metric('', '{}'.format(total_cntl), total_cntl - (dmx_cntl_annual['2018'] + lcd_cntl_annual['2018'] + tbmk1_annual['2018'] + tbmk2_annual['2018'] + sm_annual['2018'] + pwr_cntl_annual['2018']))
+                colc.subheader('Power Controller')
+                colc.metric('', '{}'.format(pwr_cntl_annual['2019']), pwr_cntl_annual['2019'] - pwr_cntl_annual['2018'])
+    
+                style_metric_cards()
+
+        elif year == 2018:
+
+            total_cntl = dmx_cntl_annual['2018'] + lcd_cntl_annual['2018'] + tbmk1_annual['2018'] + tbmk2_annual['2018'] + sm_annual['2018'] + pwr_cntl_annual['2018']
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+
+                cola.subheader('LCD Controller')
+                cola.metric('', '{}'.format(lcd_cntl_annual['2018']), lcd_cntl_annual['2018'] - lcd_cntl_annual['2017'])
+                colb.subheader('DMX Controller')
+                colb.metric('', '{}'.format(dmx_cntl_annual['2018']), dmx_cntl_annual['2018'] - dmx_cntl_annual['2017'])
+                colb.subheader('Total Controllers')
+                colb.metric('', '{}'.format(total_cntl), total_cntl - (dmx_cntl_annual['2017'] + lcd_cntl_annual['2017'] + tbmk1_annual['2017'] + tbmk2_annual['2017'] + sm_annual['2017'] + pwr_cntl_annual['2017']))
+                colc.subheader('Power Controller')
+                colc.metric('', '{}'.format(pwr_cntl_annual['2018']), pwr_cntl_annual['2018'] - pwr_cntl_annual['2017'])
+    
+                style_metric_cards()
+
+        elif year == 2017:
+
+            total_cntl = dmx_cntl_annual['2017'] + lcd_cntl_annual['2017'] + tbmk1_annual['2017'] + tbmk2_annual['2017'] + sm_annual['2017'] + pwr_cntl_annual['2017']
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+            
+                cola.subheader('DMX Controller')
+                cola.metric('', '{}'.format(dmx_cntl_annual['2017']), dmx_cntl_annual['2017'] - dmx_cntl_annual['2016'])
+                colb.subheader('Power Controller')
+                colb.metric('', '{}'.format(pwr_cntl_annual['2017']), pwr_cntl_annual['2017'] - pwr_cntl_annual['2016'])
+                colc.subheader('Total Controllers')
+                colc.metric('', '{}'.format(total_cntl), total_cntl - (dmx_cntl_annual['2016'] + lcd_cntl_annual['2016'] + tbmk1_annual['2016'] + tbmk2_annual['2016'] + sm_annual['2016'] + pwr_cntl_annual['2016']))
+
+                style_metric_cards()
+
+        elif year == 2016:
+
+            with col2:
+                cola, colb, colc = st.columns(3)
+
+                colb.subheader('DMX Controller')
+                colb.metric('', '{}'.format(dmx_cntl_annual['2016']), dmx_cntl_annual['2016'] - dmx_cntl_annual['2015'])
+    
+                style_metric_cards()
+                
+        elif year == 2015:
+
+            with col2:
+                cola, colb, colc = st.columns(3)
+
+                colb.subheader('DMX Controller')
+                colb.metric('', '{}'.format(dmx_cntl_annual['2015']), '')
+    
+                style_metric_cards()
             
 
     elif prod_cat == 'Handhelds':
