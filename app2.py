@@ -4079,6 +4079,77 @@ def to_date_product(sku_string):
     return prod_cnt_23, prod_cnt_24
 
 
+@st.cache_data
+def hist_product_data(product_tag):
+
+    cust_dict = {}
+    for cust in master_customer_list:
+        cust_dict[cust] = 0
+        
+    annual_dict = {'2022': 0, '2021': 0, '2020': 0, '2019': 0, '2018': 0, '2017': 0, '2016': 0, '2015': 0, '2014': 0, '2013': 0}
+
+    idx = 0
+    for line in product_tag:
+
+        if df_hist.iloc[idx].order_date.year in [2023, 2024, 2025, 1970]:
+            pass
+        else:
+            year = str(df_hist.iloc[idx].order_date.year)
+            if year == '2104':
+                year = '2014'
+            else:
+                try:
+                    annual_dict[year] += int(line)
+                    if line > 0:
+                        cust_dict[df_hist.iloc[idx].customer] += int(line)
+                except:
+                    pass
+                    
+        if idx <= len(df_hist): 
+            idx += 1
+
+    return cust_dict, annual_dict
+
+
+
+# HISTORICAL HANDHELDS
+hhmk1_cust, hhmk1_annual = hist_product_data(df_hist.hh_mk1)
+hhmk2_cust, hhmk2_annual = hist_product_data(df_hist.hh_mk2)
+
+# HISTORICAL ACCESSORIES
+tc_cust, tc_annual = hist_product_data(df_hist.travel_case)
+tcog_cust, tcog_annual = hist_product_data(df_hist.travel_case_og)
+bp_cust, bp_annual = hist_product_data(df_hist.backpack)
+mfd_cust, mfd_annual = hist_product_data(df_hist.manifold)
+ctc_20_cust, ctc_20_annual = hist_product_data(df_hist.ctc_20)
+ctc_50_cust, ctc_50_annual = hist_product_data(df_hist.ctc_50)
+ledmk1_cust, ledmk1_annual = hist_product_data(df_hist.led_attachment_mk1)
+ledmk2_cust, ledmk2_annual = hist_product_data(df_hist.led_attachment_mk2)
+pwrpack_cust, pwrpack_annual = hist_product_data(df_hist.power_pack)
+
+# HISTORICAL JETS
+jet_og_cust, jet_og_annual = hist_product_data(df_hist.jets_og)
+pj_cust, pj_annual = hist_product_data(df_hist.pro_jet)
+pwj_cust, pwj_annual = hist_product_data(df_hist.power_jet)
+mjmk1_cust, mjmk1_annual = hist_product_data(df_hist.micro_jet_mk1)
+mjmk2_cust, mjmk2_annual = hist_product_data(df_hist.micro_jet_mk2)
+ccmk1_cust, ccmk1_annual = hist_product_data(df_hist.cryo_clamp_mk1)
+ccmk2_cust, ccmk2_annual = hist_product_data(df_hist.cryo_clamp_mk2)
+qj_cust, qj_annual = hist_product_data(df_hist.quad_jet)
+
+# HISTORICAL CONTROLLERS
+dmx_cntl_cust, dmx_cntl_annual = hist_product_data(df_hist.dmx_controller)
+lcd_cntl_cust, lcd_cntl_annual = hist_product_data(df_hist.lcd_controller)
+tbmk1_cust, tbmk1_annual = hist_product_data(df_hist.the_button_mk1)
+tbmk2_cust, tbmk2_annual = hist_product_data(df_hist.the_button_mk2)
+sm_cust, sm_annual = hist_product_data(df_hist.shomaster)
+ss_cust, ss_annual = hist_product_data(df_hist.shostarter)
+pwr_cntl_cust, pwr_cntl_annual = hist_product_data(df_hist.power_controller)
+
+# HISTORICAL CONFETTI
+blwr_cust, blwr_annual = hist_product_data(df_hist.confetti_blower)
+
+
 
 if task_choice == 'Product Reports':
 
@@ -4112,7 +4183,7 @@ if task_choice == 'Product Reports':
         cc_td23, cc_td24 = to_date_product('CC-CC2')
 
         with col2:
-            year = ui.tabs(options=[2025, 2024, 2023], default_value=2024, key='Jet Year Select')
+            year = ui.tabs(options=[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014], default_value=2024, key='Jet Year Select')
 
         if year == 2025:
             
@@ -4287,7 +4358,171 @@ if task_choice == 'Product Reports':
                 col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), '')        
                 col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_jet[prod_select]), '')
                 
-                display_month_data_prod(prod_select, jet23)               
+                display_month_data_prod(prod_select, jet23)  
+
+        elif year == 2022:
+            
+            with col2:
+                cola, colb, colc= st.columns(3)
+        
+                cola.subheader('Pro Jet')
+                cola.metric('', '{}'.format(pj_annual['2022']), 'N/A')
+    
+                colb.subheader('Quad Jet')
+                colb.metric('', '{}'.format(qj_annual['2022']), (qj_annual['2022'] - qj_annual['2021']))
+
+                colc.subheader('Cryo Clamp MK1')
+                colc.metric('', '{}'.format(ccmk1_annual['2022']), (ccmk1_annual['2022'] - ccmk1_annual['2021']))
+    
+                cola.subheader('Micro Jet MK1')
+                cola.metric('', '{}'.format(mjmk1_annual['2022']), (mjmk1_annual['2022'] - mjmk1_annual['2021']))
+                                        
+                colb.subheader('Total Jets')
+                colb.metric('', '{}'.format(mjmk1_annual['2022'] + mjmk2_annual['2022'] + ccmk1_annual['2022'] + pj_annual['2022'] + qj_annual['2022']), ((mjmk1_annual['2022'] + mjmk2_annual['2022'] + ccmk1_annual['2022'] + pj_annual['2022'] + qj_annual['2022']) - (mjmk1_annual['2021'] + mjmk2_annual['2021'] + ccmk1_annual['2021'] + jet_og_annual['2021'] + qj_annual['2021'] + pwj_annual['2021'])))
+                
+                colc.subheader('Micro Jet MK2')
+                colc.metric('', '{}'.format(mjmk2_annual['2022']), (mjmk2_annual['2022'] - mjmk2_annual['2021']))
+
+                style_metric_cards()
+
+        elif year == 2021:
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+        
+                cola.subheader('DMX Jet')
+                cola.metric('', '{}'.format(jet_og_annual['2021']), (jet_og_annual['2021'] - jet_og_annual['2020']))
+    
+                colb.subheader('Quad Jet')
+                colb.metric('', '{}'.format(qj_annual['2021']), (qj_annual['2021'] - qj_annual['2020']))
+
+                colc.subheader('Cryo Clamp MK1')
+                colc.metric('', '{}'.format(ccmk1_annual['2021']), (ccmk1_annual['2021'] - ccmk1_annual['2020']))
+    
+                cola.subheader('Micro Jet MK1')
+                cola.metric('', '{}'.format(mjmk1_annual['2021']), (mjmk1_annual['2021'] - mjmk1_annual['2020']))
+
+                colb.subheader('Power Jet')
+                colb.metric('', '{}'.format(pwj_annual['2021']), (pwj_annual['2021'] - pwj_annual['2020']))
+                                        
+                colb.subheader('Total Jets')
+                colb.metric('', '{}'.format(mjmk1_annual['2021'] + mjmk2_annual['2021'] + ccmk1_annual['2021'] + jet_og_annual['2021'] + qj_annual['2021'] + pwj_annual['2021']), (mjmk1_annual['2021'] + mjmk2_annual['2021'] + ccmk1_annual['2021'] + jet_og_annual['2021'] + qj_annual['2021'] + pwj_annual['2021'] - (mjmk1_annual['2020'] + ccmk1_annual['2020'] + jet_og_annual['2020'] +  pwj_annual['2020'])))
+                
+                colc.subheader('Micro Jet MK2')
+                colc.metric('', '{}'.format(mjmk2_annual['2021']), (mjmk2_annual['2021'] - mjmk2_annual['2020']))
+
+                style_metric_cards()
+
+        elif year == 2020:
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+        
+                cola.subheader('DMX Jet')
+                cola.metric('', '{}'.format(jet_og_annual['2020']), (jet_og_annual['2020'] - jet_og_annual['2019']))
+    
+                colb.subheader('Micro Jet MK1')
+                colb.metric('', '{}'.format(mjmk1_annual['2020']), (mjmk1_annual['2020'] - mjmk1_annual['2019']))
+
+                colc.subheader('Power Jet')
+                colc.metric('', '{}'.format(pwj_annual['2020']), (pwj_annual['2020'] - pwj_annual['2019']))
+
+                colb.subheader('Cryo Clamp MK1')
+                colb.metric('', '{}'.format(ccmk1_annual['2020']), (ccmk1_annual['2020'] - ccmk1_annual['2019']))
+
+                colb.subheader('Total Jets')
+                colb.metric('', '{}'.format(mjmk1_annual['2020'] + ccmk1_annual['2020'] + jet_og_annual['2020'] +  pwj_annual['2020']), ((mjmk1_annual['2020'] + ccmk1_annual['2020'] + jet_og_annual['2020'] +  pwj_annual['2020']) - (mjmk1_annual['2019'] + ccmk1_annual['2019'] + jet_og_annual['2019'] +  pwj_annual['2019'])))
+                
+
+                style_metric_cards()
+
+        elif year == 2019:
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+        
+                cola.subheader('DMX Jet')
+                cola.metric('', '{}'.format(jet_og_annual['2019']), (jet_og_annual['2019'] - jet_og_annual['2018']))
+    
+                colb.subheader('Micro Jet MK1')
+                colb.metric('', '{}'.format(mjmk1_annual['2019']), (mjmk1_annual['2019'] - mjmk1_annual['2018']))
+
+                colc.subheader('Power Jet')
+                colc.metric('', '{}'.format(pwj_annual['2019']), (pwj_annual['2019'] - pwj_annual['2018']))
+
+                colb.subheader('Cryo Clamp MK1')
+                colb.metric('', '{}'.format(ccmk1_annual['2019']), (ccmk1_annual['2019'] - ccmk1_annual['2018']))
+
+                colb.subheader('Total Jets')
+                colb.metric('', '{}'.format(mjmk1_annual['2019'] + ccmk1_annual['2019'] + jet_og_annual['2019'] +  pwj_annual['2019']), ((mjmk1_annual['2019'] + ccmk1_annual['2019'] + jet_og_annual['2019'] +  pwj_annual['2019']) - (mjmk1_annual['2018'] + ccmk1_annual['2018'] + jet_og_annual['2018'] +  pwj_annual['2018'])))
+                
+                style_metric_cards()
+
+        elif year == 2018:
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+        
+                cola.subheader('DMX Jet')
+                cola.metric('', '{}'.format(jet_og_annual['2018']), (jet_og_annual['2018'] - jet_og_annual['2017']))
+
+                colb.subheader('Power Jet')
+                colb.metric('', '{}'.format(pwj_annual['2018']), (pwj_annual['2018'] - pwj_annual['2017']))
+
+                colc.subheader('Cryo Clamp MK1')
+                colc.metric('', '{}'.format(ccmk1_annual['2018']), (ccmk1_annual['2018'] - ccmk1_annual['2017']))
+
+                colb.subheader('Total Jets')
+                colb.metric('', '{}'.format(ccmk1_annual['2018'] + jet_og_annual['2018'] +  pwj_annual['2018']), ((ccmk1_annual['2018'] + jet_og_annual['2018'] +  pwj_annual['2018']) - (ccmk1_annual['2017'] + jet_og_annual['2017'] +  pwj_annual['2017'])))
+
+                style_metric_cards()
+
+        elif year == 2017:
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+        
+                cola.subheader('DMX Jet')
+                cola.metric('', '{}'.format(jet_og_annual['2017']), (jet_og_annual['2017'] - jet_og_annual['2016']))
+
+                colb.subheader('Power Jet')
+                colb.metric('', '{}'.format(pwj_annual['2017']), (pwj_annual['2017'] - pwj_annual['2016']))
+
+                colc.subheader('**Total Jets**')
+                colc.metric('', '{}'.format(jet_og_annual['2017'] + pwj_annual['2017']), ((jet_og_annual['2017'] +  pwj_annual['2017']) - (jet_og_annual['2016'] +  pwj_annual['2016'])))
+            
+                style_metric_cards()
+
+        elif year == 2016:
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+        
+                colb.subheader('DMX Jet')
+                colb.metric('', '{}'.format(jet_og_annual['2016']), (jet_og_annual['2016'] - jet_og_annual['2015']))
+
+                style_metric_cards()
+
+        elif year == 2015:
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+        
+                colb.subheader('DMX Jet')
+                colb.metric('', '{}'.format(jet_og_annual['2015']), (jet_og_annual['2015'] - jet_og_annual['2014']))
+
+                style_metric_cards()
+
+        elif year == 2014:
+            
+            with col2:
+                cola, colb, colc = st.columns(3)
+        
+                colb.subheader('DMX Jet')
+                colb.metric('', '{}'.format(jet_og_annual['2014']), '')
+
+                style_metric_cards()
+
             
 
     elif prod_cat == 'Controllers':
