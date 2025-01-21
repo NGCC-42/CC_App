@@ -4528,7 +4528,7 @@ if task_choice == 'Product Reports':
     elif prod_cat == 'Controllers':
 
         with col2:
-            year = ui.tabs(options=[2025, 2024, 2023], default_value=2024, key='Control Year Select')
+            year = ui.tabs(options=[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015], default_value=2024, key='Control Year Select')
 
         if year == 2025:
 
