@@ -4816,7 +4816,7 @@ if task_choice == 'Product Reports':
     elif prod_cat == 'Handhelds':
 
         with col2:
-            year = ui.tabs(options=[2025, 2024, 2023], default_value=2024, key='Handheld Year Select')
+            year = ui.tabs(options=[2025, 2024, 2023, 'Historical'], default_value=2024, key='Handheld Year Select')
 
         if year == 2025:
 
@@ -4997,6 +4997,37 @@ if task_choice == 'Product Reports':
                 style_metric_cards()
                 
                 display_month_data_prod(prod_select, handheld23)
+
+        elif year == 'Historical':
+
+            mk1_tot = 0
+            mk2_tot = 0
+
+            for key, val in hhmk1_annual.items():
+                mk1_tot += val
+            for key, val in hhmk2_annual.items():
+                mk2_tot += val
+
+            with col2:
+                
+                cola, colb, colc = st.columns(3)
+        
+                cola.metric('**2022**', '{}'.format(hhmk1_annual['2022'] + hhmk2_annual['2022']), (hhmk1_annual['2022'] + hhmk2_annual['2022']) - (hhmk1_annual['2021'] + hhmk2_annual['2021']))
+                cola.metric('**2019**', '{}'.format(hhmk1_annual['2019'] + hhmk2_annual['2019']), (hhmk1_annual['2019'] + hhmk2_annual['2019']) - hhmk1_annual['2018'])
+                cola.metric('**2016**', '{}'.format(hhmk1_annual['2016']), hhmk1_annual['2016'] - hhmk1_annual['2015'])
+                cola.metric('**Total MKII**', '{}'.format(mk2_tot), '')
+     
+                colb.metric('**2021**', '{}'.format(hhmk1_annual['2021'] + hhmk2_annual['2021']),  (hhmk1_annual['2021'] + hhmk2_annual['2021']) - (hhmk1_annual['2020'] + hhmk2_annual['2020']))
+                colb.metric('**2018**', '{}'.format(hhmk1_annual['2018']), hhmk1_annual['2018'] - hhmk1_annual['2017'])
+                colb.metric('**2015**', '{}'.format(hhmk1_annual['2015']), hhmk1_annual['2015'] - hhmk1_annual['2014'])
+                colb.metric('**2013**', '{}'.format(hhmk1_annual['2013']), '')
+                
+                colc.metric('**2020**', '{}'.format(hhmk1_annual['2020'] + hhmk2_annual['2020']),  (hhmk1_annual['2020'] + hhmk2_annual['2020']) - (hhmk1_annual['2019'] + hhmk2_annual['2019']))
+                colc.metric('**2017**', '{}'.format(hhmk1_annual['2017']), hhmk1_annual['2017'] - hhmk1_annual['2016'])
+                colc.metric('**2014**', '{}'.format(hhmk1_annual['2014']), hhmk1_annual['2014'] - hhmk1_annual['2013'])
+                colc.metric('**Total MKI**', '{}'.format(mk1_tot), '')
+
+                style_metric_cards()
         
     elif prod_cat == 'Hoses':
 
