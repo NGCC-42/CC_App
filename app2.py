@@ -4708,7 +4708,7 @@ if task_choice == 'Product Reports':
                 cola, colb, colc = st.columns(3)
                 
                 cola.subheader('Shomaster')
-                cola.metric('', '{}'.format(sm_annual['2021']), 'N/A')
+                cola.metric('', '{}'.format(sm_annual['2021']), sm_annual['2021'] - sm_annual['2020'])
                 cola.subheader('The Button MK1')
                 cola.metric('', '{}'.format(tbmk1_annual['2021']), tbmk1_annual['2021'] - tbmk1_annual['2020'])
                 colb.subheader('LCD Controller')
