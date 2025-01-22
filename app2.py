@@ -276,6 +276,30 @@ def rev_ordered_months(df):
     return rev_df
 
 
+def format_for_chart_hh(data_dict):
+    temp_dict = {'Years': [], 'Handheld Sales': []}
+
+    for year, sales in data_dict.items():
+        temp_dict['Years'].append(year)
+              
+        temp_dict['Handheld Sales'].append(sales)
+                
+    df = pd.DataFrame(temp_dict)
+    
+    return df
+
+    
+
+def plot_bar_chart_hh(df):
+    st.write(alt.Chart(df).mark_bar().encode(
+        x=alt.X('Years', sort=None).title('Year'),
+        y='Handheld Sales',
+    ).properties(height=800, width=800).configure_mark(
+        color='limegreen'
+    ))
+
+
+
 ### DEFINE A FUNCTION TO CONVERT - SERIES --> DICT --> DATAFRAME ###
 
 def format_for_chart(series):
@@ -5029,6 +5053,24 @@ if task_choice == 'Product Reports':
                 colc.metric('**Total MKI (Pre 2023)**', '{}'.format(mk1_tot), '')
 
                 style_metric_cards()
+
+                hh_dict = {}
+                
+                hh_dict['2025'] = annual_product_totals[8]['8FT - No Case'][0] + annual_product_totals[8]['8FT - Travel Case'][0] + annual_product_totals[8]['15FT - No Case'][0] + annual_product_totals[8]['15FT - Travel Case'][0]
+                hh_dict['2024'] = annual_product_totals[7]['8FT - No Case'][0] + annual_product_totals[7]['8FT - Travel Case'][0] + annual_product_totals[7]['15FT - No Case'][0] + annual_product_totals[7]['15FT - Travel Case'][0]
+                hh_dict['2023'] = annual_product_totals[6]['8FT - No Case'][0] + annual_product_totals[6]['8FT - Travel Case'][0] + annual_product_totals[6]['15FT - No Case'][0] + annual_product_totals[6]['15FT - Travel Case'][0]
+                
+                for year, sales in hhmk1_annual.items():
+                    hh_dict[year] = sales
+
+                for year, sales in hhmk2_annual.items():
+                    hh_dict[year] += sales
+
+
+                hh_dict = {key: hh_dict[key] for key in reversed(hh_dict)}
+
+                plot_bar_chart_hh(format_for_chart_hh(hh_dict))
+
         
     elif prod_cat == 'Hoses':
 
