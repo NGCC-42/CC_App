@@ -4183,6 +4183,7 @@ if task_choice == 'Product Reports':
 
     # PULL ALL PRODUCT SALES BY MONTH (DICTIONARIES)
     jet23, jet24, jet25, control23, control24, control25, handheld23, handheld24, handheld25, hose23, hose24, hose25, acc23, acc24, acc25 = collect_product_data(df)
+    st.write(handheld25)
     hose_detail25 = organize_hose_data(hose25)
     hose_detail24 = organize_hose_data(hose24)
     hose_detail23 = organize_hose_data(hose23)
@@ -4190,6 +4191,7 @@ if task_choice == 'Product Reports':
     
     # CALCULATE ANNUAL PRODUCT TOTALS
     annual_product_totals = product_annual_totals([jet23, jet24, jet25, control23, control24, control25, handheld23, handheld24, handheld25, hose23, hose24, hose25, acc23, acc24, acc25])
+    st.write(annual_product_totals[8])
 
     col1, col2, col3 = st.columns([.25, .5, .25], gap='medium')
 
