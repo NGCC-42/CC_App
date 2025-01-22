@@ -5068,7 +5068,7 @@ if task_choice == 'Product Reports':
 
 
                 hh_dict = {key: hh_dict[key] for key in reversed(hh_dict)}
-
+                st.write(hh_dict)
                 plot_bar_chart_hh(format_for_chart_hh(hh_dict))
 
         
