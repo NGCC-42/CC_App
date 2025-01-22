@@ -1456,21 +1456,21 @@ def extract_handheld_data(df):
 
         if df.iloc[idx].order_date.year == 2025:
             if line[:16] == 'CC-HCCMKII-08-NC':
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - No Case'][0] += df.iloc[idx].quantity
-                hose_count_24[num_to_month(df.iloc[idx].order_date.month)][0] += df.iloc[idx].quantity
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - No Case'][1] += df.iloc[idx].total_line_item_spend
+                dict_25[num_to_month(df.iloc[idx].order_date.month)]['8FT - No Case'][0] += df.iloc[idx].quantity
+                hose_count_25[num_to_month(df.iloc[idx].order_date.month)][0] += df.iloc[idx].quantity
+                dict_25[num_to_month(df.iloc[idx].order_date.month)]['8FT - No Case'][1] += df.iloc[idx].total_line_item_spend
             elif line[:16] == 'CC-HCCMKII-08-TC':
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - Travel Case'][0] += df.iloc[idx].quantity
-                hose_count_24[num_to_month(df.iloc[idx].order_date.month)][0] += df.iloc[idx].quantity
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - Travel Case'][1] += df.iloc[idx].total_line_item_spend
+                dict_25[num_to_month(df.iloc[idx].order_date.month)]['8FT - Travel Case'][0] += df.iloc[idx].quantity
+                hose_count_25[num_to_month(df.iloc[idx].order_date.month)][0] += df.iloc[idx].quantity
+                dict_25[num_to_month(df.iloc[idx].order_date.month)]['8FT - Travel Case'][1] += df.iloc[idx].total_line_item_spend
             elif line[:16] == 'CC-HCCMKII-15-NC':
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT - No Case'][0] += df.iloc[idx].quantity
-                hose_count_24[num_to_month(df.iloc[idx].order_date.month)][1] += df.iloc[idx].quantity
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT - No Case'][1] += df.iloc[idx].total_line_item_spend
+                dict_25[num_to_month(df.iloc[idx].order_date.month)]['15FT - No Case'][0] += df.iloc[idx].quantity
+                hose_count_25[num_to_month(df.iloc[idx].order_date.month)][1] += df.iloc[idx].quantity
+                dict_25[num_to_month(df.iloc[idx].order_date.month)]['15FT - No Case'][1] += df.iloc[idx].total_line_item_spend
             elif line[:16] == 'CC-HCCMKII-15-TC':
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT - Travel Case'][0] += df.iloc[idx].quantity
-                hose_count_24[num_to_month(df.iloc[idx].order_date.month)][1] += df.iloc[idx].quantity
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT - Travel Case'][1] += df.iloc[idx].total_line_item_spend
+                dict_25[num_to_month(df.iloc[idx].order_date.month)]['15FT - Travel Case'][0] += df.iloc[idx].quantity
+                hose_count_25[num_to_month(df.iloc[idx].order_date.month)][1] += df.iloc[idx].quantity
+                dict_25[num_to_month(df.iloc[idx].order_date.month)]['15FT - Travel Case'][1] += df.iloc[idx].total_line_item_spend
                 
         if df.iloc[idx].order_date.year == 2024:
             if line[:16] == 'CC-HCCMKII-08-NC':
