@@ -294,7 +294,7 @@ def plot_bar_chart_hh(df):
     st.write(alt.Chart(df).mark_bar().encode(
         x=alt.X('Years', sort=None).title('Year'),
         y='Handheld Sales',
-    ).properties(height=800, width=1000).configure_mark(
+    ).properties(height=800, width=1150).configure_mark(
         color='limegreen'
     ))
 
@@ -4893,9 +4893,9 @@ if task_choice == 'Product Reports':
                 prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, prod_select, 8, bom_cost_hh)
                 
                 
-                col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[8][prod_select][1])), percent_of_change(annual_product_totals[7][prod_select][0], annual_product_totals[8][prod_select][0]))
+                col5.metric('**Revenue**', '${:,.2f}'.format(int(annual_product_totals[8][prod_select][1])), percent_of_change(annual_product_totals[7][prod_select][0], annual_product_totals[8][prod_select][0]))
                 col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
-                col6.metric('**Profit**', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+                col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
                 col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
                 col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')        
     
@@ -4952,7 +4952,7 @@ if task_choice == 'Product Reports':
                 prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, prod_select, 7, bom_cost_hh)
                 
                 
-                col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[7][prod_select][1])), percent_of_change(annual_product_totals[6][prod_select][0], annual_product_totals[7][prod_select][0]))
+                col5.metric('**Revenue**', '${:,.2f}'.format(int(annual_product_totals[7][prod_select][1])), percent_of_change(annual_product_totals[6][prod_select][0], annual_product_totals[7][prod_select][0]))
                 col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
                 col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
                 col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
