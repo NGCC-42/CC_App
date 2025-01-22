@@ -5056,7 +5056,7 @@ if task_choice == 'Product Reports':
 
                 hh_dict = {}
                 
-                hh_dict['2025'] = annual_product_totals[8]['8FT - No Case'][0] + annual_product_totals[8]['8FT - Travel Case'][0] + annual_product_totals[8]['15FT - No Case'][0] + annual_product_totals[8]['15FT - Travel Case'][0]
+                hh_dict['2025'] = to_date_product('CC-HCCMKII-08-NC') + to_date_product('CC-HCCMKII-08-TC') + to_date_product('CC-HCCMKII-15-NC') + to_date_product('CC-HCCMKII-15-TC')
                 hh_dict['2024'] = annual_product_totals[7]['8FT - No Case'][0] + annual_product_totals[7]['8FT - Travel Case'][0] + annual_product_totals[7]['15FT - No Case'][0] + annual_product_totals[7]['15FT - Travel Case'][0]
                 hh_dict['2023'] = annual_product_totals[6]['8FT - No Case'][0] + annual_product_totals[6]['8FT - Travel Case'][0] + annual_product_totals[6]['15FT - No Case'][0] + annual_product_totals[6]['15FT - Travel Case'][0]
                 
