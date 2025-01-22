@@ -4170,7 +4170,7 @@ if task_choice == 'Product Reports':
 
     with col2:
         # NAVIGATION TABS
-        prod_cat = ui.tabs(options=['Jets', 'Controllers', 'Handhelds', 'Hoses', 'Accessories'], default_value='Jets', key='Product Categories')
+        prod_cat = ui.tabs(options=['Jets', 'Controllers', 'Handhelds', 'Hoses', 'Accessories', 'MagicFX'], default_value='Jets', key='Product Categories')
         #year = ui.tabs(options=[2025, 2024, 2023], default_value=2024, key='Products Year Select')
 
 
@@ -5089,7 +5089,66 @@ if task_choice == 'Product Reports':
                         ui.metric_card(title='{}'.format(item_last2), content='Total Profit: ${:,.2f}'.format(prod_profit), description='Profit per Unit: ${:,.2f}'.format(profit_per_unit), key=key2)
                     key2 += 'ba'
 
+    elif prod_cat == 'MagicFX':
+        
+        with col2:
+            year = ui.tabs(options=[2025, 2024, 2023], default_value=2024, key='Products Year Select')
 
+        cola, colx, coly, colz, colb = st.columns([.15, .23, .23, .23, .15], gap='medium')
+
+        if year == 2025:
+
+            idx = 0
+            
+            count, magic_dict = magic_sales('2025')
+
+            
+            for key, val in magic_dict.items():
+                if val[0] >= 1:
+                    if 0 <= idx <= 5:
+                        colx.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))
+                    elif 5 < idx <= 10:
+                        coly.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))    
+                    else:
+                        colz.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))
+
+                    idx += 1
+            
+        if year == 2024:
+
+            idx = 0
+            
+            count, magic_dict = magic_sales('2024')
+
+            
+            for key, val in magic_dict.items():
+                if val[0] >= 1:
+                    if 0 <= idx <= 5:
+                        colx.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))
+                    elif 5 < idx <= 10:
+                        coly.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))    
+                    else:
+                        colz.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))
+
+                    idx += 1
+
+        if year == 2023:
+
+            idx = 0
+            
+            count, magic_dict = magic_sales('2023')
+            for key, val in magic_dict.items():
+                if val[0] >= 1:
+                    if 0 <= idx <= 5:
+                        colx.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))
+                    elif 5 < idx <= 10:
+                        coly.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))    
+                    else:
+                        colz.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))
+
+                    idx += 1
+            
+        style_metric_cards()
 
         
         
