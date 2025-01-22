@@ -294,7 +294,7 @@ def plot_bar_chart_hh(df):
     st.write(alt.Chart(df).mark_bar().encode(
         x=alt.X('Years', sort=None).title('Year'),
         y='Handheld Sales',
-    ).properties(height=800, width=800).configure_mark(
+    ).properties(height=800, width=1200).configure_mark(
         color='limegreen'
     ))
 
