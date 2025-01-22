@@ -4208,7 +4208,7 @@ if task_choice == 'Product Reports':
         cc_td23, cc_td24 = to_date_product('CC-CC2')
 
         with col2:
-            year = ui.tabs(options=[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014], default_value=2024, key='Jet Year Select')
+            year = ui.tabs(options=[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014], default_value=2025, key='Jet Year Select')
 
         if year == 2025:
             
@@ -4553,7 +4553,7 @@ if task_choice == 'Product Reports':
     elif prod_cat == 'Controllers':
 
         with col2:
-            year = ui.tabs(options=[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015], default_value=2024, key='Control Year Select')
+            year = ui.tabs(options=[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015], default_value=2025, key='Control Year Select')
 
         if year == 2025:
 
@@ -4841,7 +4841,7 @@ if task_choice == 'Product Reports':
     elif prod_cat == 'Handhelds':
 
         with col2:
-            year = ui.tabs(options=[2025, 2024, 2023, 'Historical'], default_value=2024, key='Handheld Year Select')
+            year = ui.tabs(options=[2025, 2024, 2023, 'Historical'], default_value=2025, key='Handheld Year Select')
 
         if year == 2025:
 
@@ -4871,10 +4871,7 @@ if task_choice == 'Product Reports':
                 
                 tot_hh_rev25 = annual_product_totals[8]['8FT - No Case'][1] + annual_product_totals[8]['8FT - Travel Case'][1] + annual_product_totals[8]['15FT - No Case'][1] + annual_product_totals[8]['15FT - Travel Case'][1]
                 tot_hh_prof25 = prod_profit_8NC + prod_profit_8TC + prod_profit_15NC + prod_profit_15TC
-                if tot_hh_rev25 == 0:
-                    prof_margin25 = 0
-                else:
-                    prof_margin25 = (tot_hh_prof25 / tot_hh_rev25) * 100
+                prof_margin25 = (tot_hh_prof25 / tot_hh_rev25) * 100
                 
                 colx, coly, colz = st.columns(3)
     
@@ -4896,7 +4893,7 @@ if task_choice == 'Product Reports':
                 
                 col5.metric('**Revenue**', '${:,}'.format(int(annual_product_totals[8][prod_select][1])), percent_of_change(annual_product_totals[7][prod_select][0], annual_product_totals[8][prod_select][0]))
                 col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
-                col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+                col6.metric('**Profit**', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
                 col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
                 col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')        
     
