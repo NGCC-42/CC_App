@@ -5029,6 +5029,7 @@ if task_choice == 'Product Reports':
             style_metric_cards()
 
             cntl_annual_dict = {'2025': 0, '2024': 0, '2023': 0, '2022': 0, '2021': 0, '2020': 0, '2019': 0, '2018': 0, '2017': 0, '2016': 0, '2015': 0, '2014': 0}
+            cntl_annual_dict_seg = {'2025': {'The Button': annual_product_totals[5]['The Button'][0], 'Shostarter': annual_product_totals[5]['Shostarter'][0], 'Shomaster': annual_product_totals[5]['Shomaster'][0]}, '2024': {'The Button': annual_product_totals[4]['The Button'][0], 'Shostarter': annual_product_totals[4]['Shostarter'][0], 'Shomaster': annual_product_totals[4]['Shomaster'][0]}, '2023': {'The Button': annual_product_totals[3]['The Button'][0], 'Shostarter': annual_product_totals[3]['Shostarter'][0], 'Shomaster': annual_product_totals[3]['Shomaster'][0]}, '2022': {'The Button': tbmk2_annual['2022'], 'The Button MKI': tbmk1_annual['2022'], 'Shomaster': sm_annual['2022'], 'LCD Controller': lcd_cntl_annual['2022'], 'DMX Controller': dmx_cntl_annual['2022']}, '2021': {'Power Controller': pwr_cntl_annual['2021'], 'The Button MKI': tbmk1_annual['2021'], 'Shomaster': sm_annual['2021'], 'LCD Controller': lcd_cntl_annual['2021'], 'DMX Controller': dmx_cntl_annual['2021']}, '2020': {'Power Controller': pwr_cntl_annual['2020'], 'LCD Controller': lcd_cntl_annual['2020'], 'DMX Controller': dmx_cntl_annual['2020']}, '2019': {'Power Controller': pwr_cntl_annual['2019'], 'LCD Controller': lcd_cntl_annual['2019'], 'DMX Controller': dmx_cntl_annual['2019']}, '2018': {'Power Controller': pwr_cntl_annual['2018'], 'LCD Controller': lcd_cntl_annual['2018'], 'DMX Controller': dmx_cntl_annual['2018']}, '2017': {'Power Controller': pwr_cntl_annual['2017'], 'DMX Controller': dmx_cntl_annual['2017']}, '2016': {'DMX Controller': dmx_cntl_annual['2016']}, '2015': {'DMX Controller': dmx_cntl_annual['2015']}}
             cntl_annual_dict['2025'] += annual_product_totals[5]['The Button'][0] + annual_product_totals[5]['Shostarter'][0] + annual_product_totals[5]['Shomaster'][0] 
             cntl_annual_dict['2024'] += annual_product_totals[4]['The Button'][0] + annual_product_totals[4]['Shostarter'][0] + annual_product_totals[4]['Shomaster'][0]
             cntl_annual_dict['2023'] += annual_product_totals[3]['The Button'][0] + annual_product_totals[3]['Shostarter'][0] + annual_product_totals[3]['Shomaster'][0]
@@ -5038,7 +5039,7 @@ if task_choice == 'Product Reports':
             
             colx, coly, colz = st.columns([.2, .6, .2])
             with coly:
-                plot_bar_chart_product(format_for_chart_product(hist_annual_prod_totals(cntl_annual_dict, cntl_list, year_list), 'Total Controller Sales'), 'Total Controller Sales')
+                plot_bar_chart_product_seg(format_for_chart_product_seg(cntl_annual_dict_seg, 'Total Controller Sales'), 'Total Controller Sales')
             
 
     elif prod_cat == 'Handhelds':
