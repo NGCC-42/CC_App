@@ -4197,6 +4197,49 @@ def plot_bar_chart_product(df, prod_label):
         color='limegreen'
     ))
 
+
+def format_for_chart_product_seg(data_dict, prod_label):
+    """
+    Format data for a segmented bar chart.
+    
+    Args:
+        data_dict (dict): A dictionary where keys are years and values are dictionaries of product sales.
+                         Example: {2021: {'Product A': 100, 'Product B': 200}}
+    
+    Returns:
+        pd.DataFrame: A DataFrame suitable for a segmented bar chart.
+    """
+    temp_dict = {'Years': [], 'Product': [], 'Sales': []}
+
+    for year, product_sales in data_dict.items():
+        for product, sales in product_sales.items():
+            temp_dict['Years'].append(year)
+            temp_dict['Product'].append(product)
+            temp_dict['Sales'].append(sales)
+    
+    return pd.DataFrame(temp_dict)
+
+def plot_bar_chart_product_seg(df, prod_label):
+    """
+    Plot a segmented bar chart using Altair.
+
+    Args:
+        df (pd.DataFrame): A DataFrame with columns 'Years', 'Product', and 'Sales'.
+    """
+    chart = (
+        alt.Chart(df)
+        .mark_bar()
+        .encode(
+            x=alt.X('Years:O', title='Year'),
+            y=alt.Y('sum(Sales):Q', title='Total Sales'),
+            color=alt.Color('Product:N', title='Product', scale=alt.Scale(scheme='tableau10')),
+            tooltip=['Years', 'Product', 'Sales'],
+        )
+        .properties(height=800, width=1400)
+    )
+    st.altair_chart(chart, use_container_width=True)
+
+
 def hist_annual_prod_totals(prod_annual_dict, prod_list, year_list):
 
     for year in year_list:
@@ -4636,6 +4679,7 @@ if task_choice == 'Product Reports':
             style_metric_cards()
 
             jet_annual_dict = {'2025': 0, '2024': 0, '2023': 0, '2022': 0, '2021': 0, '2020': 0, '2019': 0, '2018': 0, '2017': 0, '2016': 0, '2015': 0, '2014': 0}
+            jet_annual_dict_seg = {'2025': {'Pro Jet': annual_product_totals[2]['Pro Jet'][0], 'Quad Jet': annual_product_totals[2]['Quad Jet'][0], 'Micro Jet MKII': annual_product_totals[2]['Micro Jet'][0], 'Cryo Clamp': annual_product_totals[2]['Cryo Clamp'][0]}, '2024': {'Pro Jet': annual_product_totals[1]['Pro Jet'][0], 'Quad Jet': annual_product_totals[1]['Quad Jet'][0], 'Micro Jet MKII': annual_product_totals[1]['Micro Jet'][0], 'Cryo Clamp': annual_product_totals[1]['Cryo Clamp'][0]}, '2023': {'Pro Jet': annual_product_totals[0]['Pro Jet'][0], 'Quad Jet': annual_product_totals[0]['Quad Jet'][0], 'Micro Jet MKII': annual_product_totals[0]['Micro Jet'][0], 'Cryo Clamp': annual_product_totals[0]['Cryo Clamp'][0]}, '2022': {'Pro Jet': pj_annual['2022'], 'Quad Jet': qj_annual['2022'], 'Micro Jet MKII': mjmk2_annual['2022'], 'Micro Jet MKI': mjmk1_annual['2022'], 'Cryo Clamp MKI': ccmk1_annual['2022']}, '2021': {'Micro Jet MKII': mjmk2_annual['2021'], 'Micro Jet MKI': mjmk1_annual['2021'], 'Cryo Clamp MKI': ccmk1_annual['2021'], 'Quad Jet': qj_annual['2021'], 'DMX Jet': jet_og_annual['2021'], 'Power Jet': pwj_annual['2021']}, '2020': {'Micro Jet MKI': mjmk1_annual['2020'], 'Cryo Clamp MKI': ccmk1_annual['2020'], 'DMX Jet': jet_og_annual['2020'], 'Power Jet': pwj_annual['2020']}, '2019': {'Micro Jet MKI': mjmk1_annual['2019'], 'Cryo Clamp MKI': ccmk1_annual['2019'], 'DMX Jet': jet_og_annual['2019'], 'Power Jet': pwj_annual['2019']}, '2018': {'Cryo Clamp MKI': ccmk1_annual['2018'], 'DMX Jet': jet_og_annual['2018'], 'Power Jet': pwj_annual['2018']}, '2017': {'DMX Jet': jet_og_annual['2017'], 'Power Jet': pwj_annual['2017']}, '2016': {'DMX Jet': jet_og_annual['2016']}, '2015': {'DMX Jet': jet_og_annual['2015']}, '2014': {'DMX Jet': jet_og_annual['2014']}}
             jet_annual_dict['2025'] += annual_product_totals[2]['Pro Jet'][0] + annual_product_totals[2]['Quad Jet'][0] + annual_product_totals[2]['Micro Jet'][0] + annual_product_totals[2]['Cryo Clamp'][0] 
             jet_annual_dict['2024'] += annual_product_totals[1]['Pro Jet'][0] + annual_product_totals[1]['Quad Jet'][0] + annual_product_totals[1]['Micro Jet'][0] + annual_product_totals[1]['Cryo Clamp'][0]
             jet_annual_dict['2023'] += annual_product_totals[0]['Pro Jet'][0] + annual_product_totals[0]['Quad Jet'][0] + annual_product_totals[0]['Micro Jet'][0] + annual_product_totals[0]['Cryo Clamp'][0]
@@ -4645,7 +4689,7 @@ if task_choice == 'Product Reports':
             
             colx, coly, colz = st.columns([.2, .6, .2])
             with coly:
-                plot_bar_chart_product(format_for_chart_product(hist_annual_prod_totals(jet_annual_dict, jet_list, year_list), 'Total Jet Sales'), 'Total Jet Sales')
+                plot_bar_chart_product_seg(format_for_chart_product_seg(jet_annual_dict_seg, 'Total Jet Sales'), 'Total Jet Sales')
 
 
             
