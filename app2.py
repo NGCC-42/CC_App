@@ -4638,19 +4638,19 @@ if task_choice == 'Product Reports':
             mj2_tot_rev = annual_product_totals[2]['Micro Jet'][1] + annual_product_totals[1]['Micro Jet'][1] + annual_product_totals[0]['Micro Jet'][1] + (mjmk2_annual['2022'] * 778) + (mjmk2_annual['2021'] * 778)
 
             mj1_tot_unit = mjmk1_annual['2022'] + mjmk1_annual['2021'] + mjmk1_annual['2020'] + mjmk1_annual['2019']
-            mj1_tot_rev = (mjmk1_annual['2022'] * 778) + (mjmk1_annual['2021'] * 778) + (mjmk1_annual['2020'] * 778) + (mjmk1_annual['2019'] * 778)
+            mj1_tot_rev = (mjmk1_annual['2022'] * 778.63) + (mjmk1_annual['2021'] * 778.99) + (mjmk1_annual['2020'] * 778.52) + (mjmk1_annual['2019'] * 778)
 
             cc2_tot_unit = annual_product_totals[2]['Cryo Clamp'][0] + annual_product_totals[1]['Cryo Clamp'][0] + annual_product_totals[0]['Cryo Clamp'][0]
             cc2_tot_rev = annual_product_totals[2]['Cryo Clamp'][1] + annual_product_totals[1]['Cryo Clamp'][1] + annual_product_totals[0]['Cryo Clamp'][1] 
 
             cc1_tot_unit = ccmk1_annual['2022'] + ccmk1_annual['2021'] + ccmk1_annual['2020'] + ccmk1_annual['2019'] + ccmk1_annual['2018']
-            cc1_tot_rev = (ccmk1_annual['2022'] * 400) + (ccmk1_annual['2021'] * 400) + (ccmk1_annual['2020'] * 400) + (ccmk1_annual['2019'] * 400) + (ccmk1_annual['2018'] * 400)
+            cc1_tot_rev = (ccmk1_annual['2022'] * 387.91) + (ccmk1_annual['2021'] * 387.91) + (ccmk1_annual['2020'] * 387.91) + (ccmk1_annual['2019'] * 387.91) + (ccmk1_annual['2018'] * 387.91)
 
             dmx_jet_tot_unit = jet_og_annual['2021'] + jet_og_annual['2020'] + jet_og_annual['2019'] + jet_og_annual['2018'] + jet_og_annual['2017'] + jet_og_annual['2016'] + jet_og_annual['2015'] + jet_og_annual['2014']
-            dmx_jet_tot_rev = (jet_og_annual['2021'] * 1100) + (jet_og_annual['2020'] * 1100) + (jet_og_annual['2019'] * 1100) + (jet_og_annual['2018'] * 1100) + (jet_og_annual['2017'] * 1100) + (jet_og_annual['2016'] * 1100) + (jet_og_annual['2015'] * 1100) + (jet_og_annual['2014'] * 1100)
+            dmx_jet_tot_rev = (jet_og_annual['2021'] * 1098.54) + (jet_og_annual['2020'] * 1098.54) + (jet_og_annual['2019'] * 1098.54) + (jet_og_annual['2018'] * 1098.54) + (jet_og_annual['2017'] * 1098.54) + (jet_og_annual['2016'] * 1098.54) + (jet_og_annual['2015'] * 1098.54) + (jet_og_annual['2014'] * 1098.54)
             
             pwj_tot_unit = pwj_annual['2021'] + pwj_annual['2020'] + pwj_annual['2019'] + pwj_annual['2018'] + pwj_annual['2017'] 
-            pwj_tot_rev = (pwj_annual['2021'] * 950) + (pwj_annual['2020'] * 950) + (pwj_annual['2019'] * 950) + (pwj_annual['2018'] * 950) + (pwj_annual['2017'] * 950)
+            pwj_tot_rev = (pwj_annual['2021'] * 948.53) + (pwj_annual['2020'] * 948.53) + (pwj_annual['2019'] * 948.53) + (pwj_annual['2018'] * 948.53) + (pwj_annual['2017'] * 948.53)
 
 
             cola, colb, colc, cold, cole = st.columns(5)
