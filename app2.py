@@ -4175,6 +4175,39 @@ pwr_cntl_cust, pwr_cntl_annual = hist_product_data(df_hist.power_controller)
 blwr_cust, blwr_annual = hist_product_data(df_hist.confetti_blower)
 
 
+def format_for_chart_product(data_dict, prod_label):
+    temp_dict = {'Years': [], prod_label: []}
+
+    for year, sales in data_dict.items():
+        temp_dict['Years'].append(year)
+              
+        temp_dict[prod_label].append(sales)
+                
+    df = pd.DataFrame(temp_dict)
+    
+    return df
+
+    
+
+def plot_bar_chart_product(df, prod_label):
+    st.write(alt.Chart(df).mark_bar().encode(
+        x=alt.X('Years', sort=None).title('Year'),
+        y=prod_label,
+    ).properties(height=800, width=1400).configure_mark(
+        color='limegreen'
+    ))
+
+def hist_annual_prod_totals(prod_annual_dict, prod_list, year_list):
+
+    for year in year_list:
+        for prod in prod_list:
+            prod_annual_dict[year] += prod[year]
+
+    prod_annual_dict = dict(reversed(list(prod_annual_dict.items())))
+    
+    return prod_annual_dict
+
+
 
 if task_choice == 'Product Reports':
 
@@ -4601,6 +4634,19 @@ if task_choice == 'Product Reports':
             cold.metric('**${:,.2f}**'.format(mj1_tot_rev), '{}'.format(mj1_tot_unit))
 
             style_metric_cards()
+
+            jet_annual_dict = {'2025': 0, '2024': 0, '2023': 0, '2022': 0, '2021': 0, '2020': 0, '2019': 0, '2018': 0, '2017': 0, '2016': 0, '2015': 0, '2014': 0}
+            jet_annual_dict['2025'] += annual_product_totals[2]['Pro Jet'][0] + annual_product_totals[2]['Quad Jet'][0] + annual_product_totals[2]['Micro Jet'][0] + annual_product_totals[2]['Cryo Clamp'][0] 
+            jet_annual_dict['2024'] += annual_product_totals[1]['Pro Jet'][0] + annual_product_totals[1]['Quad Jet'][0] + annual_product_totals[1]['Micro Jet'][0] + annual_product_totals[1]['Cryo Clamp'][0]
+            jet_annual_dict['2023'] += annual_product_totals[0]['Pro Jet'][0] + annual_product_totals[0]['Quad Jet'][0] + annual_product_totals[0]['Micro Jet'][0] + annual_product_totals[0]['Cryo Clamp'][0]
+
+            jet_list = [pj_annual, pwj_annual, jet_og_annual, ccmk1_annual, mjmk1_annual, mjmk2_annual, qj_annual]
+            year_list = ['2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014']
+            
+            colx, coly, colz = st.columns([.2, .6, .2])
+            with coly:
+                plot_bar_chart_product(format_for_chart_product(hist_annual_prod_totals(jet_annual_dict, jet_list, year_list), 'Total Jet Sales'), 'Total Jet Sales')
+
 
             
 
