@@ -4964,23 +4964,23 @@ if task_choice == 'Product Reports':
             cola, colb, colc, cold, cole = st.columns(5)
 
             colb.subheader('The Button')
-            colb.metric('${:,.2f}'.format(tb_tot_rev), '{}'.format(tb_tot_unit))
+            colb.metric('**${:,.2f}**'.format(tb_tot_rev), '{}'.format(tb_tot_unit))
             colb.subheader('The Button MKI')
-            colb.metric('${:,.2f}'.format(tbmk1_tot_rev), '{}'.format(tbmk1_tot_unit))
+            colb.metric('**${:,.2f}**'.format(tbmk1_tot_rev), '{}'.format(tbmk1_tot_unit))
             colb.subheader('Power Controller')
-            colb.metric('${:,.2f}'.format(pwr_cntl_tot_rev), '{}'.format(pwr_cntl_tot_unit))
+            colb.metric('**${:,.2f}**'.format(pwr_cntl_tot_rev), '{}'.format(pwr_cntl_tot_unit))
 
             colc.subheader('Shostarter')
-            colc.metric('${:,.2f}'.format(ss_tot_rev), '{}'.format(ss_tot_unit))
+            colc.metric('**${:,.2f}**'.format(ss_tot_rev), '{}'.format(ss_tot_unit))
             colc.subheader('LCD Controller')
-            colc.metric('${:,.2f}'.format(lcd_tot_rev), '{}'.format(lcd_tot_unit))
+            colc.metric('**${:,.2f}**'.format(lcd_tot_rev), '{}'.format(lcd_tot_unit))
 
             cold.subheader('Shomaster')
-            cold.metric('${:,.2f}'.format(sm_tot_rev), '{}'.format(sm_tot_unit))
+            cold.metric('**${:,.2f}**'.format(sm_tot_rev), '{}'.format(sm_tot_unit))
             cold.subheader('DMX Controller')
-            cold.metric('${:,.2f}'.format(dmx_cntl_tot_rev), '{}'.format(dmx_cntl_tot_unit))
-            colc.subheader('Total Controllers')
-            colc.metric('${:,.2f}'.format(tbmk1_tot_rev + pwr_cntl_tot_rev + lcd_tot_rev + dmx_cntl_tot_rev + sm_tot_rev + ss_tot_rev + tb_tot_rev), '{}'.format(tbmk1_tot_unit + pwr_cntl_tot_unit + lcd_tot_unit + dmx_cntl_tot_unit + sm_tot_unit + ss_tot_unit + tb_tot_unit))
+            cold.metric('**${:,.2f}**'.format(dmx_cntl_tot_rev), '{}'.format(dmx_cntl_tot_unit))
+            cold.subheader('Total Controllers')
+            cold.metric('**${:,.2f}**'.format(tbmk1_tot_rev + pwr_cntl_tot_rev + lcd_tot_rev + dmx_cntl_tot_rev + sm_tot_rev + ss_tot_rev + tb_tot_rev), '{}'.format(tbmk1_tot_unit + pwr_cntl_tot_unit + lcd_tot_unit + dmx_cntl_tot_unit + sm_tot_unit + ss_tot_unit + tb_tot_unit))
 
             style_metric_cards()
 
