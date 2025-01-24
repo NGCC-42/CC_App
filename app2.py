@@ -4653,7 +4653,7 @@ if task_choice == 'Product Reports':
     elif prod_cat == 'Controllers':
 
         with col2:
-            year = ui.tabs(options=[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015], default_value=2025, key='Control Year Select')
+            year = ui.tabs(options=[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 'Historical'], default_value=2025, key='Control Year Select')
 
         if year == 2025:
 
@@ -4936,6 +4936,65 @@ if task_choice == 'Product Reports':
                 colb.metric('', '{}'.format(dmx_cntl_annual['2015']), '')
     
                 style_metric_cards()
+
+        elif year == 'Historical':
+
+            tb_tot_unit = annual_product_totals[5]['The Button'][0] + annual_product_totals[4]['The Button'][0] + annual_product_totals[3]['The Button'][0] + tbmk2_annual['2022']
+            tb_tot_rev = annual_product_totals[5]['The Button'][1] + annual_product_totals[4]['The Button'][1] + annual_product_totals[3]['The Button'][1] + (tbmk2_annual['2022'] * 383)
+
+            ss_tot_unit = annual_product_totals[5]['Shostarter'][0] + annual_product_totals[4]['Shostarter'][0] + annual_product_totals[3]['Shostarter'][0]
+            ss_tot_rev = annual_product_totals[5]['Shostarter'][1] + annual_product_totals[4]['Shostarter'][1] + annual_product_totals[3]['Shostarter'][1] 
+
+            sm_tot_unit = annual_product_totals[5]['Shomaster'][0] + annual_product_totals[4]['Shomaster'][0] + annual_product_totals[3]['Shomaster'][0] + sm_annual['2022'] + sm_annual['2021']
+            sm_tot_rev = annual_product_totals[5]['Shomaster'][1] + annual_product_totals[4]['Shomaster'][1] + annual_product_totals[3]['Shomaster'][1] + (sm_annual['2022'] * 2880) + (sm_annual['2021'] * 2880)
+
+            dmx_cntl_tot_unit = dmx_cntl_annual['2022'] + dmx_cntl_annual['2021'] + dmx_cntl_annual['2020'] + dmx_cntl_annual['2019'] + dmx_cntl_annual['2018'] + dmx_cntl_annual['2017'] + dmx_cntl_annual['2016'] + dmx_cntl_annual['2015']
+            dmx_cntl_tot_rev = (dmx_cntl_annual['2022'] * 450) + (dmx_cntl_annual['2021'] * 450) + (dmx_cntl_annual['2020'] * 450) + (dmx_cntl_annual['2019'] * 450) + (dmx_cntl_annual['2018'] * 450) + (dmx_cntl_annual['2017'] * 450) + (dmx_cntl_annual['2016'] * 450) + (dmx_cntl_annual['2015'] * 450)
+
+            lcd_tot_unit = lcd_cntl_annual['2022'] + lcd_cntl_annual['2021'] + lcd_cntl_annual['2020'] + lcd_cntl_annual['2019'] + lcd_cntl_annual['2018']
+            lcd_tot_rev = (lcd_cntl_annual['2022'] * 450) + (lcd_cntl_annual['2021'] * 450) + (lcd_cntl_annual['2020'] * 450) + (lcd_cntl_annual['2019'] * 450) + (lcd_cntl_annual['2018'] * 450)
+
+            pwr_cntl_tot_unit = pwr_cntl_annual['2021'] + pwr_cntl_annual['2020'] + pwr_cntl_annual['2019'] + pwr_cntl_annual['2018'] + pwr_cntl_annual['2017']
+            pwr_cntl_tot_rev = (pwr_cntl_annual['2021'] * 260) + (pwr_cntl_annual['2020'] * 260) + (pwr_cntl_annual['2019'] * 260) + (pwr_cntl_annual['2018'] * 260) + (pwr_cntl_annual['2017'] * 260)
+            
+            tbmk1_tot_unit = tbmk1_annual['2022'] + tbmk1_annual['2021']
+            tbmk1_tot_rev = (tbmk1_annual['2022'] * 360) + (tbmk1_annual['2021'] * 360) 
+
+
+            cola, colb, colc, cold, cole = st.columns(5)
+
+            colb.subheader('The Button')
+            colb.metric('${:,.2f}'.format(tb_tot_rev), '{}'.format(tb_tot_unit))
+            colb.subheader('The Button MKI')
+            colb.metric('${:,.2f}'.format(tbmk1_tot_rev), '{}'.format(tbmk1_tot_unit))
+            colb.subheader('Power Controller')
+            colb.metric('${:,.2f}'.format(pwr_cntl_tot_rev), '{}'.format(pwr_cntl_tot_unit))
+
+            colc.subheader('Shostarter')
+            colc.metric('${:,.2f}'.format(ss_tot_rev), '{}'.format(ss_tot_unit))
+            colc.subheader('LCD Controller')
+            colc.metric('${:,.2f}'.format(lcd_tot_rev), '{}'.format(lcd_tot_unit))
+
+            cold.subheader('Shomaster')
+            cold.metric('${:,.2f}'.format(sm_tot_rev), '{}'.format(sm_tot_unit))
+            cold.subheader('DMX Controller')
+            cold.metric('${:,.2f}'.format(dmx_cntl_tot_rev), '{}'.format(dmx_cntl_tot_unit))
+            colc.subheader('Total Controllers')
+            colc.metric('${:,.2f}'.format(tbmk1_tot_rev + pwr_cntl_tot_rev + lcd_tot_rev + dmx_cntl_tot_rev + sm_tot_rev + ss_tot_rev + tb_tot_rev), '{}'.format(tbmk1_tot_unit + pwr_cntl_tot_unit + lcd_tot_unit + dmx_cntl_tot_unit + sm_tot_unit + ss_tot_unit + tb_tot_unit))
+
+            style_metric_cards()
+
+            cntl_annual_dict = {'2025': 0, '2024': 0, '2023': 0, '2022': 0, '2021': 0, '2020': 0, '2019': 0, '2018': 0, '2017': 0, '2016': 0, '2015': 0, '2014': 0}
+            cntl_annual_dict['2025'] += annual_product_totals[5]['The Button'][0] + annual_product_totals[5]['Shostarter'][0] + annual_product_totals[5]['Shomaster'][0] 
+            cntl_annual_dict['2024'] += annual_product_totals[4]['The Button'][0] + annual_product_totals[4]['Shostarter'][0] + annual_product_totals[4]['Shomaster'][0]
+            cntl_annual_dict['2023'] += annual_product_totals[3]['The Button'][0] + annual_product_totals[3]['Shostarter'][0] + annual_product_totals[3]['Shomaster'][0]
+
+            cntl_list = [tbmk1_annual, pwr_cntl_annual, lcd_cntl_annual, dmx_cntl_annual, tbmk2_annual, sm_annual]
+            year_list = ['2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014']
+            
+            colx, coly, colz = st.columns([.2, .6, .2])
+            with coly:
+                plot_bar_chart_product(format_for_chart_product(hist_annual_prod_totals(cntl_annual_dict, cntl_list, year_list), 'Total Controller Sales'), 'Total Controller Sales')
             
 
     elif prod_cat == 'Handhelds':
