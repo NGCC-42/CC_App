@@ -3403,21 +3403,21 @@ if task_choice == 'Dashboard':
                 
                 col6, col7, col8 = st.columns([.3, .4, .3])
                 
-                col6.metric('**Q1 Web Sales**', '${:,}'.format(int(q1_23[0])), percent_of_change(q1_22[0], q1_23[0]))
-                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(q1_23[0] + q1_23[1])), percent_of_change((q1_22[0] + q1_22[1]), (q1_23[0] + q1_23[1])))
-                col8.metric('**Q1 Fulcrum Sales**', '${:,}'.format(int(q1_23[1])), percent_of_change(q1_22[1], q1_23[1]))
+                col6.metric('**Q1 Web Sales**', '${:,}'.format(int(q1_23[0])), percent_of_change((qs22[0] * .4), q1_23[0]))
+                col7.metric('**Q1 Total Sales**', '${:,}'.format(int(q1_23[0] + q1_23[1])), percent_of_change((qs22[0]), (q1_23[0] + q1_23[1])))
+                col8.metric('**Q1 Fulcrum Sales**', '${:,}'.format(int(q1_23[1])), percent_of_change((qs22[0] * .6), q1_23[1]))
                 
-                col6.metric('**Q2 Web Sales**', '${:,}'.format(int(q2_23[0])), percent_of_change(q2_22[0], q2_23[0]))
-                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(q2_23[0] + q2_23[1])), percent_of_change((q2_22[0] + q2_22[1]), (q2_23[0] + q2_23[1])))
-                col8.metric('**Q2 Fulcrum Sales**', '${:,}'.format(int(q2_23[1])), percent_of_change(q2_22[1], q2_23[1]))
+                col6.metric('**Q2 Web Sales**', '${:,}'.format(int(q2_23[0])), percent_of_change((qs22[1] * .4), q2_23[0]))
+                col7.metric('**Q2 Total Sales**', '${:,}'.format(int(q2_23[0] + q2_23[1])), percent_of_change((qs22[1]), (q2_23[0] + q2_23[1])))
+                col8.metric('**Q2 Fulcrum Sales**', '${:,}'.format(int(q2_23[1])), percent_of_change((qs22[1] * .6), q2_23[1]))
                 
-                col6.metric('**Q3 Web Sales**', '${:,}'.format(int(q3_23[0])), percent_of_change(q3_22[0], q3_23[0]))
-                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(q3_23[0] + q3_23[1])), percent_of_change((q3_22[0] + q3_22[1]), (q3_23[0] + q3_23[1])))
-                col8.metric('**Q3 Fulcrum Sales**', '${:,}'.format(int(q3_23[1])), percent_of_change(q3_22[1], q3_23[1]))
-    
-                col6.metric('**Q4 Web Sales**', '${:,}'.format(int(q4_23[0])), percent_of_change(q4_22[0], q4_23[0]))
-                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(q4_23[0] + q4_23[1])), percent_of_change((q4_22[0] + q4_22[1]), (q4_23[0] + q4_23[1])))
-                col8.metric('**Q4 Fulcrum Sales**', '${:,}'.format(int(q4_23[1])), percent_of_change(q4_22[1], q4_23[1]))
+                col6.metric('**Q3 Web Sales**', '${:,}'.format(int(q3_23[0])), percent_of_change((qs22[2] * .4), q3_23[0]))
+                col7.metric('**Q3 Total Sales**', '${:,}'.format(int(q3_23[0] + q3_23[1])), percent_of_change((qs22[2]), (q3_23[0] + q3_23[1])))
+                col8.metric('**Q3 Fulcrum Sales**', '${:,}'.format(int(q3_23[1])), percent_of_change((qs22[2] * .6), q3_23[1]))
+
+                col6.metric('**Q4 Web Sales**', '${:,}'.format(int(q4_23[0])), percent_of_change((qs22[3] * .4), q4_23[0]))
+                col7.metric('**Q4 Total Sales**', '${:,}'.format(int(q4_23[0] + q4_23[1])), percent_of_change((qs22[3]), (q4_23[0] + q4_23[1])))
+                col8.metric('**Q4 Fulcrum Sales**', '${:,}'.format(int(q4_23[1])), percent_of_change((qs22[3] * .6), q4_23[1]))
 
             with coly:
                 months[0] = 'Overview'
