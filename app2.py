@@ -35,8 +35,8 @@ st.header('')
 
 
 ### LOAD FILES
-sod_ss = 'SOD 1.27.25.xlsx'
-#sod_ss = 'MASTER DATA.xlsx'
+#sod_ss = 'SOD 1.27.25.xlsx'
+sod_ss = 'MASTER DATA.xlsx'
 
 hist_ss = 'CC Historical Sales.xlsx'
 
