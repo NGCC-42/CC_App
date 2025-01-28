@@ -31,7 +31,7 @@ col2.image('logo.png',
 
 st.header('')
 
-st.divider()
+
 
 
 ### LOAD FILES
