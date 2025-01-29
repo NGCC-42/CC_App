@@ -5356,7 +5356,7 @@ if task_choice == 'Product Reports':
     elif prod_cat == 'MagicFX':
         
         with col2:
-            year = ui.tabs(options=[2025, 2024, 2023], default_value=2024, key='Products Year Select')
+            year = ui.tabs(options=[2025, 2024, 2023], default_value=2025, key='Products Year Select')
 
         cola, colx, coly, colz, colb = st.columns([.15, .23, .23, .23, .15], gap='medium')
 
