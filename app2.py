@@ -52,7 +52,7 @@ shipstat_ss_23 = '2023 SR.xlsx'
 
 wholesale_cust = 'wholesale_customers.xlsx'
 
-cogs_ss = 'COGS 1.29.25.xlsx'
+cogs_ss = 'COGS 1.29.25a.xlsx'
 
 ### LOAD SHEETS FROM PRODUCT SUMMARY
 
