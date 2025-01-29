@@ -1040,7 +1040,7 @@ def get_monthly_sales_v2(df, year):
                     unique_sales_orders.append(sale)
             else:
                 sales_dict[month][1][0] += df.iloc[idx].total_line_item_spend   
-                if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX':
+                if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX' or df.iloc[idx].item_sku[:5] == 'Magic' or df.iloc[idx].item_sku[:3] == 'MFX':
                     sales_dict[month][2][0] += df.iloc[idx].total_line_item_spend
                 if sale not in unique_sales_orders:
                     sales_dict[month][1][1] += 1
