@@ -181,6 +181,24 @@ df_shipstat_23.rename(columns={
                     '+/-':'variance'},
                     inplace=True)  
 
+df_cogs.rename(columns={
+                    'Item Number/Revision':'item',
+                    'Invoice Number':'invoice',
+                    'Status':'status',
+                    'Source':'sales_order',
+                    'Customer':'customer',
+                    'Invoice Issue Date':'issue_date',
+                    'Invoice Paid Date':'paid_date',
+                    'Invoice Quantity':'quantity',
+                    'Material Value':'material_value',
+                    'Labor Value': 'labor_value',
+                    'Outside Processing Value': 'processing_value',
+                    'Machine Value': 'machine_value',
+                    'Total Cost': 'total_cost',
+                    'Total Price': 'total_price',
+                    'Unit Price': 'unit_price'},
+                    inplace=True)  
+
 ### DEFINE A FUNCTION TO CORRECT NAME DISCRPANCIES IN SOD
 
 def fix_names(df):
