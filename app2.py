@@ -41,7 +41,7 @@ hist_ss = 'CC Historical Sales.xlsx'
 
 hsd_ss = 'HSD 11.8.24.xlsx'
 
-quote_ss = 'Quote Report 10.23.24.xlsx'
+quote_ss = 'Quote Report 1.28.25.xlsx'
 
 #sales_sum_csv = 'Total Summary-2022 - Present.csv'
 
