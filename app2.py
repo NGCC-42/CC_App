@@ -80,7 +80,8 @@ def create_dataframe(ss):
 
 	df = pd.read_excel(ss,
 					  dtype=object,
-					  header=0)
+					  header=0, 
+                      keep_default_na=False)
 	return df
 
 
