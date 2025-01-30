@@ -2579,6 +2579,7 @@ def to_date_revenue():
 
 
 # HISTORICAL TO-DATE REVENUE -- NEEDS ANNUAL UPDATE
+@st.cache_data
 def hist_td_rev(year):
 
     td24 = today - timedelta(days=366)
