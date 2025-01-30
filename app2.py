@@ -3243,6 +3243,13 @@ if task_choice == 'Dashboard':
         y2024.append(val[0][0] + val[1][0])
     for key, val in sales_dict_25.items():
         y2025.append(val[0][0] + val[1][0])
+
+    ### SALES CHANNEL BREAKDOWN ###
+    web_avg_perc = (web_23 + web_24)/2
+    ful_avg_perc = (ful_23 + ful_24)/2
+
+    col1, col2, col3 = st.columns([.28, .44, .28], gap='medium')
+    colx, coly, colz = st.columns([.28, .44, .28], gap='medium')
     
     with col2:
 
