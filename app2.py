@@ -3345,7 +3345,7 @@ if task_choice == 'Dashboard':
         style_metric_cards()
         
     ### DISPLAY SALES METRICS ###
-
+    with col2:
         if year_select == 2025:
             
             display_metrics(sales_dict_25, td_sales24, wvr1=wvr_25_months, wvr2=wvr_24_ytd)
