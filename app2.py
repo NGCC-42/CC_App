@@ -3203,11 +3203,38 @@ if task_choice == 'Dashboard':
                      'December': [[75155.19, 64], [75155.20, 30], [0]]}
     
     x = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+    y2013 = []
+    y2014 = []
+    y2015 = []
+    y2016 = []
+    y2017 = []
+    y2018 = []
+    y2019 = []
+    y2020 = []
+    y2021 = []
     y2022 = []
     y2023 = []
     y2024 = []
     y2025 = []
 
+    for key, val in sales13.items():
+        y2013.append(val[0][0] + val[1][0])
+    for key, val in sales14.items():
+        y2014.append(val[0][0] + val[1][0])
+    for key, val in sales15.items():
+        y2015.append(val[0][0] + val[1][0])
+    for key, val in sales16.items():
+        y2016.append(val[0][0] + val[1][0])
+    for key, val in sales17.items():
+        y2017.append(val[0][0] + val[1][0])
+    for key, val in sales18.items():
+        y2018.append(val[0][0] + val[1][0])
+    for key, val in sales19.items():
+        y2019.append(val[0][0] + val[1][0])
+    for key, val in sales20.items():
+        y2020.append(val[0][0] + val[1][0])
+    for key, val in sales21.items():
+        y2021.append(val[0][0] + val[1][0])
     for key, val in sales_dict_22.items():
         y2022.append(val[0][0] + val[1][0])
     for key, val in sales_dict_23.items():
@@ -3217,29 +3244,77 @@ if task_choice == 'Dashboard':
     for key, val in sales_dict_25.items():
         y2025.append(val[0][0] + val[1][0])
     
-    fig, ax = plt.subplots()
+    with col2:
+
+        #stylize_tabs()
+        
+        year_select = ui.tabs(options=['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013'], default_value='2025')    
+        
+        #tot_vs_ytd = ui.tabs(options=['Totals', 'YTD'], default_value='Totals')
+
+    col1.header('Annual Comparison')
     
-    ax.plot(x, y2022, label='2022', color='limegreen', linewidth=4.5)
-    ax.plot(x, y2023, label='2023', color='white', linewidth=4.5)
-    ax.plot(x, y2024, label='2024', color='grey', linewidth=4.5)
+    fig, ax = plt.subplots()
+    if year_select in ['2025', '2024', '2023']:
+        ax.plot(x, y2022, label='2022', color='limegreen', linewidth=4.5)
+        ax.plot(x, y2023, label='2023', color='white', linewidth=4.5)
+        ax.plot(x, y2024, label='2024', color='grey', linewidth=4.5)
+        
+    elif year_select == '2022':
+        ax.plot(x, y2021, label='2021', color='limegreen', linewidth=4.5)
+        ax.plot(x, y2022, label='2022', color='white', linewidth=4.5)
+        ax.plot(x, y2023, label='2023', color='grey', linewidth=4.5)
+
+    elif year_select == '2021':
+        ax.plot(x, y2020, label='2020', color='limegreen', linewidth=4.5)
+        ax.plot(x, y2021, label='2021', color='white', linewidth=4.5)
+        ax.plot(x, y2022, label='2022', color='grey', linewidth=4.5)
+
+    elif year_select == '2020':
+        ax.plot(x, y2019, label='2019', color='limegreen', linewidth=4.5)
+        ax.plot(x, y2020, label='2020', color='white', linewidth=4.5)
+        ax.plot(x, y2021, label='2021', color='grey', linewidth=4.5)
+
+    elif year_select == '2019':
+        ax.plot(x, y2018, label='2018', color='limegreen', linewidth=4.5)
+        ax.plot(x, y2019, label='2019', color='white', linewidth=4.5)
+        ax.plot(x, y2020, label='2020', color='grey', linewidth=4.5)
+
+    elif year_select == '2018':
+        ax.plot(x, y2017, label='2017', color='limegreen', linewidth=4.5)
+        ax.plot(x, y2018, label='2018', color='white', linewidth=4.5)
+        ax.plot(x, y2019, label='2019', color='grey', linewidth=4.5)
+
+    elif year_select == '2017':
+        ax.plot(x, y2016, label='2016', color='limegreen', linewidth=4.5)
+        ax.plot(x, y2017, label='2017', color='white', linewidth=4.5)
+        ax.plot(x, y2018, label='2018', color='grey', linewidth=4.5)
+
+    elif year_select == '2016':
+        ax.plot(x, y2015, label='2015', color='limegreen', linewidth=4.5)
+        ax.plot(x, y2016, label='2016', color='white', linewidth=4.5)
+        ax.plot(x, y2017, label='2017', color='grey', linewidth=4.5)
+
+    elif year_select == '2015':
+        ax.plot(x, y2014, label='2014', color='limegreen', linewidth=4.5)
+        ax.plot(x, y2015, label='2015', color='white', linewidth=4.5)
+        ax.plot(x, y2016, label='2016', color='grey', linewidth=4.5)
+
+    elif year_select == '2014' or year_select == '2013':
+        ax.plot(x, y2013, label='2013', color='limegreen', linewidth=4.5)
+        ax.plot(x, y2014, label='2014', color='white', linewidth=4.5)
+        ax.plot(x, y2015, label='2015', color='grey', linewidth=4.5)
+        
     ax.set_facecolor('#000000')
     fig.set_facecolor('#000000')
     plt.yticks([20000, 40000, 60000, 80000, 100000, 120000, 140000, 160000, 180000, 200000, 220000, 240000, 260000, 280000])
     plt.tick_params(axis='x', colors='white')
     plt.tick_params(axis='y', colors='white')
     #plt.title('Annual Comparison', color='green')
-    plt.figure(figsize=(12,6))
+    plt.figure(figsize=(15,10))
+    fig.legend()  
 
-    fig.legend()
-
-    ### SALES CHANNEL BREAKDOWN ###
-    web_avg_perc = (web_23 + web_24)/2
-    ful_avg_perc = (ful_23 + ful_24)/2
-
-    col1, col2, col3 = st.columns([.29, .42, .29], gap='medium')
-    colx, coly, colz = st.columns([.29, .42, .29], gap='medium')
     
-    col1.header('Annual Comparison')
     col1.pyplot(fig)
     
     with colx:
@@ -3261,13 +3336,7 @@ if task_choice == 'Dashboard':
         colc.metric('**2023 Fulcrum**', '${:,}'.format(int(td_23[1])), '100%')
 
         style_metric_cards()
-    
-    with col2:
-        year_select = ui.tabs(options=[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013], default_value=2025, key='Year')     
-    
-        #tot_vs_ytd = ui.tabs(options=['Totals', 'YTD'], default_value='Totals')
-
-    
+        
     ### DISPLAY SALES METRICS ###
 
         if year_select == 2025:
