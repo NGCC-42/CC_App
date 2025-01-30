@@ -3248,12 +3248,10 @@ if task_choice == 'Dashboard':
     web_avg_perc = (web_23 + web_24)/2
     ful_avg_perc = (ful_23 + ful_24)/2
 
-    col1, col2, col3 = st.columns([.28, .44, .28], gap='medium')
+    col1, col22, col3 = st.columns([.28, .44, .28], gap='medium')
     colx, coly, colz = st.columns([.28, .44, .28], gap='medium')
     
-    with col2:
-
-        #stylize_tabs()
+    with col22:
         
         year_select = ui.tabs(options=['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013'], default_value='2025')    
         
@@ -3321,7 +3319,6 @@ if task_choice == 'Dashboard':
     plt.figure(figsize=(15,10))
     fig.legend()  
 
-    
     col1.pyplot(fig)
     
     with colx:
@@ -3344,8 +3341,8 @@ if task_choice == 'Dashboard':
 
         style_metric_cards()
         
-    ### DISPLAY SALES METRICS ###
-    with col2:
+
+    with col22:
         if year_select == 2025:
             
             display_metrics(sales_dict_25, td_sales24, wvr1=wvr_25_months, wvr2=wvr_24_ytd)
