@@ -3248,10 +3248,10 @@ if task_choice == 'Dashboard':
     web_avg_perc = (web_23 + web_24)/2
     ful_avg_perc = (ful_23 + ful_24)/2
 
-    col1, col22, col3 = st.columns([.28, .44, .28], gap='medium')
+    col1, col2, col3 = st.columns([.28, .44, .28], gap='medium')
     colx, coly, colz = st.columns([.28, .44, .28], gap='medium')
     
-    with col22:
+    with col2:
         
         year_select = ui.tabs(options=['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013'], default_value='2025')    
         
@@ -3342,8 +3342,9 @@ if task_choice == 'Dashboard':
         style_metric_cards()
         
 
-    with col22:
-        if year_select == 2025:
+    with col2:
+        
+        if year_select == '2025':
             
             display_metrics(sales_dict_25, td_sales24, wvr1=wvr_25_months, wvr2=wvr_24_ytd)
     
@@ -3405,7 +3406,7 @@ if task_choice == 'Dashboard':
                 else:
                     display_metrics(sales_dict_25, sales_dict_24, 'December', wvr1=wvr_25_months, wvr2=wvr_24_months)
 
-        elif year_select == 2024:
+        elif year_select == '2024':
 
             with col2:
                 tot_vs_ytd = ui.tabs(options=['Totals', 'YTD'], default_value='Totals')
@@ -3474,7 +3475,7 @@ if task_choice == 'Dashboard':
                     display_metrics(sales_dict_24, sales_dict_23, 'December', wvr1=wvr_24_months, wvr2=wvr_23_months)
 
 
-        elif year_select == 2023:
+        elif year_select == '2023':
 
             with col2:
                 tot_vs_ytd = ui.tabs(options=['Totals', 'YTD'], default_value='Totals')
@@ -3543,7 +3544,7 @@ if task_choice == 'Dashboard':
                     display_metrics(sales_dict_23, sales_dict_22, 'December', wvr1=wvr_23_months)
                 
 
-        if year_select == 2022:
+        if year_select == '2022':
     
             display_metrics(sales22, sales21, note='22')
 
@@ -3570,7 +3571,7 @@ if task_choice == 'Dashboard':
             with coly:
                 display_month_data_x(sales22, sales21)
 
-        if year_select == 2021:
+        if year_select == '2021':
     
             display_metrics(sales21, sales20, note='21')
 
@@ -3597,7 +3598,7 @@ if task_choice == 'Dashboard':
             with coly:
                 display_month_data_x(sales21, sales20)
 
-        if year_select == 2020:
+        if year_select == '2020':
     
             display_metrics(sales20, sales19, note='20')
 
@@ -3624,7 +3625,7 @@ if task_choice == 'Dashboard':
             with coly:
                 display_month_data_x(sales20, sales19)
 
-        if year_select == 2019:
+        if year_select == '2019':
     
             display_metrics(sales19, sales18, note='19')
 
@@ -3651,7 +3652,7 @@ if task_choice == 'Dashboard':
             with coly:
                 display_month_data_x(sales19, sales18)
 
-        if year_select == 2018:
+        if year_select == '2018':
     
             display_metrics(sales18, sales17, note='18')
 
@@ -3678,7 +3679,7 @@ if task_choice == 'Dashboard':
             with coly:
                 display_month_data_x(sales18, sales17)
 
-        if year_select == 2017:
+        if year_select == '2017':
     
             display_metrics(sales17, sales16, note='17')
 
@@ -3705,7 +3706,7 @@ if task_choice == 'Dashboard':
             with coly:
                 display_month_data_x(sales17, sales16)
 
-        if year_select == 2016:
+        if year_select == '2016':
     
             display_metrics(sales16, sales15, note='16')
 
@@ -3732,7 +3733,7 @@ if task_choice == 'Dashboard':
             with coly:
                 display_month_data_x(sales16, sales15)
 
-        if year_select == 2015:
+        if year_select == '2015':
     
             display_metrics(sales15, sales14, note='15')
 
@@ -3759,7 +3760,7 @@ if task_choice == 'Dashboard':
             with coly:
                 display_month_data_x(sales15, sales14)
 
-        if year_select == 2014:
+        if year_select == '2014':
     
             display_metrics(sales14, sales13, note='14')
 
@@ -3787,7 +3788,7 @@ if task_choice == 'Dashboard':
             with coly:
                 display_month_data_x(sales14, sales13)
 
-        if year_select == 2013:
+        if year_select == '2013':
     
             display_metrics(sales13, note='13')
 
