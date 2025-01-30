@@ -2579,7 +2579,6 @@ def to_date_revenue():
 
 
 # HISTORICAL TO-DATE REVENUE -- NEEDS ANNUAL UPDATE
-@st.cache_data
 def hist_td_rev(year):
 
     td24 = today - timedelta(days=366)
@@ -3361,51 +3360,21 @@ if task_choice == 'Dashboard':
         
         cola, colb, colc = st.columns(3)
 
-        if year_select in ['2025', '2024', '2023']:
 
-            cola.metric('**2025 Total**', '${:,}'.format(int(td_25[1] + td_25[0])), percent_of_change((td_24[0] + td_24[1]), (td_25[0] + td_25[1])))
-            cola.metric('**2025 Web**', '${:,}'.format(int(td_25[0])), percent_of_change(td_24[0], td_25[0]))
-            cola.metric('**2025 Fulcrum**', '${:,}'.format(int(td_25[1])), percent_of_change(td_24[1], td_25[1]))
-            
-            colb.metric('**2024 Total**', '${:,}'.format(int(td_24[1] + td_24[0])), percent_of_change((td_23[0] + td_23[1]), (td_24[0] + td_24[1])))
-            colb.metric('**2024 Web**', '${:,}'.format(int(td_24[0])), percent_of_change(td_23[0], td_24[0]))
-            colb.metric('**2024 Fulcrum**', '${:,}'.format(int(td_24[1])), percent_of_change(td_23[1], td_24[1]))
-            
-            colc.metric('**2023 Total**', '${:,}'.format(int(td_23[1] + td_23[0])), percent_of_change(hist_td_rev(2022), (td_23[1] + td_23[0])))
-            colc.metric('**2023 Web**', '${:,}'.format(int(td_23[0])), percent_of_change(hist_td_rev(2022), (td_23[1] + td_23[0])))
-            colc.metric('**2023 Fulcrum**', '${:,}'.format(int(td_23[1])), percent_of_change(hist_td_rev(2022), (td_23[1] + td_23[0])))
-    
-            style_metric_cards()
 
-        elif year_select == '2022':
+        cola.metric('**2025 Total**', '${:,}'.format(int(td_25[1] + td_25[0])), percent_of_change((td_24[0] + td_24[1]), (td_25[0] + td_25[1])))
+        cola.metric('**2025 Web**', '${:,}'.format(int(td_25[0])), percent_of_change(td_24[0], td_25[0]))
+        cola.metric('**2025 Fulcrum**', '${:,}'.format(int(td_25[1])), percent_of_change(td_24[1], td_25[1]))
+        
+        colb.metric('**2024 Total**', '${:,}'.format(int(td_24[1] + td_24[0])), percent_of_change((td_23[0] + td_23[1]), (td_24[0] + td_24[1])))
+        colb.metric('**2024 Web**', '${:,}'.format(int(td_24[0])), percent_of_change(td_23[0], td_24[0]))
+        colb.metric('**2024 Fulcrum**', '${:,}'.format(int(td_24[1])), percent_of_change(td_23[1], td_24[1]))
+        
+        colc.metric('**2023 Total**', '${:,}'.format(int(td_23[1] + td_23[0])), percent_of_change(hist_td_rev(2022), (td_23[1] + td_23[0])))
+        colc.metric('**2023 Web**', '${:,}'.format(int(td_23[0])), percent_of_change(hist_td_rev(2022), (td_23[1] + td_23[0])))
+        colc.metric('**2023 Fulcrum**', '${:,}'.format(int(td_23[1])), percent_of_change(hist_td_rev(2022), (td_23[1] + td_23[0])))
 
-            year1 = hist_td_rev(int(year_select) + 1)
-            year2 = hist_td_rev(int(year_select))
-            year3 = hist_td_rev(int(year_select) - 1)
-            year4 = hist_td_rev(int(year_select) - 2)
-            
-            cola.metric('**{} Total**'.format(int(td_23[1] + td_23[0])), percent_of_change(hist_td_rev(2022), (td_23[1] + td_23[0])))
-
-            colb.metric('**{} Total**'.format(int(year_select)), '${:,}'.format(int(year2), percent_of_change(year3, year2)))
-            
-            colc.metric('**{} Total**'.format(int(year_select) - 1), '${:,}'.format(int(year3), percent_of_change(year4, year3)))
-
-            style_metric_cards()
-
-        else:
-
-            year1 = hist_td_rev(int(year_select) + 1)
-            year2 = hist_td_rev(int(year_select))
-            year3 = hist_td_rev(int(year_select) - 1)
-            year4 = hist_td_rev(int(year_select) - 2)
-            
-            cola.metric('**{} Total**'.format(int(year_select) + 1), '${:,}'.format(int(year1), percent_of_change(year2, year1)))
-
-            colb.metric('**{} Total**'.format(int(year_select)), '${:,}'.format(int(year2), percent_of_change(year3, year2)))
-            
-            colc.metric('**{} Total**'.format(int(year_select) - 1), '${:,}'.format(int(year3), percent_of_change(year4, year3)))
-
-            style_metric_cards()
+        style_metric_cards()
 
 
     with col2:
