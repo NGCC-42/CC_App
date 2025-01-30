@@ -2578,6 +2578,39 @@ def to_date_revenue():
     return td_22, td_23, td_24, td_25
 
 
+# HISTORICAL TO-DATE REVENUE -- NEEDS ANNUAL UPDATE
+def hist_td_rev(year):
+
+    td24 = today - timedelta(days=366)
+    td23 = today - timedelta(days=731)
+    td22 = today - timedelta(days=1096)
+    td21 = today - timedelta(days=1461)
+    td20 = today - timedelta(days=1826)
+    td19 = today - timedelta(days=2191)
+    td18 = today - timedelta(days=2557)
+    td17 = today - timedelta(days=2922)
+    td16 = today - timedelta(days=3287)
+    td15 = today - timedelta(days=3652)
+    td14 = today - timedelta(days=4018)
+    td13 = today - timedelta(days=4383)
+
+    date_dict = {2013: td13, 2014: td14, 2015: td15, 2016: td16, 2017: td17, 2018: td18, 2019: td19, 2020: td20, 2021: td21, 2022: td22, 2023: td23, 2024: td24}
+    
+    td_sales = 0
+
+    idx = 0
+
+    for so in df_hist.customer:
+        if df_hist.iloc[idx].order_date.date().year == year:
+            if date_dict[year].date() >= df_hist.iloc[idx].order_date.date() >= beginning_of_year(df_hist.iloc[idx].order_date).date():
+                td_sales += df_hist.iloc[idx].total_sale
+            
+        idx += 1
+
+
+    return td_sales
+
+
 
 @st.cache_data
 def gen_product_list(prod_bom_list):
