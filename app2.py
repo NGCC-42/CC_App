@@ -3199,7 +3199,60 @@ total_25, web_25, ful_25, avg_25, magic25 = calc_monthly_totals_v2(sales_dict_25
 profit_24 = profit_by_type(['2024'], ['Jet', 'Control', 'Handheld', 'Hose', 'Accessory']) + mfx_profit
 profit_23 = profit_by_type(['2023'], ['Jet', 'Control', 'Handheld', 'Hose', 'Accessory'])
 
+def plot_annual_comparison(x, year_select, col1, line_width=4.5, fig_width=12, fig_height=8):
+    # Define year series mapping
+    year_series = {
+        '2025': ['2022', '2023', '2024'],
+        '2024': ['2022', '2023', '2024'],
+        '2023': ['2022', '2023', '2024'],
+        '2022': ['2021', '2022', '2023'],
+        '2021': ['2020', '2021', '2022'],
+        '2020': ['2019', '2020', '2021'],
+        '2019': ['2018', '2019', '2020'],
+        '2018': ['2017', '2018', '2019'],
+        '2017': ['2016', '2017', '2018'],
+        '2016': ['2015', '2016', '2017'],
+        '2015': ['2014', '2015', '2016'],
+        '2014': ['2013', '2014', '2015'],
+        '2013': ['2013', '2014', '2015']
+    }
 
+    # Define corresponding colors
+    colors = ['limegreen', 'white', 'grey']
+
+    # Retrieve year labels based on selection
+    selected_years = year_series.get(year_select, ['2022', '2023', '2024'])
+
+    # Create figure and axis with dynamic size
+    fig, ax = plt.subplots(figsize=(fig_width, fig_height), dpi=100)
+
+    # Plot data dynamically with adjustable line width
+    for idx, year in enumerate(selected_years):
+        ax.plot(x, globals().get(f"y{year}", []), label=year, color=colors[idx], linewidth=line_width)
+
+    # Set background colors
+    ax.set_facecolor('#000000')
+    fig.patch.set_facecolor('#000000')
+
+    # Customize tick labels for responsiveness
+    ax.tick_params(axis='x', labelsize=40, colors='white')
+    ax.tick_params(axis='y', labelsize=40, colors='white')
+
+    # Set dynamic y-ticks based on data range
+    #all_y_values = [globals().get(f"y{year}", []) for year in selected_years if globals().get(f"y{year}") is not None]
+    #if all_y_values:
+        #y_min = min(map(min, all_y_values))
+        #y_max = max(map(max, all_y_values))
+        #y_ticks = range(int(y_min // 20000) * 20000, int(y_max // 20000 + 2) * 20000, 20000)
+        #ax.set_yticks(y_ticks)
+    plt.yticks([20000, 40000, 60000, 80000, 100000, 120000, 140000, 160000, 180000, 200000, 220000, 240000, 260000, 280000])
+    plt.tick_params(axis='x', colors='white')
+    plt.tick_params(axis='y', colors='white')
+    # Customize legend
+    #ax.legend(fontsize=16, loc="upper right", frameon=False)
+    fig.legend(fontsize=40)
+    # Ensure proper figure scaling for Streamlit
+    col1.pyplot(fig, use_container_width=True)
 
 
 if task_choice == 'Dashboard':
@@ -3314,67 +3367,7 @@ if task_choice == 'Dashboard':
 
     col1.header('Annual Comparison')
     
-    fig, ax = plt.subplots()
-    if year_select in ['2025', '2024', '2023']:
-        ax.plot(x, y2022, label='2022', color='limegreen', linewidth=4.5)
-        ax.plot(x, y2023, label='2023', color='white', linewidth=4.5)
-        ax.plot(x, y2024, label='2024', color='grey', linewidth=4.5)
-        
-    elif year_select == '2022':
-        ax.plot(x, y2021, label='2021', color='limegreen', linewidth=4.5)
-        ax.plot(x, y2022, label='2022', color='white', linewidth=4.5)
-        ax.plot(x, y2023, label='2023', color='grey', linewidth=4.5)
-
-    elif year_select == '2021':
-        ax.plot(x, y2020, label='2020', color='limegreen', linewidth=4.5)
-        ax.plot(x, y2021, label='2021', color='white', linewidth=4.5)
-        ax.plot(x, y2022, label='2022', color='grey', linewidth=4.5)
-
-    elif year_select == '2020':
-        ax.plot(x, y2019, label='2019', color='limegreen', linewidth=4.5)
-        ax.plot(x, y2020, label='2020', color='white', linewidth=4.5)
-        ax.plot(x, y2021, label='2021', color='grey', linewidth=4.5)
-
-    elif year_select == '2019':
-        ax.plot(x, y2018, label='2018', color='limegreen', linewidth=4.5)
-        ax.plot(x, y2019, label='2019', color='white', linewidth=4.5)
-        ax.plot(x, y2020, label='2020', color='grey', linewidth=4.5)
-
-    elif year_select == '2018':
-        ax.plot(x, y2017, label='2017', color='limegreen', linewidth=4.5)
-        ax.plot(x, y2018, label='2018', color='white', linewidth=4.5)
-        ax.plot(x, y2019, label='2019', color='grey', linewidth=4.5)
-
-    elif year_select == '2017':
-        ax.plot(x, y2016, label='2016', color='limegreen', linewidth=4.5)
-        ax.plot(x, y2017, label='2017', color='white', linewidth=4.5)
-        ax.plot(x, y2018, label='2018', color='grey', linewidth=4.5)
-
-    elif year_select == '2016':
-        ax.plot(x, y2015, label='2015', color='limegreen', linewidth=4.5)
-        ax.plot(x, y2016, label='2016', color='white', linewidth=4.5)
-        ax.plot(x, y2017, label='2017', color='grey', linewidth=4.5)
-
-    elif year_select == '2015':
-        ax.plot(x, y2014, label='2014', color='limegreen', linewidth=4.5)
-        ax.plot(x, y2015, label='2015', color='white', linewidth=4.5)
-        ax.plot(x, y2016, label='2016', color='grey', linewidth=4.5)
-
-    elif year_select == '2014' or year_select == '2013':
-        ax.plot(x, y2013, label='2013', color='limegreen', linewidth=4.5)
-        ax.plot(x, y2014, label='2014', color='white', linewidth=4.5)
-        ax.plot(x, y2015, label='2015', color='grey', linewidth=4.5)
-        
-    ax.set_facecolor('#000000')
-    fig.set_facecolor('#000000')
-    plt.yticks([20000, 40000, 60000, 80000, 100000, 120000, 140000, 160000, 180000, 200000, 220000, 240000, 260000, 280000])
-    plt.tick_params(axis='x', colors='white')
-    plt.tick_params(axis='y', colors='white')
-    #plt.title('Annual Comparison', color='green')
-    plt.figure(figsize=(15,10))
-    fig.legend()  
-
-    col1.pyplot(fig)
+    plot_annual_comparison(x, year_select, col1, line_width=15, fig_width=30, fig_height=25)
     
     with colx:
         
