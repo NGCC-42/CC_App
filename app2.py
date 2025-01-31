@@ -3235,8 +3235,8 @@ def plot_annual_comparison(x, year_select, col1, line_width=4.5, fig_width=12, f
     fig.patch.set_facecolor('#000000')
 
     # Customize tick labels for responsiveness
-    ax.tick_params(axis='x', labelsize=22, colors='white')
-    ax.tick_params(axis='y', labelsize=22, colors='white')
+    ax.tick_params(axis='x', labelsize=25, colors='white')
+    ax.tick_params(axis='y', labelsize=25, colors='white')
 
     # Set dynamic y-ticks based on data range
     #all_y_values = [globals().get(f"y{year}", []) for year in selected_years if globals().get(f"y{year}") is not None]
@@ -3250,7 +3250,7 @@ def plot_annual_comparison(x, year_select, col1, line_width=4.5, fig_width=12, f
     plt.tick_params(axis='y', colors='white')
     # Customize legend
     #ax.legend(fontsize=16, loc="upper right", frameon=False)
-    fig.legend(fontsize=22)
+    fig.legend(fontsize=25)
     # Ensure proper figure scaling for Streamlit
     col1.pyplot(fig, use_container_width=True)
 
@@ -3367,7 +3367,7 @@ if task_choice == 'Dashboard':
 
     col1.header('Annual Comparison')
     
-    plot_annual_comparison(x, year_select, col1, line_width=13, fig_width=20, fig_height=15)
+    plot_annual_comparison(x, year_select, col1, line_width=11, fig_width=18, fig_height=11)
     
     with colx:
         
