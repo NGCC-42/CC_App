@@ -144,6 +144,7 @@ df.rename(columns={
     inplace=True)
 
 df.order_date = pd.to_datetime(df.order_date).dt.date
+df['total_line_item_spend'] = df['total_line_item_spend'].astype('float32')
 
 df_hsd.rename(columns={
     'Sales Order': 'sales_order',
@@ -198,6 +199,10 @@ df_cogs.rename(columns={
                     'Total Price': 'total_price',
                     'Unit Price': 'unit_price'},
                     inplace=True)  
+
+df_cogs['total_cost'] = df_cogs['total_cost'].astype('float32')
+df_cogs['total_price'] = df_cogs['total_price'].astype('float32')
+df_cogs['unit_price'] = df_cogs['unit_price'].astype('float32')
 
 ### DEFINE A FUNCTION TO CORRECT NAME DISCRPANCIES IN SOD
 
