@@ -955,23 +955,32 @@ def calc_monthly_totals(sales_dict, months=['All']):
 
 @st.cache_data
 def get_monthly_sales_wvr(df, year):
+    # Ensure 'order_date' is in datetime format
+    df["order_date"] = pd.to_datetime(df["order_date"], errors="coerce")
 
-    sales_dict = {'January': [0, 0], 'February': [0, 0], 'March': [0, 0], 'April': [0, 0], 'May': [0, 0], 'June': [0, 0], 'July': [0, 0], 'August': [0, 0], 'September': [0, 0], 'October': [0, 0], 'November': [0, 0], 'December': [0, 0]}
-
-    idx = 0
-
-    for cust in df.customer:
-		
-        month = num_to_month(df.iloc[idx].order_date.month)
+    # Initialize sales dictionary
+    months = ["January", "February", "March", "April", "May", "June", 
+              "July", "August", "September", "October", "November", "December"]
+    sales_dict = {month: [0, 0] for month in months}
     
-        if df.iloc[idx].order_date.year == year:
-            if cust in wholesale_list:
-                sales_dict[month][0] += df.iloc[idx].total_line_item_spend
-            else:
-                sales_dict[month][1] += df.iloc[idx].total_line_item_spend            
+    # Filter dataset to the required year
+    df = df[df["order_date"].dt.year == year]
 
-        idx += 1
-	
+    # Convert order_date to month names
+    df["month"] = df["order_date"].dt.month.map(lambda x: months[x - 1])
+
+    # Determine if the customer is wholesale
+    df["is_wholesale"] = df["customer"].isin(wholesale_list)
+
+    # Group by month
+    grouped = df.groupby("month")
+
+    for month, group in grouped:
+        # Sum of sales for wholesale customers
+        sales_dict[month][0] = group.loc[group["is_wholesale"], "total_line_item_spend"].sum()
+        # Sum of sales for non-wholesale customers
+        sales_dict[month][1] = group.loc[~group["is_wholesale"], "total_line_item_spend"].sum()
+
     return sales_dict
 
 
