@@ -1026,33 +1026,41 @@ def get_monthly_sales_wvr_ytd():
 ### FOR DASHBOARD ###  
 @st.cache_data
 def get_monthly_sales_v2(df, year):
+    # Ensure 'order_date' is in datetime format
+    df["order_date"] = pd.to_datetime(df["order_date"], errors="coerce")
 
-    unique_sales_orders = []
-
-    sales_dict = {'January': [[0, 0], [0, 0], [0]], 'February': [[0, 0], [0, 0], [0]], 'March': [[0, 0], [0, 0], [0]], 'April': [[0, 0], [0, 0], [0]], 'May': [[0, 0], [0, 0], [0]], 'June': [[0, 0], [0, 0], [0]], 'July': [[0, 0], [0, 0], [0]], 'August': [[0, 0], [0, 0], [0]], 'September': [[0, 0], [0, 0], [0]], 'October': [[0, 0], [0, 0], [0]], 'November': [[0, 0], [0, 0], [0]], 'December': [[0, 0], [0, 0], [0]]}
-    idx = 0
-
-    for sale in df.sales_order:
-        
-        month = num_to_month(df.iloc[idx].order_date.month)
-
-        if df.iloc[idx].order_date.year == year:
-            
-            if df.iloc[idx].channel[0] == 'F':
-                sales_dict[month][0][0] += df.iloc[idx].total_line_item_spend
-                if sale not in unique_sales_orders:
-                    sales_dict[month][0][1] += 1
-                    unique_sales_orders.append(sale)
-            else:
-                sales_dict[month][1][0] += df.iloc[idx].total_line_item_spend   
-                if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX' or df.iloc[idx].item_sku[:5] == 'Magic' or df.iloc[idx].item_sku[:3] == 'MFX':
-                    sales_dict[month][2][0] += df.iloc[idx].total_line_item_spend
-                if sale not in unique_sales_orders:
-                    sales_dict[month][1][1] += 1
-                    unique_sales_orders.append(sale)
-
-        idx += 1
+    # Initialize sales dictionary
+    months = ["January", "February", "March", "April", "May", "June", 
+              "July", "August", "September", "October", "November", "December"]
+    sales_dict = {month: [[0, 0], [0, 0], [0]] for month in months}
     
+    # Filter dataset to the required year
+    df = df[df["order_date"].dt.year == year]
+    
+    # Convert order_date to month names
+    df["month"] = df["order_date"].dt.month.map(lambda x: months[x - 1])
+    
+    # Determine if the sale is from channel "F"
+    df["is_F"] = df["channel"].str.startswith("F")
+
+    # Identify Magic/MFX items
+    df["is_magic"] = df["line_item"].str.startswith(("Magic", "MFX")) | df["item_sku"].str.startswith(("Magic", "MFX"))
+
+    # Group by month
+    for month, group in df.groupby("month"):
+        # Total spend for channel "F"
+        sales_dict[month][0][0] = group.loc[group["is_F"], "total_line_item_spend"].sum()
+        # Count of unique sales orders for channel "F"
+        sales_dict[month][0][1] = group.loc[group["is_F"], "sales_order"].nunique()
+        
+        # Total spend for non-"F" channels
+        sales_dict[month][1][0] = group.loc[~group["is_F"], "total_line_item_spend"].sum()
+        # Count of unique sales orders for non-"F" channels
+        sales_dict[month][1][1] = group.loc[~group["is_F"], "sales_order"].nunique()
+        
+        # Total spend for Magic/MFX items
+        sales_dict[month][2][0] = group.loc[group["is_magic"], "total_line_item_spend"].sum()
+
     return sales_dict
 
 
