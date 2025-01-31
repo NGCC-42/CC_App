@@ -2520,39 +2520,47 @@ def quarterly_sales(year):
     
 
 def to_date_revenue():
-
-    # WEB SALES, FULCRUM SALES
-
-    td_22 = [0,0]
-    td_23 = [0,0]
-    td_24 = [0,0]
-    td_25 = [0,0]
-
-    idx = 0
+    # td_22 remains unused in the original code; keeping it as [0, 0]
+    td_22 = [0, 0]
     
-    for sale in df.sales_order:
-        order_date = df.iloc[idx].order_date
-        if df.iloc[idx].channel[0] == 'F':
-            if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
-                td_23[0] += df.iloc[idx].total_line_item_spend
-            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
-                td_24[0] += df.iloc[idx].total_line_item_spend
-            elif today.date() >= order_date >= beginning_of_year(today).date():
-                td_25[0] += df.iloc[idx].total_line_item_spend
-            #elif order_date.year == 2025:
-                #td_25[0] += df.iloc[idx].total_line_item_spend   
-        else:
-            if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
-                td_23[1] += df.iloc[idx].total_line_item_spend
-            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
-                td_24[1] += df.iloc[idx].total_line_item_spend
-            elif today.date() >= order_date >= beginning_of_year(today).date():
-                td_25[1] += df.iloc[idx].total_line_item_spend
-            #elif order_date.year == 2025:
-                #td_25[1] += df.iloc[idx].total_line_item_spend            
-
-        idx += 1
-        
+    # Ensure the order_date column is in datetime format.
+    # (This will convert any strings or non-datetime values to datetime, with errors coerced to NaT.)
+    df["order_date"] = pd.to_datetime(df["order_date"], errors="coerce")
+    
+    # Create a boolean flag: True if the channel starts with 'F'
+    cond_F = df["channel"].str.startswith("F")
+    
+    # Create masks for each date range.
+    # For td_23: orders between beginning_of_year(two_years_ago) and two_years_ago (inclusive)
+    cond_td23 = (
+        (df["order_date"].dt.date >= beginning_of_year(two_years_ago).date()) &
+        (df["order_date"].dt.date <= two_years_ago.date())
+    )
+    # For td_24: orders between beginning_of_year(one_year_ago) and one_year_ago
+    cond_td24 = (
+        (df["order_date"].dt.date >= beginning_of_year(one_year_ago).date()) &
+        (df["order_date"].dt.date <= one_year_ago.date())
+    )
+    # For td_25: orders between beginning_of_year(today) and today
+    cond_td25 = (
+        (df["order_date"].dt.date >= beginning_of_year(today).date()) &
+        (df["order_date"].dt.date <= today.date())
+    )
+    
+    # Sum total_line_item_spend for each combination of date range and channel type:
+    td_23 = [
+        df.loc[cond_td23 & cond_F, "total_line_item_spend"].sum(),
+        df.loc[cond_td23 & (~cond_F), "total_line_item_spend"].sum()
+    ]
+    td_24 = [
+        df.loc[cond_td24 & cond_F, "total_line_item_spend"].sum(),
+        df.loc[cond_td24 & (~cond_F), "total_line_item_spend"].sum()
+    ]
+    td_25 = [
+        df.loc[cond_td25 & cond_F, "total_line_item_spend"].sum(),
+        df.loc[cond_td25 & (~cond_F), "total_line_item_spend"].sum()
+    ]
+    
     return td_22, td_23, td_24, td_25
 
 
