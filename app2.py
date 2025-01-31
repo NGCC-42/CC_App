@@ -4829,17 +4829,21 @@ if task_choice == 'Product Reports':
 
         if year == 2025:
 
+            tb_td23, tb_td24 = to_date_product('CC-TB-35')
+            ss_td23, ss_td24 = to_date_product('CC-SS-35')
+            sm_td23, sm_td24 = to_date_product('CC-SM')
+            
             total_cntl_rev = annual_product_totals[5]['The Button'][1] + annual_product_totals[5]['Shostarter'][1] + annual_product_totals[5]['Shomaster'][1]
             
             with col2:
                 cola, colb, colc = st.columns(3)
                 
                 cola.subheader('The Button')
-                cola.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['The Button'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['The Button'][0]), annual_product_totals[5]['The Button'][0] - annual_product_totals[4]['The Button'][0])
+                cola.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['The Button'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['The Button'][0]), annual_product_totals[5]['The Button'][0] - tb_td24)
                 colb.subheader('Shostarter')
-                colb.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['Shostarter'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['Shostarter'][0]), annual_product_totals[5]['Shostarter'][0] - annual_product_totals[4]['Shostarter'][0])
+                colb.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['Shostarter'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['Shostarter'][0]), annual_product_totals[5]['Shostarter'][0] - ss_td24)
                 colc.subheader('Shomaster')
-                colc.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['Shomaster'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['Shomaster'][0]), annual_product_totals[5]['Shomaster'][0] - annual_product_totals[4]['Shomaster'][0])
+                colc.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['Shomaster'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['Shomaster'][0]), annual_product_totals[5]['Shomaster'][0] - sm_td24)
     
                 prod_profit_TB, profit_per_unit_TB, prod_profit_last_TB, avg_price_TB, avg_price_last_TB, wholesale_sales_TB, wholesale_percentage_TB, wholesale_delta_TB = calculate_product_metrics(annual_product_totals, 'The Button', 5, bom_cost_control)
                 prod_profit_SS, profit_per_unit_SS, prod_profit_last_SS, avg_price_SS, avg_price_last_SS, wholesale_sales_SS, wholesale_percentage_SS, wholesale_delta_SS = calculate_product_metrics(annual_product_totals, 'Shostarter', 5, bom_cost_control)
