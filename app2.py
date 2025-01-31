@@ -643,65 +643,21 @@ def sum_of_dict_values(dict):
     
     return '${:,.2f}'.format(total)
 
-### DEFINE A FUNCTION TO CONVERT MONTH STRING TO NUMERICAL ###
+### DEFINE A FUNCTION TO CONVERT MONTH STRING TO NUMERICAL 
 def month_to_num(month):
-
-    month_num = '01'
-
-    if month == 'February':
-        month_num = '02'
-    elif month == 'March':
-        month_num = '03'
-    elif month == 'April':
-        month_num = '04'
-    elif month == 'May':
-        month_num = '05'
-    elif month == 'June':
-        month_num = '06'
-    elif month == 'July':
-        month_num = '07'
-    elif month == 'August':
-        month_num = '08'
-    elif month == 'September':
-        month_num = '09'
-    elif month == 'October':
-        month_num = '10'
-    elif month == 'November':
-        month_num = '11'
-    elif month == 'December':
-        month_num = '12'
+    months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+    ]
+    return (months.index(month) + 1)
         
-    return month_num
 
 def num_to_month(month_num):
-
-    month = 'January'
-
-    if month_num == 2:
-        month = 'February'
-    elif month_num == 3:
-        month = 'March'
-    elif month_num == 4:
-        month = 'April'
-    elif month_num == 5:
-        month = 'May'
-    elif month_num == 6:
-        month = 'June'
-    elif month_num == 7:
-        month = 'July'
-    elif month_num == 8:
-        month = 'August'
-    elif month_num == 9:
-        month = 'September'
-    elif month_num == 10:
-        month = 'October'
-    elif month_num == 11:
-        month = 'November'
-    elif month_num == 12:
-        month = 'December'
-
-    return month
-
+    months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ]
+    return months[month_num - 1]
 
 
 ### SALES CHANNEL TRACKING ###
