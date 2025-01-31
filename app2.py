@@ -3367,7 +3367,7 @@ if task_choice == 'Dashboard':
 
     col1.header('Annual Comparison')
     
-    plot_annual_comparison(x, year_select, col1, line_width=11, fig_width=18, fig_height=11)
+    plot_annual_comparison(x, year_select, col1, line_width=11, fig_width=18, fig_height=13)
     
     with colx:
         
