@@ -1101,40 +1101,41 @@ def get_monthly_sales_ytd():
 
 @st.cache_data
 def calc_monthly_totals_v2(sales_dict, months=['All']):
-
     total_sales = 0
     total_web = 0
     total_fulcrum = 0
-    num_months = 0
     magic_sales = 0
-    
-    for month, sales in sales_dict.items():
-        if months == ['All']:
-            total_sales += (sales[0][0] + sales[1][0])
-            total_web += sales[0][0]
-            total_fulcrum += sales[1][0]
-            magic_sales += sales[2][0]
-            if sales[0][0] + sales[1][0] < 100:
-                pass
-            else:
-                num_months += 1
-            
-        else:
-            for mnth in months:
-                if month == mnth:
-                    total_sales += (sales[0][0] + sales[1][0])
-                    total_web += sales[0][0]
-                    total_fulcrum += sales[1][0]
-                if sales[0][0] + sales [1][0] < 100:
-                    pass
-                else:
-                    num_months += 1
-    if num_months == 0:
-        num_months = 1
-    avg_month = total_sales / num_months                
-    total_web_perc = percent_of_sales(total_web, total_fulcrum)
+    num_months = 0
+
+    # Determine which months to iterate over
+    if months == ['All']:
+        selected_items = sales_dict.items()
+    else:
+        selected_items = ((m, sales) for m, sales in sales_dict.items() if m in months)
+
+    # Loop over the selected months
+    for m, sales in selected_items:
+        web      = sales[0][0]
+        fulcrum  = sales[1][0]
+        magic    = sales[2][0]
+        month_total = web + fulcrum
+
+        total_sales   += month_total
+        total_web     += web
+        total_fulcrum += fulcrum
+        magic_sales   += magic
+
+        # Only count the month if total sales are at least 100
+        if month_total >= 100:
+            num_months += 1
+
+    # Compute average monthly sales (if no month qualifies, set average to 0)
+    avg_month = total_sales / num_months if num_months else 0
+
+    # Compute percentages using your helper function (assumed to be defined elsewhere)
+    total_web_perc     = percent_of_sales(total_web, total_fulcrum)
     total_fulcrum_perc = percent_of_sales(total_fulcrum, total_web)
-    
+
     return total_sales, total_web_perc, total_fulcrum_perc, avg_month, magic_sales
 
 ### FUNCTIONS FOR PLOTTING CHARTS ###
@@ -1199,48 +1200,7 @@ def extract_transaction_data(sales_dict, month='All'):
             
 
 
-def extract_transaction_data(sales_dict, month='All'):
 
-    sales_sum = 0
-    sales_sum_web = 0
-    sales_sum_fulcrum = 0
-    
-    total_trans = 0
-    total_trans_web = 0
-    total_trans_fulcrum = 0
-
-    avg_order = 0
-    avg_order_web = 0
-    avg_order_fulcrum = 0
-
-    if month == 'All':
-        for mnth, sales in sales_dict.items():
-            sales_sum += sales[0][0] + sales[1][0]
-            sales_sum_web += sales[0][0]
-            sales_sum_fulcrum += sales[1][0]
-            total_trans += sales[0][1] + sales[1][1]
-            total_trans_web += sales[0][1]
-            total_trans_fulcrum += sales[1][1]
-    else:
-        sales_sum_web = sales_dict[month][0][0]
-        sales_sum_fulcrum = sales_dict[month][1][0]
-        sales_sum = sales_sum_fulcrum + sales_sum_web
-        total_trans_web = sales_dict[month][0][1]
-        total_trans_fulcrum = sales_dict[month][1][1]
-        total_trans = total_trans_web + total_trans_fulcrum
-
-    if total_trans == 0:
-        avg_order = 0
-    elif total_trans_web == 0:
-        avg_order_web = 0
-    elif total_trans_fulcrum == 0:
-        avg_order_fulcrum = 0
-    else:
-        avg_order = sales_sum / total_trans
-        avg_order_web = sales_sum_web / total_trans_web
-        avg_order_fulcrum = sales_sum_fulcrum / total_trans_fulcrum
-
-    return [avg_order_web, avg_order_fulcrum, avg_order, sales_sum_web, sales_sum_fulcrum, sales_sum, total_trans_web, total_trans_fulcrum, total_trans]
 
 
 ### USE METRIC CARDS TO DISPLAY MONTHLY SALES DATA ###
