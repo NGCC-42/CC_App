@@ -1171,47 +1171,30 @@ def plot_bar_chart_ms_comp(df):
 
 @st.cache_data
 def extract_transaction_data(sales_dict, month='All'):
-
-    sales_sum = 0
-    sales_sum_web = 0
-    sales_sum_fulcrum = 0
-    
-    total_trans = 0
-    total_trans_web = 0
-    total_trans_fulcrum = 0
-
-    avg_order = 0
-    avg_order_web = 0
-    avg_order_fulcrum = 0
-
     if month == 'All':
-        for mnth, sales in sales_dict.items():
-            sales_sum += sales[0][0] + sales[1][0]
-            sales_sum_web += sales[0][0]
-            sales_sum_fulcrum += sales[1][0]
-            total_trans += sales[0][1] + sales[1][1]
-            total_trans_web += sales[0][1]
-            total_trans_fulcrum += sales[1][1]
+        # Sum the wholesale and non-wholesale values over all months using generator expressions.
+        sales_sum_web      = sum(sales[0][0] for sales in sales_dict.values())
+        sales_sum_fulcrum  = sum(sales[1][0] for sales in sales_dict.values())
+        total_trans_web    = sum(sales[0][1] for sales in sales_dict.values())
+        total_trans_fulcrum= sum(sales[1][1] for sales in sales_dict.values())
     else:
-        sales_sum_web = sales_dict[month][0][0]
-        sales_sum_fulcrum = sales_dict[month][1][0]
-        sales_sum = sales_sum_fulcrum + sales_sum_web
-        total_trans_web = sales_dict[month][0][1]
+        # For a specific month, extract values directly
+        sales_sum_web       = sales_dict[month][0][0]
+        sales_sum_fulcrum   = sales_dict[month][1][0]
+        total_trans_web     = sales_dict[month][0][1]
         total_trans_fulcrum = sales_dict[month][1][1]
-        total_trans = total_trans_web + total_trans_fulcrum
+    
+    sales_sum   = sales_sum_web + sales_sum_fulcrum
+    total_trans = total_trans_web + total_trans_fulcrum
 
-    if total_trans == 0:
-        avg_order = 0
-    elif total_trans_web == 0:
-        avg_order_web = 0
-    elif total_trans_fulcrum == 0:
-        avg_order_fulcrum = 0
-    else:
-        avg_order = sales_sum / total_trans
-        avg_order_web = sales_sum_web / total_trans_web
-        avg_order_fulcrum = sales_sum_fulcrum / total_trans_fulcrum
+    # Calculate averages using inline conditional expressions
+    avg_order         = sales_sum / total_trans if total_trans else 0
+    avg_order_web     = sales_sum_web / total_trans_web if total_trans_web else 0
+    avg_order_fulcrum = sales_sum_fulcrum / total_trans_fulcrum if total_trans_fulcrum else 0
 
-    return [avg_order_web, avg_order_fulcrum, avg_order, sales_sum_web, sales_sum_fulcrum, sales_sum, total_trans_web, total_trans_fulcrum, total_trans]
+    return [avg_order_web, avg_order_fulcrum, avg_order,
+            sales_sum_web, sales_sum_fulcrum, sales_sum,
+            total_trans_web, total_trans_fulcrum, total_trans]
             
             
 
