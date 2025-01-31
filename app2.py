@@ -1156,7 +1156,7 @@ def plot_bar_chart_ms(df):
 	st.write(alt.Chart(df).mark_bar().encode(
 		x=alt.X('Months', sort=None).title('Month'),
 		y='Total Sales',
-	).properties(height=500, width=750).configure_mark(
+	).properties(height=500, width=700).configure_mark(
 		color='limegreen'
 	))
 
