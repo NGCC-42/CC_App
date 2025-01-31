@@ -3033,127 +3033,100 @@ def hist_cust_sales():
 
 @st.cache_data
 def hist_annual_sales():
-
+    # Define month names
+    months = ["January", "February", "March", "April", "May", "June",
+              "July", "August", "September", "October", "November", "December"]
     
-    sales13 = {'January': [[0,0],[0,0]], 'February': [[0,0],[0,0]], 'March': [[0,0],[0,0]], 'April': [[0,0],[0,0]], 'May': [[0,0],[0,0]], 'June': [[0,0],[0,0]], 'July': [[0,0],[0,0]], 'August': [[0,0],[0,0]], 'September': [[0,0],[0,0]], 'October': [[0,0],[0,0]], 'November': [[0,0],[0,0]], 'December': [[0,0],[0,0]]}
-    sales14 = {'January': [[0,0],[0,0]], 'February': [[0,0],[0,0]], 'March': [[0,0],[0,0]], 'April': [[0,0],[0,0]], 'May': [[0,0],[0,0]], 'June': [[0,0],[0,0]], 'July': [[0,0],[0,0]], 'August': [[0,0],[0,0]], 'September': [[0,0],[0,0]], 'October': [[0,0],[0,0]], 'November': [[0,0],[0,0]], 'December': [[0,0],[0,0]]}
-    sales15 = {'January': [[0,0],[0,0]], 'February': [[0,0],[0,0]], 'March': [[0,0],[0,0]], 'April': [[0,0],[0,0]], 'May': [[0,0],[0,0]], 'June': [[0,0],[0,0]], 'July': [[0,0],[0,0]], 'August': [[0,0],[0,0]], 'September': [[0,0],[0,0]], 'October': [[0,0],[0,0]], 'November': [[0,0],[0,0]], 'December': [[0,0],[0,0]]}
-    sales16 = {'January': [[0,0],[0,0]], 'February': [[0,0],[0,0]], 'March': [[0,0],[0,0]], 'April': [[0,0],[0,0]], 'May': [[0,0],[0,0]], 'June': [[0,0],[0,0]], 'July': [[0,0],[0,0]], 'August': [[0,0],[0,0]], 'September': [[0,0],[0,0]], 'October': [[0,0],[0,0]], 'November': [[0,0],[0,0]], 'December': [[0,0],[0,0]]}
-    sales17 = {'January': [[0,0],[0,0]], 'February': [[0,0],[0,0]], 'March': [[0,0],[0,0]], 'April': [[0,0],[0,0]], 'May': [[0,0],[0,0]], 'June': [[0,0],[0,0]], 'July': [[0,0],[0,0]], 'August': [[0,0],[0,0]], 'September': [[0,0],[0,0]], 'October': [[0,0],[0,0]], 'November': [[0,0],[0,0]], 'December': [[0,0],[0,0]]}
-    sales18 = {'January': [[0,0],[0,0]], 'February': [[0,0],[0,0]], 'March': [[0,0],[0,0]], 'April': [[0,0],[0,0]], 'May': [[0,0],[0,0]], 'June': [[0,0],[0,0]], 'July': [[0,0],[0,0]], 'August': [[0,0],[0,0]], 'September': [[0,0],[0,0]], 'October': [[0,0],[0,0]], 'November': [[0,0],[0,0]], 'December': [[0,0],[0,0]]}
-    sales19 = {'January': [[0,0],[0,0]], 'February': [[0,0],[0,0]], 'March': [[0,0],[0,0]], 'April': [[0,0],[0,0]], 'May': [[0,0],[0,0]], 'June': [[0,0],[0,0]], 'July': [[0,0],[0,0]], 'August': [[0,0],[0,0]], 'September': [[0,0],[0,0]], 'October': [[0,0],[0,0]], 'November': [[0,0],[0,0]], 'December': [[0,0],[0,0]]}
-    sales20 = {'January': [[0,0],[0,0]], 'February': [[0,0],[0,0]], 'March': [[0,0],[0,0]], 'April': [[0,0],[0,0]], 'May': [[0,0],[0,0]], 'June': [[0,0],[0,0]], 'July': [[0,0],[0,0]], 'August': [[0,0],[0,0]], 'September': [[0,0],[0,0]], 'October': [[0,0],[0,0]], 'November': [[0,0],[0,0]], 'December': [[0,0],[0,0]]}
-    sales21 = {'January': [[0,0],[0,0]], 'February': [[0,0],[0,0]], 'March': [[0,0],[0,0]], 'April': [[0,0],[0,0]], 'May': [[0,0],[0,0]], 'June': [[0,0],[0,0]], 'July': [[0,0],[0,0]], 'August': [[0,0],[0,0]], 'September': [[0,0],[0,0]], 'October': [[0,0],[0,0]], 'November': [[0,0],[0,0]], 'December': [[0,0],[0,0]]}
-    sales22 = {'January': [[0,0],[0,0]], 'February': [[0,0],[0,0]], 'March': [[0,0],[0,0]], 'April': [[0,0],[0,0]], 'May': [[0,0],[0,0]], 'June': [[0,0],[0,0]], 'July': [[0,0],[0,0]], 'August': [[0,0],[0,0]], 'September': [[0,0],[0,0]], 'October': [[0,0],[0,0]], 'November': [[0,0],[0,0]], 'December': [[0,0],[0,0]]}
+    # Template dictionary for a year: for each month, a list of two lists:
+    # index 0: [wholesale_total, wholesale_order_count]
+    # index 1: [non_wholesale_total, non_wholesale_order_count]
+    empty_year_dict = {month: [[0, 0], [0, 0]] for month in months}
     
-    idx = 0
-
+    # Work on a copy of df_hist
+    #df = df_hist.copy()
     
-    for sale in df_hist.customer:
-
-
-        if sale in wholesale_list:
-
-            if df_hist.iloc[idx].order_date.date().year == 2013:
-                sales13[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][0] += float(df_hist.iloc[idx].total_sale)
-                sales13[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][1] += 1
+    # Ensure 'order_date' is datetime
+    df_hist["order_date"] = pd.to_datetime(df_hist["order_date"], errors="coerce")
     
-            if df_hist.iloc[idx].order_date.date().year == 2014:
-                sales14[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][0] += float(df_hist.iloc[idx].total_sale)
-                sales14[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][1] += 1
+    # Create new columns for year and month (as month names)
+    df_hist["year"] = df_hist["order_date"].dt.year
+    df_hist["month"] = df_hist["order_date"].dt.month.apply(lambda m: months[m - 1])
     
-            if df_hist.iloc[idx].order_date.date().year == 2015:
-                sales15[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][0] += float(df_hist.iloc[idx].total_sale)
-                sales15[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][1] += 1
+    # Convert 'total_sale' to numeric (if not already) and fill invalid values with 0
+    df_hist["total_sale"] = pd.to_numeric(df_hist["total_sale"], errors="coerce").fillna(0)
     
-            if df_hist.iloc[idx].order_date.date().year == 2016:
-                sales16[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][0] += float(df_hist.iloc[idx].total_sale)
-                sales16[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][1] += 1
+    # Create a wholesale flag column (True if customer is in wholesale_list)
+    df_hist["wholesale"] = df_hist["customer"].isin(wholesale_list)
     
-            if df_hist.iloc[idx].order_date.date().year == 2017:
-                sales17[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][0] += float(df_hist.iloc[idx].total_sale)
-                sales17[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][1] += 1
+    # Group by year, month, and wholesale flag.
+    # For each group, compute:
+    #   - Sum of total_sale.
+    #   - Count of orders (each row is one order).
+    grouped = df_hist.groupby(["year", "month", "wholesale"]).agg(
+        total_sale_sum=("total_sale", "sum"),
+        order_count=("total_sale", "size")
+    ).reset_index()
     
-            if df_hist.iloc[idx].order_date.date().year == 2018:
-                sales18[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][0] += float(df_hist.iloc[idx].total_sale)
-                sales18[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][1] += 1
+    # Prepare a dictionary to hold results for years 2013 to 2022.
+    yearly_results = {yr: {month: [[0, 0], [0, 0]] for month in months} for yr in range(2013, 2023)}
     
-            if df_hist.iloc[idx].order_date.date().year == 2019:
-                sales19[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][0] += float(df_hist.iloc[idx].total_sale)
-                sales19[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][1] += 1
+    # Populate the results dictionary using the grouped data.
+    for _, row in grouped.iterrows():
+        yr = row["year"]
+        month = row["month"]
+        # Wholesale orders go in index 0; non-wholesale in index 1.
+        idx = 0 if row["wholesale"] else 1
+        if yr in yearly_results:
+            yearly_results[yr][month][idx][0] = row["total_sale_sum"]
+            yearly_results[yr][month][idx][1] = row["order_count"]
     
-            if df_hist.iloc[idx].order_date.date().year == 2020:
-                sales20[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][0] += float(df_hist.iloc[idx].total_sale)
-                sales20[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][1] += 1
+    # Extract results for each year. If a particular year has no data, use the empty template.
+    sales13 = yearly_results.get(2013, empty_year_dict)
+    sales14 = yearly_results.get(2014, empty_year_dict)
+    sales15 = yearly_results.get(2015, empty_year_dict)
+    sales16 = yearly_results.get(2016, empty_year_dict)
+    sales17 = yearly_results.get(2017, empty_year_dict)
+    sales18 = yearly_results.get(2018, empty_year_dict)
+    sales19 = yearly_results.get(2019, empty_year_dict)
+    sales20 = yearly_results.get(2020, empty_year_dict)
+    sales21 = yearly_results.get(2021, empty_year_dict)
+    sales22 = yearly_results.get(2022, empty_year_dict)
     
-            if df_hist.iloc[idx].order_date.date().year == 2021:
-                sales21[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][0] += float(df_hist.iloc[idx].total_sale)
-                sales21[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][1] += 1
-                
-            if df_hist.iloc[idx].order_date.date().year == 2022:
-                sales22[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][0] += float(df_hist.iloc[idx].total_sale)
-                sales22[num_to_month(df_hist.iloc[idx].order_date.date().month)][0][1] += 1
-
-        else:
-            
-            if df_hist.iloc[idx].order_date.date().year == 2013:
-                sales13[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][0] += float(df_hist.iloc[idx].total_sale)
-                sales13[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][1] += 1
-    
-            if df_hist.iloc[idx].order_date.date().year == 2014:
-                sales14[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][0] += float(df_hist.iloc[idx].total_sale)
-                sales14[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][1] += 1
-    
-            if df_hist.iloc[idx].order_date.date().year == 2015:
-                sales15[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][0] += float(df_hist.iloc[idx].total_sale)
-                sales15[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][1] += 1
-    
-            if df_hist.iloc[idx].order_date.date().year == 2016:
-                sales16[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][0] += float(df_hist.iloc[idx].total_sale)
-                sales16[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][1] += 1
-    
-            if df_hist.iloc[idx].order_date.date().year == 2017:
-                sales17[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][0] += float(df_hist.iloc[idx].total_sale)
-                sales17[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][1] += 1
-    
-            if df_hist.iloc[idx].order_date.date().year == 2018:
-                sales18[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][0] += float(df_hist.iloc[idx].total_sale)
-                sales18[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][1] += 1
-    
-            if df_hist.iloc[idx].order_date.date().year == 2019:
-                sales19[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][0] += float(df_hist.iloc[idx].total_sale)
-                sales19[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][1] += 1
-    
-            if df_hist.iloc[idx].order_date.date().year == 2020:
-                sales20[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][0] += float(df_hist.iloc[idx].total_sale)
-                sales20[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][1] += 1
-    
-            if df_hist.iloc[idx].order_date.date().year == 2021:
-                sales21[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][0] += float(df_hist.iloc[idx].total_sale)
-                sales21[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][1] += 1
-                
-            if df_hist.iloc[idx].order_date.date().year == 2022:
-                sales22[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][0] += float(df_hist.iloc[idx].total_sale)
-                sales22[num_to_month(df_hist.iloc[idx].order_date.date().month)][1][1] += 1
-
-        idx += 1
-        
     return sales13, sales14, sales15, sales16, sales17, sales18, sales19, sales20, sales21, sales22
 
 
 @st.cache_data
 def hist_quarterly_sales():
+    # Define the quarters as lists of month names
+    quarters = {
+        1: ["January", "February", "March"],
+        2: ["April", "May", "June"],
+        3: ["July", "August", "September"],
+        4: ["October", "November", "December"]
+    }
     
-    qs13 = [(sales13['January'][0][0]+ sales13['February'][0][0] + sales13['March'][0][0] + sales13['January'][1][0] + sales13['February'][1][0] + sales13['March'][1][0]), (sales13['April'][0][0] + sales13['May'][0][0] + sales13['June'][0][0] + sales13['April'][1][0] + sales13['May'][1][0] + sales13['June'][1][0]), (sales13['July'][0][0] + sales13['August'][0][0] + sales13['September'][0][0] + sales13['July'][1][0]+ sales13['August'][1][0] + sales13['September'][1][0]), (sales13['October'][0][0] + sales13['November'][0][0] + sales13['December'][0][0] + sales13['October'][1][0]+ sales13['November'][1][0] + sales13['December'][1][0])]
-    qs14 = [(sales14['January'][0][0]+ sales14['February'][0][0] + sales14['March'][0][0] + sales14['January'][1][0] + sales14['February'][1][0] + sales14['March'][1][0]), (sales14['April'][0][0] + sales14['May'][0][0] + sales14['June'][0][0] + sales14['April'][1][0] + sales14['May'][1][0] + sales14['June'][1][0]), (sales14['July'][0][0] + sales14['August'][0][0] + sales14['September'][0][0] + sales14['July'][1][0]+ sales14['August'][1][0] + sales14['September'][1][0]), (sales14['October'][0][0] + sales14['November'][0][0] + sales14['December'][0][0] + sales14['October'][1][0]+ sales14['November'][1][0] + sales14['December'][1][0])]
-    qs15 = [(sales15['January'][0][0]+ sales15['February'][0][0] + sales15['March'][0][0] + sales15['January'][1][0] + sales15['February'][1][0] + sales15['March'][1][0]), (sales15['April'][0][0] + sales15['May'][0][0] + sales15['June'][0][0] + sales15['April'][1][0] + sales15['May'][1][0] + sales15['June'][1][0]), (sales15['July'][0][0] + sales15['August'][0][0] + sales15['September'][0][0] + sales15['July'][1][0]+ sales15['August'][1][0] + sales15['September'][1][0]), (sales15['October'][0][0] + sales15['November'][0][0] + sales15['December'][0][0] + sales15['October'][1][0]+ sales15['November'][1][0] + sales15['December'][1][0])]
-    qs16 = [(sales16['January'][0][0]+ sales16['February'][0][0] + sales16['March'][0][0] + sales16['January'][1][0] + sales16['February'][1][0] + sales16['March'][1][0]), (sales16['April'][0][0] + sales16['May'][0][0] + sales16['June'][0][0] + sales16['April'][1][0] + sales16['May'][1][0] + sales16['June'][1][0]), (sales16['July'][0][0] + sales16['August'][0][0] + sales16['September'][0][0] + sales16['July'][1][0]+ sales16['August'][1][0] + sales16['September'][1][0]), (sales16['October'][0][0] + sales16['November'][0][0] + sales16['December'][0][0] + sales16['October'][1][0]+ sales16['November'][1][0] + sales16['December'][1][0])]
-    qs17 = [(sales17['January'][0][0]+ sales17['February'][0][0] + sales17['March'][0][0] + sales17['January'][1][0] + sales17['February'][1][0] + sales17['March'][1][0]), (sales17['April'][0][0] + sales17['May'][0][0] + sales17['June'][0][0] + sales17['April'][1][0] + sales17['May'][1][0] + sales17['June'][1][0]), (sales17['July'][0][0] + sales17['August'][0][0] + sales17['September'][0][0] + sales17['July'][1][0]+ sales17['August'][1][0] + sales17['September'][1][0]), (sales17['October'][0][0] + sales17['November'][0][0] + sales17['December'][0][0] + sales17['October'][1][0]+ sales17['November'][1][0] + sales17['December'][1][0])]
-    qs18 = [(sales18['January'][0][0]+ sales18['February'][0][0] + sales18['March'][0][0] + sales18['January'][1][0] + sales18['February'][1][0] + sales18['March'][1][0]), (sales18['April'][0][0] + sales18['May'][0][0] + sales18['June'][0][0] + sales18['April'][1][0] + sales18['May'][1][0] + sales18['June'][1][0]), (sales18['July'][0][0] + sales18['August'][0][0] + sales18['September'][0][0] + sales18['July'][1][0]+ sales18['August'][1][0] + sales18['September'][1][0]), (sales18['October'][0][0] + sales18['November'][0][0] + sales18['December'][0][0] + sales18['October'][1][0]+ sales18['November'][1][0] + sales18['December'][1][0])]   
-    qs19 = [(sales19['January'][0][0]+ sales19['February'][0][0] + sales19['March'][0][0] + sales19['January'][1][0] + sales19['February'][1][0] + sales19['March'][1][0]), (sales19['April'][0][0] + sales19['May'][0][0] + sales19['June'][0][0] + sales19['April'][1][0] + sales19['May'][1][0] + sales19['June'][1][0]), (sales19['July'][0][0] + sales19['August'][0][0] + sales19['September'][0][0] + sales19['July'][1][0]+ sales19['August'][1][0] + sales19['September'][1][0]), (sales19['October'][0][0] + sales19['November'][0][0] + sales19['December'][0][0] + sales19['October'][1][0]+ sales19['November'][1][0] + sales19['December'][1][0])]
-    qs20 = [(sales20['January'][0][0]+ sales20['February'][0][0] + sales20['March'][0][0] + sales20['January'][1][0] + sales20['February'][1][0] + sales20['March'][1][0]), (sales20['April'][0][0] + sales20['May'][0][0] + sales20['June'][0][0] + sales20['April'][1][0] + sales20['May'][1][0] + sales20['June'][1][0]), (sales20['July'][0][0] + sales20['August'][0][0] + sales20['September'][0][0] + sales20['July'][1][0]+ sales20['August'][1][0] + sales20['September'][1][0]), (sales20['October'][0][0] + sales20['November'][0][0] + sales20['December'][0][0] + sales20['October'][1][0]+ sales20['November'][1][0] + sales20['December'][1][0])]
-    qs21 = [(sales21['January'][0][0]+ sales21['February'][0][0] + sales21['March'][0][0] + sales21['January'][1][0] + sales21['February'][1][0] + sales21['March'][1][0]), (sales21['April'][0][0] + sales21['May'][0][0] + sales21['June'][0][0] + sales21['April'][1][0] + sales21['May'][1][0] + sales21['June'][1][0]), (sales21['July'][0][0] + sales21['August'][0][0] + sales21['September'][0][0] + sales21['July'][1][0]+ sales21['August'][1][0] + sales21['September'][1][0]), (sales21['October'][0][0] + sales21['November'][0][0] + sales21['December'][0][0] + sales21['October'][1][0]+ sales21['November'][1][0] + sales21['December'][1][0])]
-    qs22 = [(sales22['January'][0][0]+ sales22['February'][0][0] + sales22['March'][0][0] + sales22['January'][1][0] + sales22['February'][1][0] + sales22['March'][1][0]), (sales22['April'][0][0] + sales22['May'][0][0] + sales22['June'][0][0] + sales22['April'][1][0] + sales22['May'][1][0] + sales22['June'][1][0]), (sales22['July'][0][0] + sales22['August'][0][0] + sales22['September'][0][0] + sales22['July'][1][0]+ sales22['August'][1][0] + sales22['September'][1][0]), (sales22['October'][0][0] + sales22['November'][0][0] + sales22['December'][0][0] + sales22['October'][1][0]+ sales22['November'][1][0] + sales22['December'][1][0])]
+    def compute_quarterly_sales(sales):
+        """
+        Given a sales dictionary (e.g., sales13) where each month maps to
+        [[wholesale_total, wholesale_order_count], [non_wholesale_total, non_wholesale_order_count]],
+        compute a list of quarterly totals by summing the wholesale and non-wholesale totals.
+        """
+        return [
+            sum(sales[month][0][0] + sales[month][1][0] for month in quarters[q])
+            for q in range(1, 5)
+        ]
+    
+    # Compute quarterly sales for each year
+    qs13 = compute_quarterly_sales(sales13)
+    qs14 = compute_quarterly_sales(sales14)
+    qs15 = compute_quarterly_sales(sales15)
+    qs16 = compute_quarterly_sales(sales16)
+    qs17 = compute_quarterly_sales(sales17)
+    qs18 = compute_quarterly_sales(sales18)
+    qs19 = compute_quarterly_sales(sales19)
+    qs20 = compute_quarterly_sales(sales20)
+    qs21 = compute_quarterly_sales(sales21)
+    qs22 = compute_quarterly_sales(sales22)
     
     return qs13, qs14, qs15, qs16, qs17, qs18, qs19, qs20, qs21, qs22
 
