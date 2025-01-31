@@ -4098,30 +4098,36 @@ def calculate_product_metrics(annual_product_totals, prod_select, key, bom_dict)
         return prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last
 
 def to_date_product(sku_string):
+    # Filter rows where the line_item starts with sku_string.
+    mask_sku = df["line_item"].str.startswith(sku_string)
+    df_sku = df[mask_sku].copy()
     
-    # 15FT & 8FT HOSES DO NOT INCLUDE HANDHELDS
-
-    prod_cnt_25 = 0
-    prod_cnt_24 = 0
-    prod_cnt_23 = 0
-    prod_cnt_22 = 0
-
-    idx = 0
-
-    for order in df.line_item:
-        order_date = df.iloc[idx].order_date
-        if order[:len(sku_string)] == sku_string:
-            if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
-                prod_cnt_22 += df.iloc[idx].quantity
-            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
-                prod_cnt_23 += df.iloc[idx].quantity
-            elif today.date() >= order_date >= beginning_of_year(today).date():
-                prod_cnt_24 += df.iloc[idx].quantity
-            elif order_date.year == 2025:
-                prod_cnt_25 += df.iloc[idx].quantity
-                
-        idx += 1
-            
+    # Ensure order_date is a datetime and create a date-only column.
+    df_sku["order_date"] = pd.to_datetime(df_sku["order_date"], errors="coerce")
+    df_sku["order_date_date"] = df_sku["order_date"].dt.date
+    
+    # Convert our reference datetime values to dates.
+    two_years_ago_date = two_years_ago.date()
+    one_year_ago_date   = one_year_ago.date()
+    today_date          = today.date()
+    
+    begin_two = beginning_of_year(two_years_ago).date()
+    begin_one = beginning_of_year(one_year_ago).date()
+    begin_today = beginning_of_year(today).date()
+    
+    # Build boolean masks for the different time ranges.
+    mask_22 = (df_sku["order_date_date"] >= begin_two) & (df_sku["order_date_date"] <= two_years_ago_date)
+    mask_23 = (df_sku["order_date_date"] >= begin_one) & (df_sku["order_date_date"] <= one_year_ago_date)
+    mask_24 = (df_sku["order_date_date"] >= begin_today) & (df_sku["order_date_date"] <= today_date)
+    mask_25 = (df_sku["order_date"].dt.year == 2025)  # 2025 comparison can remain on timestamps.
+    
+    # Sum the quantities for each date range.
+    prod_cnt_22 = df_sku.loc[mask_22, "quantity"].sum()
+    prod_cnt_23 = df_sku.loc[mask_23, "quantity"].sum()
+    prod_cnt_24 = df_sku.loc[mask_24, "quantity"].sum()
+    prod_cnt_25 = df_sku.loc[mask_25, "quantity"].sum()
+    
+    # (Return only the counts you need. In your example, you returned prod_cnt_23 and prod_cnt_24.)
     return prod_cnt_23, prod_cnt_24
 
 
