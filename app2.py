@@ -3367,15 +3367,13 @@ if task_choice == 'Dashboard':
 
     col1.header('Annual Comparison')
     
-    plot_annual_comparison(x, year_select, col1, line_width=13, fig_width=25, fig_height=20)
+    plot_annual_comparison(x, year_select, col1, line_width=13, fig_width=20, fig_height=15)
     
     with colx:
         
         st.header('To-Date Sales')
         
         cola, colb, colc = st.columns(3)
-
-
 
         cola.metric('**2025 Total**', '${:,}'.format(int(td_25[1] + td_25[0])), percent_of_change((td_24[0] + td_24[1]), (td_25[0] + td_25[1])))
         cola.metric('**2025 Web**', '${:,}'.format(int(td_25[0])), percent_of_change(td_24[0], td_25[0]))
