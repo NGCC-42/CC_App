@@ -3050,7 +3050,7 @@ def hist_annual_sales():
     
     # Create new columns for year and month (as month names)
     df_hist["year"] = df_hist["order_date"].dt.year
-    df_hist["month"] = df_hist["order_date"].dt.month.apply(lambda m: months[m - 1])
+    df_hist["month"] = df_hist["order_date"].dt.month.apply(lambda m: months[int(m)-1] if pd.notnull(m) else None)
     
     # Convert 'total_sale' to numeric (if not already) and fill invalid values with 0
     df_hist["total_sale"] = pd.to_numeric(df_hist["total_sale"], errors="coerce").fillna(0)
