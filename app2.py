@@ -1050,26 +1050,26 @@ def get_monthly_sales_ytd():
         month = num_to_month(df.iloc[idx].order_date.month)
             
         if df.iloc[idx].channel[0] == 'F':
-            if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
+            if two_years_ago.date() >= order_date.date() >= beginning_of_year(two_years_ago).date():
                 sales_dict_minus2[month][0][0] += df.iloc[idx].total_line_item_spend
                 if sale not in unique_sales_orders_minus2:
                     sales_dict_minus2[month][0][1] += 1
                     unique_sales_orders_minus2.append(sale)
                     
-            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
+            elif one_year_ago.date() >= order_date.date() >= beginning_of_year(one_year_ago).date():
                 sales_dict_minus1[month][0][0] += df.iloc[idx].total_line_item_spend
                 if sale not in unique_sales_orders_minus1:
                     sales_dict_minus1[month][0][1] += 1
                     unique_sales_orders_minus1.append(sale)
                     
-            elif today.date() >= order_date >= beginning_of_year(today).date():
+            elif today.date() >= order_date.date() >= beginning_of_year(today).date():
                 sales_dict[month][0][0] += df.iloc[idx].total_line_item_spend
                 if sale not in unique_sales_orders:
                     sales_dict[month][0][1] += 1
                     unique_sales_orders.append(sale)
 
         else:
-            if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
+            if two_years_ago.date() >= order_date.date() >= beginning_of_year(two_years_ago).date():
                 sales_dict_minus2[month][1][0] += df.iloc[idx].total_line_item_spend 
                 if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX':
                     sales_dict_minus2[month][2][0] += df.iloc[idx].total_line_item_spend
@@ -1077,7 +1077,7 @@ def get_monthly_sales_ytd():
                     sales_dict_minus2[month][1][1] += 1
                     unique_sales_orders_minus2.append(sale)
                     
-            elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
+            elif one_year_ago.date() >= order_date.date() >= beginning_of_year(one_year_ago).date():
                 sales_dict_minus1[month][1][0] += df.iloc[idx].total_line_item_spend
                 if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX':
                     sales_dict_minus1[month][2][0] += df.iloc[idx].total_line_item_spend
@@ -1085,7 +1085,7 @@ def get_monthly_sales_ytd():
                     sales_dict_minus1[month][1][1] += 1
                     unique_sales_orders_minus1.append(sale)
                     
-            elif today.date() >= order_date >= beginning_of_year(today).date():
+            elif today.date() >= order_date.date() >= beginning_of_year(today).date():
                 sales_dict[month][1][0] += df.iloc[idx].total_line_item_spend
                 if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX':
                     sales_dict[month][2][0] += df.iloc[idx].total_line_item_spend
