@@ -965,19 +965,19 @@ def get_monthly_sales_wvr_ytd():
         order_date = df.iloc[idx].order_date
         month = num_to_month(df.iloc[idx].order_date.month)
     
-        if two_years_ago.date() >= order_date >= beginning_of_year(two_years_ago).date():
+        if two_years_ago.date() >= order_date.date() >= beginning_of_year(two_years_ago).date():
             if cust in wholesale_list:
                 sales_dict_minus2[month][0] += df.iloc[idx].total_line_item_spend
             else:
                 sales_dict_minus2[month][1] += df.iloc[idx].total_line_item_spend 
                 
-        elif one_year_ago.date() >= order_date >= beginning_of_year(one_year_ago).date():
+        elif one_year_ago.date() >= order_date.date() >= beginning_of_year(one_year_ago).date():
             if cust in wholesale_list:
                 sales_dict_minus1[month][0] += df.iloc[idx].total_line_item_spend
             else:
                 sales_dict_minus1[month][1] += df.iloc[idx].total_line_item_spend 
                 
-        elif today.date() >= order_date >= beginning_of_year(today).date():
+        elif today.date() >= order_date.date() >= beginning_of_year(today).date():
             if cust in wholesale_list:
                 sales_dict[month][0] += df.iloc[idx].total_line_item_spend
             else:
