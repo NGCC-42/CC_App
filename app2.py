@@ -2160,7 +2160,7 @@ def magic_sales(year):
 
     for sale in df.sales_order:
         if df.iloc[idx].ordered_year == year:
-            if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX':
+            if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX' or df.iloc[idx].item_sku[:5] == 'Magic' or df.iloc[idx].item_sku[:3] == 'MFX':
                 count += df.iloc[idx].total_line_item_spend
                 for prod, key in magic_products.items():
                     if df.iloc[idx].line_item[:len(prod)] == prod:
