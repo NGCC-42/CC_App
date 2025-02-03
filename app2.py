@@ -2439,22 +2439,22 @@ def quarterly_sales(year):
     for sale in df.sales_order:
         order_date = df.iloc[idx].order_date
         if df.iloc[idx].channel[0] == 'F':
-            if q1_end.date() >= order_date >= beginning_of_year(q1_end).date():
+            if q1_end.date() >= order_date.date() >= beginning_of_year(q1_end).date():
                 q1_count[0] += df.iloc[idx].total_line_item_spend
-            elif q2_end.date() >= order_date >= q2_start.date():
+            elif q2_end.date() >= order_date.date() >= q2_start.date():
                 q2_count[0] += df.iloc[idx].total_line_item_spend
-            elif q3_end.date() >= order_date >= q3_start.date():
+            elif q3_end.date() >= order_date.date() >= q3_start.date():
                 q3_count[0] += df.iloc[idx].total_line_item_spend
-            elif q4_end.date() >= order_date >= q4_start.date():
+            elif q4_end.date() >= order_date.date() >= q4_start.date():
                 q4_count[0] += df.iloc[idx].total_line_item_spend
         else:
-            if q1_end.date() >= order_date >= beginning_of_year(q1_end).date():
+            if q1_end.date() >= order_date.date() >= beginning_of_year(q1_end).date():
                 q1_count[1] += df.iloc[idx].total_line_item_spend
-            elif q2_end.date() >= order_date >= q2_start.date():
+            elif q2_end.date() >= order_date.date() >= q2_start.date():
                 q2_count[1] += df.iloc[idx].total_line_item_spend
-            elif q3_end.date() >= order_date >= q3_start.date():
+            elif q3_end.date() >= order_date.date() >= q3_start.date():
                 q3_count[1] += df.iloc[idx].total_line_item_spend
-            elif q4_end.date() >= order_date >= q4_start.date():
+            elif q4_end.date() >= order_date.date() >= q4_start.date():
                 q4_count[1] += df.iloc[idx].total_line_item_spend
     
         idx += 1
