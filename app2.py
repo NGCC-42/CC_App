@@ -220,6 +220,8 @@ def fix_names(df):
     df.replace('Tonz of Fun', 'Eric Walker', inplace=True)
     df.replace('Travis S. Johnson', 'Travis Johnson', inplace=True)
     df.replace('Yang Gao', 'Nebula NY', inplace=True)
+    df.replace('Adam Stipe', 'Special Event Services (SES)', inplace=True)
+    df.replace('Michael Brammer', 'Special Event Services (SES)', inplace=True)
 
     return df
 
