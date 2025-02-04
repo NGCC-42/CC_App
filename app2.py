@@ -37,7 +37,7 @@ st.header('')
 ### LOAD FILES
 sod_ss = 'MASTER DATA 2.4.25.xlsx'
 
-hist_ss = 'CC Historical Sales.xlsx'
+hist_ss = 'CC Historical Sales 2.4.xlsx'
 
 hsd_ss = 'HSD 11.8.24.xlsx'
 
@@ -5789,6 +5789,101 @@ if task_choice == 'Quote Reports':
                     
     
         style_metric_cards()
+
+
+def hist_cust_data(customer):
+    
+    target_years = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]
+    
+    spending_dict = {2013: 0, 2014: 0, 2015: 0, 2016: 0, 2017: 0, 2018: 0, 2019: 0, 2020: 0, 2021: 0, 2022: 0}
+    spending_total = 0
+    
+    hist_products = {
+        'hh_mk2': 'Handheld MKII',
+        'hh_mk1': 'Handheld MKI', 
+        'travel_case': 'Travel Case',
+        'travel_case_og': 'Original Travel Case', 
+        'backpack': 'Back Pack',
+        'jets_og': 'DMX Jet',
+        'pro_jet': 'Pro Jet',
+        'power_jet': 'Power Jet',
+        'micro_jet_mk1': 'Micro Jet MKI',
+        'micro_jet_mk2': 'Micro Jet MKII',
+        'cryo_clamp_mk1': 'Cryo Clamp MKI',
+        'cryo_clamp_mk2': 'Cryo Clamp MKII',
+        'quad_jet': 'Quad Jet',
+        'dmx_controller': 'DMX Controller',
+        'lcd_controller': 'LCD Controller',
+        'the_button_mk1': 'The Button MKI',
+        'the_button_mk2': 'The Button',
+        'shomaster': 'Shomaster',
+        'shostarter': 'Shostarter',
+        'power_controller': 'Power Controller',
+        'hoses': 'Hoses',
+        'manifold': 'Manifold',
+        'ctc_20': '20LB Tank Cover',
+        'ctc_50': '50LB Tank Cover',
+        'led_attachment_mk1': 'LED Attachment I', 
+        'led_attachment_mk2': 'LED Attachment II',
+        'power_pack': 'Power Pack',
+        'confetti_blower': 'Confetti Blower',
+        
+    }
+    
+    cust_products = {
+        'hh_mk2': 0,
+        'hh_mk1': 0, 
+        'travel_case': 0,
+        'travel_case_og': 0, 
+        'backpack': 0,
+        'jets_og': 0,
+        'pro_jet': 0,
+        'power_jet': 0,
+        'micro_jet_mk1': 0,
+        'micro_jet_mk2': 0,
+        'cryo_clamp_mk1': 0,
+        'cryo_clamp_mk2': 0,
+        'quad_jet': 0,
+        'dmx_controller': 0,
+        'lcd_controller': 0,
+        'the_button_mk1': 0,
+        'the_button_mk2': 0,
+        'shomaster': 0,
+        'shostarter': 0,
+        'power_controller': 0,
+        'hoses': 0,
+        'manifold': 0,
+        'ctc_20': 0,
+        'ctc_50': 0,
+        'led_attachment_mk1': 0, 
+        'led_attachment_mk2': 0,
+        'power_pack': 0,
+        'confetti_blower': 0,
+        
+    }
+            
+    cust_rows = df_hist.loc[df_hist['customer'] == customer].reset_index()
+    
+    cust_filtered = cust_rows[cust_rows['order_date'].dt.year.isin(target_years)]
+    
+    cust_filtered['year'] = cust_filtered['order_date'].dt.year
+    spending_dict = cust_filtered.groupby('year')['total_spend'].sum().to_dict()
+    
+    spending_total = sum(spending_dict.values())
+
+    idx = 0 
+    for sale in cust_filtered.order_date:
+        for prod in cust_products.keys():
+            if cust_filtered.iloc[idx][prod] > 0:
+                cust_products[prod] += cust_filtered.iloc[idx][prod]
+
+        idx += 1
+
+    keyed_cust_products = dict(zip(hist_products.values(), cust_products.values()))
+
+    return spending_dict, spending_total, keyed_cust_products
+
+
 
 
 if task_choice == 'Customer Details':
