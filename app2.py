@@ -230,6 +230,7 @@ def fix_names(df):
     df.replace('Creative Production & Design', 'Justin Jenkins / Creative Production & Design', inplace=True)
     df.replace('Andrew Pla / Rock The House', 'Steve Tanruther / Rock The House', inplace=True)
     df.replace('Cole M. Blessinger', 'Cole Blessinger', inplace=True)
+    df.replace('Parti Line International, LLC', 'Fluttter Feti', inplace=True)
     
     
 
