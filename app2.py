@@ -224,6 +224,14 @@ def fix_names(df):
     df.replace('Michael Brammer', 'Special Event Services (SES)', inplace=True)
     df.replace('ffp effects inc c/o Third Encore', 'FFP FX', inplace=True)
     df.replace('Disney Worldwide Services, Inc', 'Disney Cruise Line', inplace=True)
+    df.replace('Jeff Meuzelaar', 'Jeff Meuzelaar / Pinnacle Productions', inplace=True)
+    df.replace('Ernesto Blanco', 'Ernesto Koncept Systems', inplace=True)
+    df.replace('Justin Jenkins', 'Justin Jenkins / Creative Production & Design', inplace=True)
+    df.replace('Creative Production & Design', 'Justin Jenkins / Creative Production & Design', inplace=True)
+    df.replace('Andrew Pla / Rock The House', 'Steve Tanruther / Rock The House', inplace=True)
+    df.replace('Cole M. Blessinger', 'Cole Blessinger', inplace=True)
+    
+    
 
     return df
 
