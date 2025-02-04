@@ -222,6 +222,7 @@ def fix_names(df):
     df.replace('Yang Gao', 'Nebula NY', inplace=True)
     df.replace('Adam Stipe', 'Special Event Services (SES)', inplace=True)
     df.replace('Michael Brammer', 'Special Event Services (SES)', inplace=True)
+    df.replace('ffp effects inc c/o Third Encore', 'FFP FX', inplace=True)
 
     return df
 
