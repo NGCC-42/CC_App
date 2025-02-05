@@ -3027,8 +3027,9 @@ def hist_cust_data(customer):
     idx = 0 
     for sale in cust_filtered.order_date:
         for prod in cust_products.keys():
+            st.write(cust_filtered.iloc[idx][prod])
             if cust_filtered.iloc[idx][prod] > 0:
-                st.write(cust_filtered.iloc[idx][prod])
+                
                 cust_products[prod][0] += int(cust_filtered.iloc[idx][prod])
                 cust_products[prod][1].append((int(cust_filtered.iloc[idx][prod]), str(cust_filtered.iloc[idx].order_date.date())))
                 
