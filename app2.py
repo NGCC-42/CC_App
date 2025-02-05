@@ -231,6 +231,7 @@ def fix_names(df):
     df.replace('Andrew Pla / Rock The House', 'Steve Tanruther / Rock The House', inplace=True)
     df.replace('Cole M. Blessinger', 'Cole Blessinger', inplace=True)
     df.replace('Parti Line International, LLC', 'Fluttter Feti', inplace=True)
+    df.replace('MICHAEL MELICE', 'Michael Melice', inplace=True)
     
     
 
@@ -5917,7 +5918,7 @@ if task_choice == 'Customer Details':
         st.header('Customer Details')
 
         text_input = st.multiselect('Search Customers', 
-                                   options=unique_customer_list, 
+                                   options=master_customer_list, 
                                    max_selections=1,
                                    placeholder='Start Typing Customer Name')
     
@@ -6084,7 +6085,7 @@ if task_choice == 'Customer Details':
     
         
     # CALCULATE SPENDING TREANDS
-    if len(spending_dict) >= 1:
+    if 2022 in spending_dict.keys():
         perc_change = percent_of_change(spending_dict[2022], spend_total_2023)
     else:
         perc_change = '100%'
