@@ -6099,7 +6099,7 @@ if task_choice == 'Customer Details':
         ### DISPLAY PRODUCT PURCHASE SUMMARIES FOR SELECTED CUSTOMER ###
         if len(text_input) > 1:
     
-            col3, col4, col5, col6 = st.columns(4)
+            col3, col4, col5 = st.columns(3)
             
             ### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS
             with col3:
