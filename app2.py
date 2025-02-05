@@ -2939,6 +2939,116 @@ def display_daily_plot(month, years=['All']):
 df_hist['order_date'] = pd.to_datetime(df_hist['order_date'])
 
 
+def hist_cust_data(customer):
+    
+    target_years = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]
+    
+    spending_dict = {2013: 0, 2014: 0, 2015: 0, 2016: 0, 2017: 0, 2018: 0, 2019: 0, 2020: 0, 2021: 0, 2022: 0}
+    spending_total = 0
+
+    jets = ['DMX Jet', 'Pro Jet', 'Power Jet', 'Micro Jet MKI', 'Micro Jet MKII', 'Cryo Clamp MKI', 'Cryo Clamp', 'Quad Jet']
+    handhelds = ['Handheld MKI', 'Handheld MKII']
+    controllers = ['DMX Controller', 'LCD Controller', 'The Button MKI', 'The Button', 'Shomaster', 'Shostarter', 'Power Controller']
+    accessories = ['Travel Case', 'Original Travel Case', 'Back Pack', 'Manifold', '20LB Tank Cover', '50LB Tank Cover', 'LED Attachment I', 'LED Attachment II', 'Power Pack', 'Confetti Blower']
+    
+    hist_products = {
+        'hh_mk2': 'Handheld MKII',
+        'hh_mk1': 'Handheld MKI', 
+        'travel_case': 'Travel Case',
+        'travel_case_og': 'Original Travel Case', 
+        'backpack': 'Back Pack',
+        'jets_og': 'DMX Jet',
+        'pro_jet': 'Pro Jet',
+        'power_jet': 'Power Jet',
+        'micro_jet_mk1': 'Micro Jet MKI',
+        'micro_jet_mk2': 'Micro Jet MKII',
+        'cryo_clamp_mk1': 'Cryo Clamp MKI',
+        'cryo_clamp_mk2': 'Cryo Clamp',
+        'quad_jet': 'Quad Jet',
+        'dmx_controller': 'DMX Controller',
+        'lcd_controller': 'LCD Controller',
+        'the_button_mk1': 'The Button MKI',
+        'the_button_mk2': 'The Button',
+        'shomaster': 'Shomaster',
+        'shostarter': 'Shostarter',
+        'power_controller': 'Power Controller',
+        'hoses': 'Hoses',
+        'manifold': 'Manifold',
+        'ctc_20': '20LB Tank Cover',
+        'ctc_50': '50LB Tank Cover',
+        'led_attachment_mk1': 'LED Attachment I', 
+        'led_attachment_mk2': 'LED Attachment II',
+        'power_pack': 'Power Pack',
+        'confetti_blower': 'Confetti Blower',
+        
+    }
+    
+    cust_products = {
+        'hh_mk2': [0, []],
+        'hh_mk1': [0, []], 
+        'travel_case': [0, []],
+        'travel_case_og': [0, []], 
+        'backpack': [0, []],
+        'jets_og': [0, []],
+        'pro_jet': [0, []],
+        'power_jet': [0, []],
+        'micro_jet_mk1': [0, []],
+        'micro_jet_mk2': [0, []],
+        'cryo_clamp_mk1': [0, []],
+        'cryo_clamp_mk2': [0, []],
+        'quad_jet': [0, []],
+        'dmx_controller': [0, []],
+        'lcd_controller': [0, []],
+        'the_button_mk1': [0, []],
+        'the_button_mk2': [0, []],
+        'shomaster': [0, []],
+        'shostarter': [0, []],
+        'power_controller': [0, []],
+        'hoses': [0, []],
+        'manifold': [0, []],
+        'ctc_20': [0, []],
+        'ctc_50': [0, []],
+        'led_attachment_mk1': [0, []], 
+        'led_attachment_mk2': [0, []],
+        'power_pack': [0, []],
+        'confetti_blower': [0, []],
+        
+    }
+            
+    cust_rows = df_hist.loc[df_hist['customer'] == customer].reset_index()
+    
+    cust_filtered = cust_rows[cust_rows['order_date'].dt.year.isin(target_years)]
+    
+    cust_filtered['year'] = cust_filtered['order_date'].dt.year
+    spending_dict = cust_filtered.groupby('year')['total_spend'].sum().to_dict()
+    
+    spending_total = sum(spending_dict.values())
+
+    idx = 0 
+    for sale in cust_filtered.order_date:
+        for prod in cust_products.keys():
+            if cust_filtered.iloc[idx][prod] > 0:
+                cust_products[prod][0] += int(cust_filtered.iloc[idx][prod])
+                cust_products[prod][1].append((int(cust_filtered.iloc[idx][prod]), str(cust_filtered.iloc[idx].order_date.date())))
+                
+
+        idx += 1
+
+    # CONVERT TO READABLE NAMES
+    keyed_cust_products = dict(zip(hist_products.values(), cust_products.values()))
+
+    # SPLIT DICT INTO CATEGORY DICTS
+    jet_dict = {key: keyed_cust_products[key] for key in jets}
+    handheld_dict = {key: keyed_cust_products[key] for key in handhelds}
+    controller_dict = {key: keyed_cust_products[key] for key in controllers}
+    acc_dict = {key: keyed_cust_products[key] for key in accessories}
+
+    return spending_dict, spending_total, jet_dict, handheld_dict, controller_dict, acc_dict
+
+
+
+
+
 @st.cache_data
 def hist_cust_sales():
     cust_dict = {cust: 0 for cust in master_customer_list}  # Initialize dictionary
