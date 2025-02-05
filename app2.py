@@ -234,6 +234,7 @@ def fix_names(df):
     df.replace('MICHAEL MELICE', 'Michael Melice', inplace=True)
     df.replace('Michael Brammer / Special Event Services', 'Special Event Services (SES)', inplace=True)
     df.replace('Dios Vazquez ', 'Dios Vazquez', inplace=True)
+    df.replace('Brilliant Stages Ltd T/A TAIT', 'Brilliant Stages', inplace=True)
     
     return df
 
