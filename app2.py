@@ -242,7 +242,7 @@ df_hist = fix_names(df_hist)
 
 ### CREATE A LIST OF UNIQUE CUSTOMERS ###
 unique_customer_list = df.customer.unique().tolist()
-hist_customer_list = df_hist.customer.unique().tolist()
+hist_customer_list = df_hist['customer'].unique()
 master_customer_list = list(set(unique_customer_list) | set(hist_customer_list))
 
 ### DEFINE FUNCTION TO CREATE PRODUCT DATAFRAME FROM EXCEL SPREADSHEET ###
