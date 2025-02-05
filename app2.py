@@ -232,12 +232,12 @@ def fix_names(df):
     df.replace('Cole M. Blessinger', 'Cole Blessinger', inplace=True)
     df.replace('Parti Line International, LLC', 'Fluttter Feti', inplace=True)
     df.replace('MICHAEL MELICE', 'Michael Melice', inplace=True)
+    df.replace('Michael Brammer / Special Event Services', 'Special Event Services (SES)', inplace=True)
     
-    
-
     return df
 
 df = fix_names(df)
+df_hist = fix_names(df_hist)
 
 ### CREATE A LIST OF UNIQUE CUSTOMERS ###
 unique_customer_list = df.customer.unique().tolist()
