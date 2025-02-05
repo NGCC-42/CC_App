@@ -6028,14 +6028,28 @@ if task_choice == 'Customer Details':
     
     ### PRODUCT TOTALS SUMMARY DICTS ###
     jet_totals_cust = {'Quad Jet': 0, 
-                      'Pro Jet': 0, 
-                      'Micro Jet MKII': 0,
-                      'Cryo Clamp': 0}
+                       'Pro Jet': 0, 
+                       'Micro Jet MKII': 0,
+                       'Micro Jet MKI': 0,
+                       'Cryo Clamp': 0,
+                       'Cryo Clamp MKI': 0,
+                       'DMX Jet': 0,
+                       'Power Jet': 0, 
+                      }
+    
     controller_totals_cust = {'The Button': 0,
-                             'Shostarter': 0,
-                             'Shomaster': 0}
-    cust_handheld_cnt = 0
-    cust_LED_cnt = 0
+                              'Shostarter': 0,
+                              'Shomaster': 0,
+                              'DMX Controller': 0,
+                              'LCD Controller': 0,
+                              'The Button MKI': 0,
+                              'Power Controller': 0,                         
+                             }
+    
+    cust_handheld_mk2_cnt = 0
+    cust_handheld_mk1_cnt = 0
+    cust_LED_mk2_cnt = 0
+    cust_LED_mk1_cnt = 0
     cust_RC_cnt = 0
     
     ### LISTS OF HISTORICAL SALES FOR CUSTOMER ###
@@ -6056,6 +6070,8 @@ if task_choice == 'Customer Details':
                 spend_total_2023 += df.iloc[idx].total_line_item_spend
             elif df.iloc[idx].ordered_year == '2024':
                 spend_total_2024 += df.iloc[idx].total_line_item_spend
+            elif df.iloc[idx].ordered_year == '2025':
+                spend_total_2025 += df.iloc[idx].total_line_item_spend
     
     
     
@@ -6105,14 +6121,14 @@ if task_choice == 'Customer Details':
                     df.iloc[idx].item_sku,
                     df.iloc[idx].line_item))
                 if df.iloc[idx].item_sku[:9] == 'CC-AC-LA2':
-                    cust_LED_cnt += df.iloc[idx].quantity                    
+                    cust_LED_mk2_cnt += df.iloc[idx].quantity                    
             elif df.iloc[idx].item_sku[:6] == 'CC-HCC' or df.iloc[idx].item_sku[:6] == 'Handhe':
                 handheld_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                     df.iloc[idx].sales_order, 
                     df.iloc[idx].quantity,
                     df.iloc[idx].item_sku,
                     df.iloc[idx].line_item))
-                cust_handheld_cnt += df.iloc[idx].quantity
+                cust_handheld_mk2_cnt += df.iloc[idx].quantity
             elif df.iloc[idx].item_sku[:5] == 'Shipp' or df.iloc[idx].item_sku[:5] == 'Overn' or df.iloc[idx].item_sku[:5] == 'CC-NP':
                 pass
             else:
@@ -6129,9 +6145,41 @@ if task_choice == 'Customer Details':
             else:
                 sales_order_list.append(df.iloc[idx].sales_order)
         idx += 1
+
+
+    spending_dict, spending_total, cust_jet, cust_hh, cust_cntl, cust_acc = hist_cust_data(text_input)
+
+    
+    # ADD IN HISTORICAL PRODUCTS
+    for jet, tot in cust_jet.items():
+        jet_totals_cust[jet] += tot[0]
+        for sale in tot[1]:
+            jet_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], jet))
+
+    for cntl, tot in cust_cntl.items():
+        controller_totals_cust[cntl] += tot[0]
+        for sale in tot[1]:
+            controller_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], cntl))
+
+    for acc, tot in cust_acc.items():
+        for sale in tot[1]:
+            fittings_accessories_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], acc))
+
+    cust_handheld_mk2_cnt += cust_hh['Handheld MKII'][0]
+    cust_handheld_mk1_cnt = cust_hh['Handheld MKI'][0]
+
+    cust_LED_mk2_cnt += cust_acc['LED Attachment II'][0]
+    cust_LED_mk1_cnt = cust_acc['LED Attachment I'][0]
+    
         
-    perc_change = percent_of_change(spend_total_2023, spend_total_2024)   
+    # CALCULATE SPENDING TREANDS
+    if len(spending_dict) >= 1:
+        perc_change = percent_of_change(spending_dict[2022], spend_total_2023)
+    else:
+        perc_change = '100%'
+    perc_change1 = percent_of_change(spend_total_2023, spend_total_2024) 
     perc_change2 = percent_of_change(spend_total_2024, spend_total_2025)
+
     
     with colb:
         st.header('')
@@ -6144,16 +6192,14 @@ if task_choice == 'Customer Details':
             
             ### DISPLAY CUSTOMER SPENDING TRENDS AND TOTALS
             with col3:
-                st.metric('2023 Spending', '${:,.2f}'.format(spend_total_2023), '')
+                st.metric('2023 Spending', '${:,.2f}'.format(spend_total_2023), perc_change)
         
             with col4:
-                st.metric('2024 Spending', '${:,.2f}'.format(spend_total_2024), perc_change)
-
+                st.metric('2024 Spending', '${:,.2f}'.format(spend_total_2024), perc_change1)
+                st.metric('**Total Spending**', '${:,.2f}'.format(spend_total_2023 + spend_total_2024 + spend_total_2025 + spending_total), '')
+                
             with col5:
                 st.metric('2025 Spending', '${:,.2f}'.format(spend_total_2025), perc_change2)
-                
-            with col6:
-                st.metric('Total Spending', '${:,.2f}'.format(spend_total_2023 + spend_total_2024), '')
     
             style_metric_cards()       
             
@@ -6163,17 +6209,23 @@ if task_choice == 'Customer Details':
                 for jet, totl in jet_totals_cust.items():
                     if totl > 0:
                         st.markdown(' - **{}: {}**'.format(jet, totl))
+                        
             with col7.container(border=True):
                 for controller, totl in controller_totals_cust.items():
                     if totl > 0:
                         st.markdown(' - **{}: {}**'.format(controller, totl))
-                if cust_handheld_cnt > 0:
-                    st.markdown(' - **Handhelds: {}**'.format(cust_handheld_cnt))
+                    
             with col8.container(border=True):
-                if cust_LED_cnt > 0:
-                    st.markdown(' - **LED Attachment II: {}**'.format(cust_LED_cnt))
+                if cust_LED_mk2_cnt > 0:
+                    st.markdown(' - **LED Attachment II: {}**'.format(cust_LED_mk2_cnt))
+                if cust_LED_mk1_cnt > 0:
+                    st.markdown(' - **LED Attachment I: {}**'.format(cust_LED_mk1_cnt))
                 if cust_RC_cnt > 0:
                     st.markdown(' - **Road Cases: {}**'.format(cust_RC_cnt))
+                if cust_handheld_mk2_cnt > 0:
+                    st.markdown(' - **Handheld MKII: {}**'.format(cust_handheld_mk2_cnt))
+                if cust_handheld_mk1_cnt > 0:
+                    st.markdown(' - **Handheld MKI: {}**'.format(cust_handheld_mk1_cnt))
     
 ### DISPLAY CATEGORIES OF PRODUCTS PURCHASED BY SELECTED CUSTOMER ###
         if len(jet_list) >= 1:
