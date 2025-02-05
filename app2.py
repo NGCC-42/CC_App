@@ -86,7 +86,7 @@ def create_dataframe(ss):
 
 df = create_dataframe(sod_ss)
 
-df_hist = create_dataframe(hist_ss)
+df_hist = pd.read_excel(hist_ss, dtype=object, header=0)
 df_hist.fillna(0, inplace=True)
 
 df_quotes = create_dataframe(quote_ss)
