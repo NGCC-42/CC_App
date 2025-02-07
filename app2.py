@@ -145,8 +145,8 @@ df.rename(columns={
 
 df.order_date = pd.to_datetime(df.order_date).dt.date
 df['total_line_item_spend'] = df['total_line_item_spend'].astype('float32')
-df['customer'] = df['customer'].str.title()
-df_hist['customer'] = df_hist['customer'].str.title()
+#df['customer'] = df['customer'].str.title()
+#df_hist['customer'] = df_hist['customer'].str.title()
 df_hist = df_hist[~df_hist['customer'].str.contains('AMAZON SALES', na=False)]
 
 df_hsd.rename(columns={
@@ -259,7 +259,9 @@ def fix_names(df):
     df.replace('Sean Devaney', 'POSH DJs', inplace=True)
     df.replace('Brian Uychich', 'POSH DJs', inplace=True)
     df.replace('Omar Sánchez Jiménez / Pyrofetti FX', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
+    df.replace('Omar Sánchez Jiménez / Pyrofetti Fx', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
     df.replace('Gilbert / Pyrotec Sa', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
+    df.replace('Gilbert / Pyrotec S.A.', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
     df.replace('Image SFX (Gordo)', 'Image SFX', inplace=True)
     df.replace('Image SFX (Drake 6 Jets)', 'Image SFX', inplace=True)
     df.replace('Image SFX (Drake 18 Jets)', 'Image SFX', inplace=True)
@@ -271,6 +273,8 @@ def fix_names(df):
     df.replace('Tanner Valerio / Shadow Mountain Productions (GEAR TO RETURN)', 'Tanner Valerio', inplace=True)
     df.replace('Blast Pyrotechnics', 'Blaso Pyrotechnics', inplace=True)
     df.replace('Pyrotecnico ', 'Pyrotecnico', inplace=True)
+    df.replace('PYROTECNICO ', 'PYROTECNICO', inplace=True)
+    df.replace('Pyrotek FX ', 'Pyrotek FX', inplace=True)
     df.replace('Pyrotek Fx ', 'Pyrotek Fx', inplace=True)
     
 
