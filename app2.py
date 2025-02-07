@@ -229,6 +229,7 @@ def fix_names(df):
     df.replace('Justin Jenkins', 'Justin Jenkins / Creative Production & Design', inplace=True)
     df.replace('Creative Production & Design', 'Justin Jenkins / Creative Production & Design', inplace=True)
     df.replace('Andrew Pla / Rock The House', 'Steve Tanruther / Rock The House', inplace=True)
+    df.replace('Ryan Konikoff / ROCK THE HOUSE', 'Steve Tanruther / Rock The House', inplace=True)
     df.replace('Cole M. Blessinger', 'Cole Blessinger', inplace=True)
     df.replace('Parti Line International, LLC', 'Fluttter Feti', inplace=True)
     df.replace('MICHAEL MELICE', 'Michael Melice', inplace=True)
@@ -241,8 +242,20 @@ def fix_names(df):
     df.replace('Randy Hood / Hood And Associates / talent', 'Randy Hood', inplace=True)
     df.replace('Steve VanderHeyden (Band Ayd Event Group)', 'Steve Vanderheyden / Band Ayd Event Group', inplace=True)
     df.replace('Steve VanderHeyden', 'Steve Vanderheyden / Band Ayd Event Group', inplace=True)
-
+    df.replace('Kyle Kelly', 'Special FX Rentals', inplace=True)
+    df.replace('MARIE COVELLI', 'Marie Covelli', inplace=True)
+    df.replace('Frank Brown', 'Frank Brown / Night Nation Run', inplace=True)
+    df.replace('Matt Spencer / SDCM', 'Matt Spencer', inplace=True)
+    df.replace('Solotech U.S. Corporation', 'Solotech', inplace=True)
+    df.replace('Michael Bedkowski', 'POSH DJs', inplace=True)
+    df.replace('Kyle Jonas', 'POSH DJs', inplace=True)
+    df.replace('Evan Ruga', 'POSH DJs', inplace=True)
+    df.replace('Sean Devaney', 'POSH DJs', inplace=True)
+    df.replace('Brian Uychich', 'POSH DJs', inplace=True)
+    df.replace('Omar Sánchez Jiménez / Pyrofetti FX', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
     
+
+
     
     return df
 
