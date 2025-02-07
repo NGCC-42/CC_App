@@ -145,7 +145,7 @@ df.rename(columns={
 
 df.order_date = pd.to_datetime(df.order_date).dt.date
 df['total_line_item_spend'] = df['total_line_item_spend'].astype('float32')
-df['customer'] = df['custom'].str.title()
+df['customer'] = df['customer'].str.title()
 df_hist['customer'] = df_hist['customer'].str.title()
 df_hist = df_hist[~df_hist['customer'].str.contains('AMAZON SALES', na=False)]
 
