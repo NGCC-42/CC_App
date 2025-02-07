@@ -145,6 +145,9 @@ df.rename(columns={
 
 df.order_date = pd.to_datetime(df.order_date).dt.date
 df['total_line_item_spend'] = df['total_line_item_spend'].astype('float32')
+df['customer'] = df['custom'].str.title()
+df_hist['customer'] = df_hist['custom'].str.title()
+df_hist = df_hist[~df_hist['customer'].str.contains('AMAZON SALES', na=False)]
 
 df_hsd.rename(columns={
     'Sales Order': 'sales_order',
@@ -203,6 +206,9 @@ df_cogs.rename(columns={
 df_cogs['total_cost'] = df_cogs['total_cost'].astype('float32')
 df_cogs['total_price'] = df_cogs['total_price'].astype('float32')
 df_cogs['unit_price'] = df_cogs['unit_price'].astype('float32')
+
+
+
 
 ### DEFINE A FUNCTION TO CORRECT NAME DISCRPANCIES IN SOD
 
