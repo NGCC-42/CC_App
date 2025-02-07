@@ -148,6 +148,8 @@ df['total_line_item_spend'] = df['total_line_item_spend'].astype('float32')
 #df['customer'] = df['customer'].str.title()
 #df_hist['customer'] = df_hist['customer'].str.title()
 df_hist = df_hist[~df_hist['customer'].str.contains('AMAZON SALES', na=False)]
+df_hist = df_hist[~df_hist['customer'].str.contains('AMAZON', na=False)]
+df_hist = df_hist[~df_hist['customer'].str.contains('Amazon', na=False)]
 
 df_hsd.rename(columns={
     'Sales Order': 'sales_order',
