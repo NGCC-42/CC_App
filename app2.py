@@ -260,8 +260,11 @@ def fix_names(df):
     df.replace('Brian Uychich', 'POSH DJs', inplace=True)
     df.replace('Omar Sánchez Jiménez / Pyrofetti FX', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
     df.replace('Omar Sánchez Jiménez / Pyrofetti Fx', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
+    df.replace('Omar Jimenez / Pyrofetti efectos especiales', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
+    df.replace('Oscar Jimenez / Pyrofetti Fx', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
     df.replace('Gilbert / Pyrotec Sa', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
     df.replace('Gilbert / Pyrotec S.A.', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
+    df.replace('Gilbert Salazar / Pyrotec S.A.', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
     df.replace('Image SFX (Gordo)', 'Image SFX', inplace=True)
     df.replace('Image SFX (Drake 6 Jets)', 'Image SFX', inplace=True)
     df.replace('Image SFX (Drake 18 Jets)', 'Image SFX', inplace=True)
@@ -270,12 +273,15 @@ def fix_names(df):
     df.replace('Shadow Mountain Productions', 'Tanner Valerio', inplace=True)
     df.replace('Tanner Valerio / Shadow Mountain Productions', 'Tanner Valerio', inplace=True)
     df.replace('Tanner Valerio / Shadow Mountain Productions (GEAR TO RETURN)', 'Tanner Valerio', inplace=True)
-    df.replace('Tanner Valerio / Shadow Mountain Productions (GEAR TO RETURN)', 'Tanner Valerio', inplace=True)
+    df.replace('Tanner Valerio / Shadow Mountain productions (GEAR TO RETURN)', 'Tanner Valerio', inplace=True)
     df.replace('Blast Pyrotechnics', 'Blaso Pyrotechnics', inplace=True)
     df.replace('Pyrotecnico ', 'Pyrotecnico', inplace=True)
     df.replace('PYROTECNICO ', 'PYROTECNICO', inplace=True)
     df.replace('Pyrotek FX ', 'Pyrotek FX', inplace=True)
     df.replace('Pyrotek Fx ', 'Pyrotek Fx', inplace=True)
+    df.replace('Pyro Spectacular Industries', 'Pyro Spectaculars Industries, Inc.', inplace=True)
+    df.replace('SK PYRO SPECIAL EFFECTS', 'SK Pyro Special Effects', inplace=True)
+    df.replace('Illuminated Integration / Nashville Live', 'Illuminated Integration', inplace=True)
     
 
 
