@@ -259,6 +259,7 @@ def fix_names(df):
     df.replace('Sean Devaney', 'POSH DJs', inplace=True)
     df.replace('Brian Uychich', 'POSH DJs', inplace=True)
     df.replace('Omar Sánchez Jiménez / Pyrofetti FX', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
+    df.replace('Gilbert / Pyrotec Sa', 'Pyrofetti Efectos Especiales SA de CV', inplace=True)
     df.replace('Image SFX (Gordo)', 'Image SFX', inplace=True)
     df.replace('Image SFX (Drake 6 Jets)', 'Image SFX', inplace=True)
     df.replace('Image SFX (Drake 18 Jets)', 'Image SFX', inplace=True)
@@ -267,6 +268,9 @@ def fix_names(df):
     df.replace('Shadow Mountain Productions', 'Tanner Valerio', inplace=True)
     df.replace('Tanner Valerio / Shadow Mountain Productions', 'Tanner Valerio', inplace=True)
     df.replace('Tanner Valerio / Shadow Mountain Productions (GEAR TO RETURN)', 'Tanner Valerio', inplace=True)
+    df.replace('Tanner Valerio / Shadow Mountain Productions (GEAR TO RETURN)', 'Tanner Valerio', inplace=True)
+    df.replace('Blast Pyrotechnics', 'Blaso Pyrotechnics', inplace=True)
+    df.replace('Pyrotecnico ', 'Pyrotecnico', inplace=True)
     
 
 
