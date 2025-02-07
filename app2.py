@@ -282,9 +282,26 @@ def fix_names(df):
     df.replace('Pyro Spectacular Industries', 'Pyro Spectaculars Industries, Inc.', inplace=True)
     df.replace('SK PYRO SPECIAL EFFECTS', 'SK Pyro Special Effects', inplace=True)
     df.replace('Illuminated Integration / Nashville Live', 'Illuminated Integration', inplace=True)
+    df.replace('edgar guerrero', 'Edgar Guerrero', inplace=True)
+    df.replace('HEDGER SANCHEZ', 'Hedger Sanchez', inplace=True)
+    df.replace('Gear Club Direct Pro - Luis Garcia', 'Gear Club Direct', inplace=True)
+    df.replace('edgar Rojas', 'Edgar Rojas', inplace=True)
+    df.replace('Grant ashling', 'Grant Ashling', inplace=True)
+    df.replace('Sebastian Gomez', 'Sebastian Gómez', inplace=True)
+    df.replace('Ravinder singh', 'Ravinder Singh', inplace=True)
+    df.replace('Eric Swanson / Slightly Stoopid', 'Slightly Stoopid', inplace=True)
+    df.replace('the bouffants / David Griffin', 'David Griffin', inplace=True)
+    df.replace('Anthony Mendoza (Infusion Lounge)', 'Anthony Mendoza', inplace=True)
+    df.replace('The Party Stage Company / Ryan Smith', 'Ryan Smith', inplace=True)
+    df.replace('Rafael Urban (Re-ship charge)', 'Rafael Urban', inplace=True)
+    df.replace('California Pro Sound And Light', 'California Pro Sound and Light', inplace=True)
+    df.replace('Max Moussier / Sound Miami Nightclub', 'Max Moussier', inplace=True)
+    df.replace('Tony Tannous (Sound Agents Australia)', 'Tony Tannous', inplace=True)
+    df.replace('Carlos BURGOS', 'Carlos Burgos', inplace=True)
+    df.replace('Jonathan / Visual Edge', 'Visual Edge', inplace=True)
+    df.replace('Justin Jenkins / Creative Production & Design', 'Justin Jenkins', inplace=True)
     
-
-
+    
     
     return df
 
