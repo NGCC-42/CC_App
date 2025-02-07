@@ -300,6 +300,7 @@ def fix_names(df):
     df.replace('Carlos BURGOS', 'Carlos Burgos', inplace=True)
     df.replace('Jonathan / Visual Edge', 'Visual Edge', inplace=True)
     df.replace('Justin Jenkins / Creative Production & Design', 'Justin Jenkins', inplace=True)
+    df.replace('David Belogolovsky (6 solenoids)', 'David Belogolovsky', inplace=True)
     
     
     
