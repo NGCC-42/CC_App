@@ -211,7 +211,7 @@ df_cogs['unit_price'] = df_cogs['unit_price'].astype('float32')
 
 
 ### DEFINE A FUNCTION TO CORRECT NAME DISCRPANCIES IN SOD
-
+@st.cache_data
 def fix_names(df):
 
     df.replace('Tim Doyle', 'Timothy Doyle', inplace=True)
