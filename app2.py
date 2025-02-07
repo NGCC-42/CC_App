@@ -275,7 +275,7 @@ def fix_names(df):
     df.replace('Shadow Mountain Productions', 'Tanner Valerio', inplace=True)
     df.replace('Tanner Valerio / Shadow Mountain Productions', 'Tanner Valerio', inplace=True)
     df.replace('Tanner Valerio / Shadow Mountain Productions (GEAR TO RETURN)', 'Tanner Valerio', inplace=True)
-    df.replace('Tanner Valerio / Shadow Mountain productions (GEAR TO RETURN)', 'Tanner Valerio', inplace=True)
+    df.replace('Tanner Valerio / Shadow Mountain productions', 'Tanner Valerio', inplace=True)
     df.replace('Blast Pyrotechnics', 'Blaso Pyrotechnics', inplace=True)
     df.replace('Pyrotecnico ', 'Pyrotecnico', inplace=True)
     df.replace('PYROTECNICO ', 'PYROTECNICO', inplace=True)
@@ -303,6 +303,10 @@ def fix_names(df):
     df.replace('Jonathan / Visual Edge', 'Visual Edge', inplace=True)
     df.replace('Justin Jenkins / Creative Production & Design', 'Justin Jenkins', inplace=True)
     df.replace('David Belogolovsky (6 solenoids)', 'David Belogolovsky', inplace=True)
+    df.replace('amar gill', 'Amar Gill', inplace=True)
+    df.replace('ARIEL MARTINEZ', 'Ariel Martinez', inplace=True)
+    df.replace('JOSE ANTONIO MAR HERNANDEZ', 'Jose Antonio Mar Hernandez', inplace=True)
+    df.replace('Alma Delia Rivero Sánchez', 'Alma Delia Rivero Sanchez', inplace=True)
     
     
     
