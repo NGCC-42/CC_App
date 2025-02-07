@@ -309,6 +309,10 @@ def fix_names(df):
     df.replace('ARIEL MARTINEZ', 'Ariel Martinez', inplace=True)
     df.replace('JOSE ANTONIO MAR HERNANDEZ', 'Jose Antonio Mar Hernandez', inplace=True)
     df.replace('Alma Delia Rivero Sánchez', 'Alma Delia Rivero Sanchez', inplace=True)
+    df.replace('PROMEDSA', 'Promedsa', inplace=True)
+    df.replace('JABARI JOHNSON', 'Jabari Johnson', inplace=True)
+    df.replace('Paul Klassenn / Laird FX', 'Paul Klaassen / Laird FX', inplace=True)
+    df.replace('Parag Enterprises / Divine FX', 'Divine FX', inplace=True)
     
     
     
