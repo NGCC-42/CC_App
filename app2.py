@@ -271,6 +271,7 @@ def fix_names(df):
     df.replace('Tanner Valerio / Shadow Mountain Productions (GEAR TO RETURN)', 'Tanner Valerio', inplace=True)
     df.replace('Blast Pyrotechnics', 'Blaso Pyrotechnics', inplace=True)
     df.replace('Pyrotecnico ', 'Pyrotecnico', inplace=True)
+    df.replace('Pyrotek Fx ', 'Pyrotek Fx', inplace=True)
     
 
 
