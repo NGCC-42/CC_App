@@ -274,6 +274,7 @@ def fix_names(df):
     df.replace('Image SFX (Water Cannon Deposit)', 'Image SFX', inplace=True)
     df.replace('Shadow Mountain Productions', 'Tanner Valerio', inplace=True)
     df.replace('Tanner Valerio / Shadow Mountain Productions', 'Tanner Valerio', inplace=True)
+    df.replace('Tanner Valero', 'Tanner Valerio', inplace=True)
     df.replace('Tanner Valerio / Shadow Mountain Productions (GEAR TO RETURN)', 'Tanner Valerio', inplace=True)
     df.replace('Tanner Valerio / Shadow Mountain productions (GEAR TO RETURN)', 'Tanner Valerio', inplace=True)
     df.replace('Tanner Valerio / Shadow Mountain productions', 'Tanner Valerio', inplace=True)
