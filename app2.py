@@ -2089,97 +2089,65 @@ def extract_control_data(df):
 
 @st.cache_data
 def extract_jet_data(df):
-
-    dict_23 = {}
-    dict_24 = {}
-    dict_25 = {}
-
-    # CREATE DATA DICTS 
-    for month in months_x:
-        dict_23[month] = {'Pro Jet': [0,0,0],
-                'Quad Jet': [0,0,0],
-               'Micro Jet': [0,0,0],
-               'Cryo Clamp': [0,0,0]}
-        dict_24[month] = {'Pro Jet': [0,0,0],
-                'Quad Jet': [0,0,0],
-               'Micro Jet': [0,0,0],
-               'Cryo Clamp': [0,0,0]}
-        dict_25[month] = {'Pro Jet': [0,0,0],
-                'Quad Jet': [0,0,0],
-               'Micro Jet': [0,0,0],
-               'Cryo Clamp': [0,0,0]}
+    # Define month names if not already defined
+    months_x = ["January", "February", "March", "April", "May", "June", 
+                "July", "August", "September", "October", "November", "December"]
     
-    idx = 0
-    for line in df.line_item:
-
-        if df.iloc[idx].order_date.year == 2025:
-            if line[:6] == 'CC-PRO':
-                dict_25[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][0] += df.iloc[idx].quantity
-                dict_25[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][1] += df.iloc[idx].total_line_item_spend
-                if df.iloc[idx].customer in wholesale_list:
-                    dict_25[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][2] += df.iloc[idx].quantity     
-            elif line[:5] == 'CC-QJ':
-                dict_25[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][0] += df.iloc[idx].quantity
-                dict_25[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][1] += df.iloc[idx].total_line_item_spend
-                if df.iloc[idx].customer in wholesale_list:
-                    dict_25[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][2] += df.iloc[idx].quantity  
-            elif line[:6] == 'CC-MJM':
-                dict_25[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][0] += df.iloc[idx].quantity
-                dict_25[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][1] += df.iloc[idx].total_line_item_spend
-                if df.iloc[idx].customer in wholesale_list:
-                    dict_25[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][2] += df.iloc[idx].quantity  
-            elif line[:6] == 'CC-CC2':
-                dict_25[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][0] += df.iloc[idx].quantity
-                dict_25[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][1] += df.iloc[idx].total_line_item_spend
-                if df.iloc[idx].customer in wholesale_list:
-                    dict_25[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][2] += df.iloc[idx].quantity 
-                    
-        if df.iloc[idx].order_date.year == 2024:
-            if line[:6] == 'CC-PRO':
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][0] += df.iloc[idx].quantity
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][1] += df.iloc[idx].total_line_item_spend
-                if df.iloc[idx].customer in wholesale_list:
-                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][2] += df.iloc[idx].quantity     
-            elif line[:5] == 'CC-QJ':
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][0] += df.iloc[idx].quantity
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][1] += df.iloc[idx].total_line_item_spend
-                if df.iloc[idx].customer in wholesale_list:
-                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][2] += df.iloc[idx].quantity  
-            elif line[:6] == 'CC-MJM':
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][0] += df.iloc[idx].quantity
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][1] += df.iloc[idx].total_line_item_spend
-                if df.iloc[idx].customer in wholesale_list:
-                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][2] += df.iloc[idx].quantity  
-            elif line[:6] == 'CC-CC2':
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][0] += df.iloc[idx].quantity
-                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][1] += df.iloc[idx].total_line_item_spend
-                if df.iloc[idx].customer in wholesale_list:
-                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][2] += df.iloc[idx].quantity  
-        elif df.iloc[idx].order_date.year == 2023:
-            if line[:6] == 'CC-PRO':
-                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][0] += df.iloc[idx].quantity
-                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][1] += df.iloc[idx].total_line_item_spend
-                if df.iloc[idx].customer in wholesale_list:
-                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][2] += df.iloc[idx].quantity  
-            elif line[:5] == 'CC-QJ':
-                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][0] += df.iloc[idx].quantity
-                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][1] += df.iloc[idx].total_line_item_spend
-                if df.iloc[idx].customer in wholesale_list:
-                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][2] += df.iloc[idx].quantity  
-            elif line[:6] == 'CC-MJM':
-                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][0] += df.iloc[idx].quantity
-                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][1] += df.iloc[idx].total_line_item_spend
-                if df.iloc[idx].customer in wholesale_list:
-                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][2] += df.iloc[idx].quantity  
-            elif line[:6] == 'CC-CC2':
-                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][0] += df.iloc[idx].quantity
-                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][1] += df.iloc[idx].total_line_item_spend
-                if df.iloc[idx].customer in wholesale_list:
-                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][2] += df.iloc[idx].quantity  
-                
-        idx += 1
+    # Define product mapping using the prefixes in line_item.
+    conditions = [
+        df["item_sku"].str.startswith("CC-PRO", na=False),
+        df["item_sku"].str.startswith("CC-QJ", na=False),
+        df["item_sku"].str.startswith("CC-MJM", na=False),
+        df["item_sku"].str.startswith("CC-CC2", na=False)
+    ]
+    choices = ["Pro Jet", "Quad Jet", "Micro Jet", "Cryo Clamp"]
     
-    return dict_23, dict_24, dict_25
+    # Create a new column "product" based on the above conditions.
+    df = df.copy()
+    df["product"] = np.select(conditions, choices, default=None)
+    # Remove rows that are not one of our desired product types.
+    df = df[df["product"].notnull()]
+    
+    # Ensure order_date is datetime and add year and month columns.
+    df["order_date"] = pd.to_datetime(df["order_date"], errors="coerce")
+    df["year"] = df["order_date"].dt.year
+    df["month"] = df["order_date"].dt.month.apply(lambda m: months_x[m - 1])
+    
+    # Create a wholesale flag column.
+    df["wholesale"] = df["customer"].isin(wholesale_list)
+    
+    # Group by year, month, and product for overall totals.
+    overall = df.groupby(["year", "month", "product"]).agg(
+        qty_sum=("quantity", "sum"),
+        spend_sum=("total_line_item_spend", "sum")
+    ).reset_index()
+    
+    # Group by year, month, and product for wholesale only quantities.
+    wholesale_grp = df[df["wholesale"]].groupby(["year", "month", "product"])["quantity"].sum().reset_index()
+    wholesale_grp = wholesale_grp.rename(columns={"quantity": "wholesale_qty"})
+    
+    # Merge the overall and wholesale results.
+    merged = pd.merge(overall, wholesale_grp, on=["year", "month", "product"], how="left")
+    merged["wholesale_qty"] = merged["wholesale_qty"].fillna(0)
+    
+    # Build a result dictionary for each target year.
+    result = {}
+    # Target years: 2023, 2024, and 2025.
+    for y in [2023, 2024, 2025]:
+        # Pre-fill with default values for every month and each product.
+        year_dict = {month: {"Pro Jet": [0, 0, 0], "Quad Jet": [0, 0, 0],
+                             "Micro Jet": [0, 0, 0], "Cryo Clamp": [0, 0, 0]}
+                     for month in months_x}
+        sub = merged[merged["year"] == y]
+        for _, row in sub.iterrows():
+            month = row["month"]
+            product = row["product"]
+            # Update the values: [total_quantity, total_spend, wholesale_quantity]
+            year_dict[month][product] = [row["qty_sum"], row["spend_sum"], row["wholesale_qty"]]
+        result[y] = year_dict
+    
+    # Return dictionaries for the target years.
+    return result.get(2023), result.get(2024), result.get(2025)
 
 @st.cache_data
 def collect_product_data(df, prod='All', years=[2023, 2024, 2025]):
