@@ -112,7 +112,7 @@ wholesale_list = gen_ws_list()
 
 ### STRIP UNUSED COLUMN ###
 
-#df = df.drop(['Ordered Week', 'Customer Item Name'], axis=1)
+df = df.drop(['Ordered Week', 'Customer Item Name'], axis=1)
 
 ### RENAME DF COLUMNS FOR SIMPLICITY ###
 
