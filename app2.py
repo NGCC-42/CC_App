@@ -5628,7 +5628,7 @@ if task_choice == 'Product Reports':
             group3 = [3, 6, 9, 12]
             
             for key, val in magic_dict.items():
-                if val[0] >= 1:
+                if val[0] >= 1 and key != 'MFX-ECO2JET-BKT':
                     if idx in group1:
                         colx.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))
                     elif idx in group2:
