@@ -2294,7 +2294,8 @@ def magic_sales(year):
         spend_sum = df.loc[mask_prod, "total_line_item_spend"].sum()
         magic_products[prod] = [qty_sum, spend_sum]
         
-    magic_products['MFX-E2J-BKT'] = magic_products['MFX-ECO2JET-BKT'] + magic_products['MFX-E2J-BKT']
+    magic_products['MFX-E2J-BKT'][0] = magic_products['MFX-ECO2JET-BKT'][0] + magic_products['MFX-E2J-BKT'][0]
+    magic_products['MFX-E2J-BKT'][1] = magic_products['MFX-ECO2JET-BKT'][1] + magic_products['MFX-E2J-BKT'][1]
     
     return total_spend, magic_products
 
@@ -5622,12 +5623,15 @@ if task_choice == 'Product Reports':
             
             count, magic_dict = magic_sales('2025')
 
+            group1 = [1, 4, 7, 10]
+            group2 = [2, 5, 8, 11]
+            group3 = [3, 6, 9, 12]
             
             for key, val in magic_dict.items():
                 if val[0] >= 1:
-                    if 0 <= idx <= 5:
+                    if idx in group1:
                         colx.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))
-                    elif 5 < idx <= 10:
+                    elif idx in group2:
                         coly.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))    
                     else:
                         colz.metric('**{}**'.format(key), '{}'.format(int(val[0])), '${:,.2f} in revenue'.format(val[1]))
