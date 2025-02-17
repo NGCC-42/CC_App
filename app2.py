@@ -5256,6 +5256,11 @@ if task_choice == 'Product Reports':
 
     elif prod_cat == 'Handhelds':
 
+        td_8nc = to_date_product('CC-HCCMKII-08-NC')
+        td_8tc = to_date_product('CC-HCCMKII-08-TC')
+        td_15nc = to_date_product('CC-HCCMKII-15-NC')
+        td_15tc = to_date_product('CC-HCCMKII-15-TC')
+
         with col2:
             year = ui.tabs(options=[2025, 2024, 2023, 'Historical'], default_value=2025, key='Handheld Year Select')
 
@@ -5267,16 +5272,16 @@ if task_choice == 'Product Reports':
                 cola, colb, colc, cold = st.columns(4)
         
                 cola.subheader('8FT NC')
-                cola.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[8]['8FT - No Case'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[8]['8FT - No Case'][0]), '{}'.format(annual_product_totals[8]['8FT - No Case'][0] - annual_product_totals[7]['8FT - No Case'][0]))
+                cola.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[8]['8FT - No Case'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[8]['8FT - No Case'][0]), '{}'.format(annual_product_totals[8]['8FT - No Case'][0] - td_8nc))
                 cola.metric('', '${:,}'.format(int(annual_product_totals[8]['8FT - No Case'][1])), percent_of_change(annual_product_totals[7]['8FT - No Case'][1], annual_product_totals[8]['8FT - No Case'][1]))
                 colb.subheader('8FT TC')
-                colb.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[8]['8FT - Travel Case'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[8]['8FT - Travel Case'][0]),  '{}'.format(annual_product_totals[8]['8FT - Travel Case'][0] - annual_product_totals[7]['8FT - Travel Case'][0]))
+                colb.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[8]['8FT - Travel Case'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[8]['8FT - Travel Case'][0]),  '{}'.format(annual_product_totals[8]['8FT - Travel Case'][0] - td_8tc))
                 colb.metric('', '${:,}'.format(int(annual_product_totals[8]['8FT - Travel Case'][1])), percent_of_change(annual_product_totals[7]['8FT - Travel Case'][1], annual_product_totals[8]['8FT - Travel Case'][1]))
                 colc.subheader('15FT NC')
-                colc.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[8]['15FT - No Case'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[8]['15FT - No Case'][0]),  '{}'.format(annual_product_totals[8]['15FT - No Case'][0] - annual_product_totals[7]['15FT - No Case'][0]))
+                colc.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[8]['15FT - No Case'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[8]['15FT - No Case'][0]),  '{}'.format(annual_product_totals[8]['15FT - No Case'][0] - td_15nc))
                 colc.metric('', '${:,}'.format(int(annual_product_totals[8]['15FT - No Case'][1])), percent_of_change(annual_product_totals[7]['15FT - No Case'][1], annual_product_totals[8]['15FT - No Case'][1]))
                 cold.subheader('15FT TC')
-                cold.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[8]['15FT - Travel Case'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[8]['15FT - Travel Case'][0]),  '{}'.format(annual_product_totals[8]['15FT - Travel Case'][0] - annual_product_totals[7]['15FT - Travel Case'][0]))
+                cold.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[8]['15FT - Travel Case'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[8]['15FT - Travel Case'][0]),  '{}'.format(annual_product_totals[8]['15FT - Travel Case'][0] - td_15tc))
                 cold.metric('', '${:,}'.format(int(annual_product_totals[8]['15FT - Travel Case'][1])), percent_of_change(annual_product_totals[7]['15FT - Travel Case'][1], annual_product_totals[8]['15FT - Travel Case'][1]))
     
     
