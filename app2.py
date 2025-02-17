@@ -112,7 +112,11 @@ wholesale_list = gen_ws_list()
 
 ### STRIP UNUSED COLUMN ###
 
-df = df.drop(['Ordered Week', 'Customer Item Name'], axis=1)
+missing_cols = [col for col in ['Ordered Week', 'Customer Item Name'] if col not in df.columns]
+if missing_cols:
+    print(f"Warning: The following columns are missing and cannot be dropped: {missing_cols}")
+else:
+    df = df.drop(['Ordered Week', 'Customer Item Name'], axis=1)
 
 ### RENAME DF COLUMNS FOR SIMPLICITY ###
 
