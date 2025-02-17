@@ -1552,6 +1552,8 @@ def extract_handheld_data(df):
     
     return dict_23, dict_24, dict_25, hose_count_23, hose_count_24, hose_count_25
 
+dict_23, dict_24, dict_25, hose_count_23, hose_count_24, hose_count_25 = extract_handheld_data(df)
+st.write(dict_25)
 
 @st.cache_data
 def extract_hose_data(df):
