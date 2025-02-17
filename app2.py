@@ -1492,7 +1492,7 @@ def extract_handheld_data(df):
         hose_count_25[month] = [0,0]
     
     idx = 0
-    for line in df.line_item:
+    for line in df.item_sku:
 
         if df.iloc[idx].order_date.year == 2025:
             if line[:16] == 'CC-HCCMKII-08-NC':
