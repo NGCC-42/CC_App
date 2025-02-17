@@ -6340,11 +6340,11 @@ if task_choice == 'Leaderboards':
     
     for customer in df.customer:
 
-        if df.iloc[idx].ordered_year == '2023':
+        if df.iloc[idx].ordered_year == '2023' or df.iloc[idx].order_date.year == 2023:
             cust_spend_dict_2023[customer] += float(df.iloc[idx].total_line_item_spend)
-        elif df.iloc[idx].ordered_year == '2024':
+        elif df.iloc[idx].ordered_year == '2024' or df.iloc[idx].order_date.year == 2024:
             cust_spend_dict_2024[customer] += float(df.iloc[idx].total_line_item_spend)
-        elif df.iloc[idx].ordered_year == '2025':
+        elif df.iloc[idx].ordered_year == '2025' or df.iloc[idx].order_date.year == 2025:
             cust_spend_dict_2025[customer] += float(df.iloc[idx].total_line_item_spend)
         
         idx += 1
