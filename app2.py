@@ -2222,23 +2222,81 @@ def organize_hose_data(dict):
 @st.cache_data
 def magic_sales(year):
 
-    count = 0
-    magic_products = {'MagicFX Commander': [0,0], 'Magic FX Smoke Bubble Blaster': [0,0], 'MagicFX ARM SFX SAFETY TERMINATOR': [0,0], 'MagicFX Device Updater': [0,0], 'MagicFX PSYCO2JET': [0,0], 'MagicFX Red Button': [0,0], 'MagicFX Replacement Keys': [0,0], 'MagicFX SFX Safety ARM Controller': [0,0], 'MagicFX SPARXTAR': [0,0], 'MagicFX Sparxtar powder': [0,0], 'MagicFX StadiumBlaster': [0,0], 'MagicFX StadiumBlower': [0,0], 'MagicFX StadiumShot III': [0,0], 'MagicFX SuperBlaster II': [0,0], 'MagicFX Swirl Fan II': [0,0], 'MagicFX Switchpack II': [0,0], 'MFX-AC-SBRV': [0,0], 'MFX-E2J-230': [0,0], 'MFX-E2J-2LFA': [0,0], 'MFX-E2J-5LFCB': [0,0], 'MFX-E2J-F-ID': [0,0], 'MFX-E2J-F-OD': [0,0], 'MFX-E2J-FC': [0,0], 'MFX-E2J-FEH-1M': [0,0], 'MFX-E2J-FEH-2M': [0,0], 'MFX-E2J-OB': [0,0], 'MFX-ECO2JET-BKT': [0,0], 'MFX-SS3-RB': [0,0]}
+    # Filter for rows that match the given year.
+    #mask_year = df["ordered_year"] == year
+    
+    # Force conversion of order_date to datetime
+    df['order_date'] = pd.to_datetime(df['order_date'], errors='coerce')
+    
+    # Debugging: Check if conversion worked
+    print(df[['order_date']].head())  # Should display datetime values
+    print(df['order_date'].dtype)  # Should be 'datetime64[ns]'
+    
+    # Now, extract the year safely
+    mask_year = df['order_date'].dt.year == int(year)
 
-    idx = 0
+    # Build a mask for rows where either 'line_item' or 'item_sku' starts with "Magic" or "MFX"
+    mask_magic = (
+        df["line_item"].str.startswith("Magic", na=False) |
+        df["line_item"].str.startswith("MFX", na=False) |
+        df["item_sku"].str.startswith("Magic", na=False) |
+        df["item_sku"].str.startswith("MFX", na=False)
+    )
+    
+    # Combined mask: only consider rows from the given year that mention Magic/MFX
+    mask = mask_year & mask_magic
 
-    for sale in df.sales_order:
-        if df.iloc[idx].ordered_year == year:
-            if df.iloc[idx].line_item[:5] == 'Magic' or df.iloc[idx].line_item[:3] == 'MFX' or df.iloc[idx].item_sku[:5] == 'Magic' or df.iloc[idx].item_sku[:3] == 'MFX':
-                count += df.iloc[idx].total_line_item_spend
-                for prod, key in magic_products.items():
-                    if df.iloc[idx].line_item[:len(prod)] == prod:
-                        key[0] += df.iloc[idx].quantity
-                        key[1] += df.iloc[idx].total_line_item_spend
+    # Sum total_line_item_spend for these rows
+    total_spend = df.loc[mask, "total_line_item_spend"].sum()
+    
+    # Create (or copy) the magic_products dictionary
+    magic_products = {
+        'MagicFX Commander': [0, 0],
+        'Magic FX Smoke Bubble Blaster': [0, 0],
+        'MagicFX ARM SFX SAFETY TERMINATOR': [0, 0],
+        'MagicFX Device Updater': [0, 0],
+        'MagicFX PSYCO2JET': [0, 0],
+        'MagicFX Red Button': [0, 0],
+        'MagicFX Replacement Keys': [0, 0],
+        'MagicFX SFX Safety ARM Controller': [0, 0],
+        'MagicFX SPARXTAR': [0, 0],
+        'MagicFX Sparxtar powder': [0, 0],
+        'MagicFX StadiumBlaster': [0, 0],
+        'MagicFX StadiumBlower': [0, 0],
+        'MagicFX StadiumShot III': [0, 0],
+        'MagicFX SuperBlaster II': [0, 0],
+        'MagicFX Swirl Fan II': [0, 0],
+        'MagicFX Switchpack II': [0, 0],
+        'MFX-AC-SBRV': [0, 0],
+        'MFX-E2J-230': [0, 0],
+        'MFX-E2J-2LFA': [0, 0],
+        'MFX-E2J-5LFCB': [0, 0],
+        'MFX-E2J-F-ID': [0, 0],
+        'MFX-E2J-F-OD': [0, 0],
+        'MFX-E2J-FC': [0, 0],
+        'MFX-E2J-FEH-1M': [0, 0],
+        'MFX-E2J-FEH-2M': [0, 0],
+        'MFX-E2J-OB': [0, 0],
+        'MFX-ECO2JET-BKT': [0, 0],
+        'MFX-E2J-BKT': [0, 0],
+        'MFX-SS3-RB': [0, 0]
+    }
 
-        idx += 1
-
-    return count, magic_products
+    #for prod in magic_products:
+        #mask_prod = mask_year & df["line_item"].str.lower().str.startswith(prod.lower(), na=False)
+        #st.write(f"Checking {prod}: {mask_prod.sum()} rows matched")
+    
+    # For each magic product, create a mask (using the line_item column) and aggregate quantity and sales.
+    for prod in magic_products:
+        # Check if the beginning of line_item matches the product name.
+        mask_prod = mask_year & df["item_sku"].str.contains(prod, na=False)
+        qty_sum   = df.loc[mask_prod, "quantity"].sum()
+        spend_sum = df.loc[mask_prod, "total_line_item_spend"].sum()
+        magic_products[prod] = [qty_sum, spend_sum]
+        
+    magic_products['MFX-E2J-BKT'] = magic_products['MFX-ECO2JET-BKT'] + magic_products['MFX-E2J-BKT']
+    
+    return total_spend, magic_products
 
 def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=None, note=None):
 
