@@ -5864,6 +5864,10 @@ if task_choice == 'Customer Details':
 
     
     # ADD IN HISTORICAL PRODUCTS
+    for hh, tot in cust_hh.items():
+        for sale in tot[1]:
+            handheld_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], hh))
+            
     for jet, tot in cust_jet.items():
         jet_totals_cust[jet] += tot[0]
         for sale in tot[1]:
