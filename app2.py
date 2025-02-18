@@ -285,6 +285,7 @@ def fix_names(df):
     df.replace('Blast Pyrotechnics', 'Blaso Pyrotechnics', inplace=True)
     df.replace('Pyrotecnico ', 'Pyrotecnico', inplace=True)
     df.replace('PYROTECNICO ', 'PYROTECNICO', inplace=True)
+    df.replace('Pyrotecnico', 'PYROTECNICO', inplace=True)
     df.replace('Pyrotek FX ', 'Pyrotek FX', inplace=True)
     df.replace('Pyrotek Fx ', 'Pyrotek Fx', inplace=True)
     df.replace('Pyro Spectacular Industries', 'Pyro Spectaculars Industries, Inc.', inplace=True)
