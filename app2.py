@@ -2641,42 +2641,6 @@ def range_sales(num):
     return daily_sales23, daily_sales24, daily_sales25
 
 
-def range_sales(num):
-
-    daily_sales23 = []
-    daily_sales24 = []
-    daily_sales25 = []
-
-    delta_range = timedelta(days=num)
-    
-    for i in range(num):
-        daily_sales23.append(0)
-        daily_sales24.append(0)
-        daily_sales25.append(0)
-
-
-        
-    idx = 0 
-    
-    for sale in df.sales_order:
-        if today.date() >= df.iloc[idx].order_date >= (today - delta_range).date():
-            daily_sales25[-((today.date() - (df.iloc[idx].order_date)).days)] += df.iloc[idx].total_line_item_spend
-            
-        elif one_year_ago.date() >= df.iloc[idx].order_date >= (one_year_ago - delta_range).date():
-            daily_sales24[-((one_year_ago.date() - (df.iloc[idx].order_date)).days)] += df.iloc[idx].total_line_item_spend
-            
-        elif two_years_ago.date() >= df.iloc[idx].order_date >= (two_years_ago - delta_range).date():
-            daily_sales23[-((two_years_ago.date() - (df.iloc[idx].order_date)).days)] += df.iloc[idx].total_line_item_spend
-
-
-        idx += 1
-
-    daily_sales23.reverse()
-    daily_sales24.reverse()
-    daily_sales25.reverse()
-    
-            
-    return daily_sales23, daily_sales24, daily_sales25
 
 
 def display_daily_plot(month, years=['All']):
