@@ -35,8 +35,8 @@ st.header('')
 
 
 ### LOAD FILES
-#sod_ss = 'MASTER DATA 2.17.25.xlsx'
-sod_ss = 'SOD 2.18.25.xlsx'
+sod_ss = 'MASTER DATA 2.17.25.xlsx'
+#sod_ss = 'SOD 2.18.25.xlsx'
 
 hist_ss = 'CC Historical Sales 2.7.xlsx'
 
@@ -148,7 +148,7 @@ df.rename(columns={
     'Ordered Year': 'ordered_year'},
     inplace=True)
 
-#df.order_date = pd.to_datetime(df.order_date).dt.date
+df.order_date = pd.to_datetime(df.order_date).dt.date
 df['total_line_item_spend'] = df['total_line_item_spend'].astype('float32')
 #df['customer'] = df['customer'].str.title()
 #df_hist['customer'] = df_hist['customer'].str.title()
