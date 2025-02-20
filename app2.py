@@ -55,6 +55,8 @@ wholesale_cust = 'wholesale_customers.xlsx'
 
 cogs_ss = 'COGS 1.29.25a.xlsx'
 
+qb_ss = 'QB Transactions.xlsx'
+
 ### LOAD SHEETS FROM PRODUCT SUMMARY
 
 #acc_2024 = 'Accessories 2024'
@@ -101,6 +103,11 @@ df_hsd = create_dataframe(hsd_ss)
 df_wholesale = create_dataframe(wholesale_cust)
 
 df_cogs = create_dataframe(cogs_ss)
+
+df_qb = pd.read_excel(qb_ss,
+                      dtype=object,
+                      header=0,
+                      keep_default_na=True)
 
 @st.cache_data
 def gen_ws_list():
@@ -155,6 +162,17 @@ df['total_line_item_spend'] = df['total_line_item_spend'].astype('float32')
 df_hist = df_hist[~df_hist['customer'].str.contains('AMAZON SALES', na=False)]
 df_hist = df_hist[~df_hist['customer'].str.contains('AMAZON', na=False)]
 df_hist = df_hist[~df_hist['customer'].str.contains('Amazon', na=False)]
+
+df_qb['customer'] = df_qb['customer'].str.title()
+df_qb = df_qb[~df_qb['customer'].str.contains('Total', na=False)]
+df_qb = df_qb[~df_qb["order_num"].str.contains("F", na=False)]
+df_qb = df_qb[~df_qb["order_num"].str.contains("CF", na=False)]
+df_qb = df_qb[~df_qb["order_num"].str.contains("(I2G)", na=False)]
+df_qb = df_qb[~df_qb["order_num"].str.contains("ch_", na=False)]
+df_qb['customer'] = df_qb['customer'].ffill()
+df_qb.dropna(subset=['date'], inplace=True)
+df_qb.dropna(subset=['total'], inplace=True)
+df_qb.reset_index(drop=True, inplace=True)
 
 df_hsd.rename(columns={
     'Sales Order': 'sales_order',
@@ -351,6 +369,7 @@ def fix_names(df):
 
 df = fix_names(df)
 df_hist = fix_names(df_hist)
+df_qb = fix_names(df_qb)
 
 ### CREATE A LIST OF UNIQUE CUSTOMERS ###
 unique_customer_list = df.customer.unique().tolist()
@@ -5888,25 +5907,47 @@ if task_choice == 'Customer Details':
 
     spending_dict, spending_total, cust_jet, cust_hh, cust_cntl, cust_acc = hist_cust_data(text_input)
 
+    df_qb['date'] = df_qb['date'].dt.strftime('%Y-%m-%d')
+
     
     # ADD IN HISTORICAL PRODUCTS
     for hh, tot in cust_hh.items():
         for sale in tot[1]:
-            handheld_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], hh))
-            
+            match = df_qb.loc[(df_qb['customer'] == text_input) & (df_qb['date'] == sale[1])]
+            try:
+                order_num = match['order_num'].iloc[0]
+                handheld_list.append('| {} | {} | ( {}x ) {}'.format(order_num, sale[1], sale[0], hh))
+            except:
+                handheld_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], hh))
+    
     for jet, tot in cust_jet.items():
         jet_totals_cust[jet] += tot[0]
         for sale in tot[1]:
-            jet_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], jet))
+            match = df_qb.loc[(df_qb['customer'] == text_input) & (df_qb['date'] == sale[1])]
+            try:
+                order_num = match['order_num'].iloc[0]
+                jet_list.append('| {} | {} | ( {}x ) {}'.format(order_num, sale[1], sale[0], jet))
+            except:
+                jet_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], jet))
 
     for cntl, tot in cust_cntl.items():
         controller_totals_cust[cntl] += tot[0]
         for sale in tot[1]:
-            controller_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], cntl))
+            match = df_qb.loc[(df_qb['customer'] == text_input) & (df_qb['date'] == sale[1])]
+            try:
+                order_num = match['order_num'].iloc[0]
+                controller_list.append('| {} | {} | ( {}x ) {}'.format(order_num, sale[1], sale[0], cntl))
+            except:
+                controller_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], cntl))
 
     for acc, tot in cust_acc.items():
         for sale in tot[1]:
-            fittings_accessories_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], acc))
+            match = df_qb.loc[(df_qb['customer'] == text_input) & (df_qb['date'] == sale[1])]
+            try:
+                order_num = match['order_num'].iloc[0]
+                fittings_accessories_list.append('| {} | {} | ( {}x ) {}'.format(order_num, sale[1], sale[0], acc))
+            except:
+                fittings_accessories_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], acc))
 
     cust_handheld_mk2_cnt += cust_hh['Handheld MKII'][0]
     cust_handheld_mk1_cnt = cust_hh['Handheld MKI'][0]
