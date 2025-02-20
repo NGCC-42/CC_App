@@ -342,6 +342,7 @@ def fix_names(df):
     df.replace('Ernesto Koncept Systems / Khalil', 'Ernesto Koncept Systems', inplace=True)
     df.replace('jose ramos', 'Jose Ramos', inplace=True)
     df.replace('RAMON', 'Ramon', inplace=True)
+    df.replace('4WALL ENTERTAINMENT, INC. ', '4WALL ENTERTAINMENT, INC.', inplace=True)
     
     
     
