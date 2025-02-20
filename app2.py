@@ -319,6 +319,8 @@ def fix_names(df):
     df.replace('JABARI JOHNSON', 'Jabari Johnson', inplace=True)
     df.replace('Paul Klassenn / Laird FX', 'Paul Klaassen / Laird FX', inplace=True)
     df.replace('Parag Enterprises / Divine FX', 'Divine FX', inplace=True)
+    df.replace('Roman Zandi ', 'Romin Zandi', inplace=True)
+    df.replace('Romin Zandi (Personal)', 'Romin Zandi', inplace=True)
     
     
     
