@@ -105,7 +105,7 @@ df_wholesale = create_dataframe(wholesale_cust)
 df_cogs = create_dataframe(cogs_ss)
 
 df_qb = pd.read_excel(qb_ss,
-                      dtype=object,
+                      #dtype=object,
                       header=0,
                       keep_default_na=True)
 
@@ -5907,7 +5907,7 @@ if task_choice == 'Customer Details':
 
     spending_dict, spending_total, cust_jet, cust_hh, cust_cntl, cust_acc = hist_cust_data(text_input)
 
-    #df_qb['date'] = df_qb['date'].dt.strftime('%Y-%m-%d')
+    df_qb['date'] = df_qb['date'].dt.strftime('%Y-%m-%d')
 
     
     # ADD IN HISTORICAL PRODUCTS
