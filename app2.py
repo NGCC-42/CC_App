@@ -4289,16 +4289,16 @@ if task_choice == 'Product Reports':
                 cola, colb, colc, cold = st.columns(4, gap='medium')
     
                 cola.subheader('Pro Jet')
-                cola.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Pro Jet'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Pro Jet'][0]), annual_product_totals[2]['Pro Jet'][0] - pj_td24)
+                cola.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Pro Jet'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Pro Jet'][0]), (annual_product_totals[2]['Pro Jet'][0] - pj_td24))
     
                 colb.subheader('Quad Jet')
-                colb.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Quad Jet'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Quad Jet'][0]), annual_product_totals[2]['Quad Jet'][0] - qj_td24)
+                colb.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Quad Jet'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Quad Jet'][0]), (annual_product_totals[2]['Quad Jet'][0] - qj_td24))
     
                 colc.subheader('Micro Jet')
-                colc.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Micro Jet'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Micro Jet'][0]), annual_product_totals[2]['Micro Jet'][0] - mj_td24)
+                colc.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Micro Jet'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Micro Jet'][0]), (annual_product_totals[2]['Micro Jet'][0] - mj_td24))
     
                 cold.subheader('Cryo Clamp')
-                cold.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Cryo Clamp'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Cryo Clamp'][0]), annual_product_totals[2]['Cryo Clamp'][0] - cc_td24)
+                cold.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[2]['Cryo Clamp'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[2]['Cryo Clamp'][0]), (annual_product_totals[2]['Cryo Clamp'][0] - cc_td24))
 
                 prod_profit_PJ, profit_per_unit_PJ, prod_profit_last_PJ, avg_price_PJ, avg_price_last_PJ, wholesale_sales_PJ, wholesale_percentage_PJ, wholesale_delta_PJ = calculate_product_metrics(annual_product_totals, 'Pro Jet', 2, bom_cost_jet)
                 prod_profit_QJ, profit_per_unit_QJ, prod_profit_last_QJ, avg_price_QJ, avg_price_last_QJ, wholesale_sales_QJ, wholesale_percentage_QJ, wholesale_delta_QJ = calculate_product_metrics(annual_product_totals, 'Quad Jet', 2, bom_cost_jet)
@@ -4704,11 +4704,11 @@ if task_choice == 'Product Reports':
                 cola, colb, colc = st.columns(3)
                 
                 cola.subheader('The Button')
-                cola.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['The Button'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['The Button'][0]), annual_product_totals[5]['The Button'][0] - tb_td24)
+                cola.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['The Button'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['The Button'][0]), (annual_product_totals[5]['The Button'][0] - tb_td24))
                 colb.subheader('Shostarter')
-                colb.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['Shostarter'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['Shostarter'][0]), annual_product_totals[5]['Shostarter'][0] - ss_td24)
+                colb.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['Shostarter'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['Shostarter'][0]), (annual_product_totals[5]['Shostarter'][0] - ss_td24))
                 colc.subheader('Shomaster')
-                colc.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['Shomaster'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['Shomaster'][0]), annual_product_totals[5]['Shomaster'][0] - sm_td24)
+                colc.metric('{:.1f}% of Total Revenue'.format((annual_product_totals[5]['Shomaster'][1] / td_25_tot) * 100), '{}'.format(annual_product_totals[5]['Shomaster'][0]), (annual_product_totals[5]['Shomaster'][0] - sm_td24))
     
                 prod_profit_TB, profit_per_unit_TB, prod_profit_last_TB, avg_price_TB, avg_price_last_TB, wholesale_sales_TB, wholesale_percentage_TB, wholesale_delta_TB = calculate_product_metrics(annual_product_totals, 'The Button', 5, bom_cost_control)
                 prod_profit_SS, profit_per_unit_SS, prod_profit_last_SS, avg_price_SS, avg_price_last_SS, wholesale_sales_SS, wholesale_percentage_SS, wholesale_delta_SS = calculate_product_metrics(annual_product_totals, 'Shostarter', 5, bom_cost_control)
