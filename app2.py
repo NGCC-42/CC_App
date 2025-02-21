@@ -4065,7 +4065,7 @@ def calculate_product_metrics(annual_product_totals, prod_select, key, bom_dict)
 
 def to_date_product(sku_string):
     # Filter rows where the line_item starts with sku_string.
-    mask_sku = df["line_item"].str.startswith(sku_string)
+    mask_sku = df["item_sku"].str.startswith(sku_string)
     df_sku = df[mask_sku].copy()
     
     # Ensure order_date is a datetime and create a date-only column.
