@@ -363,6 +363,7 @@ def fix_names(df):
     df.replace('4WALL ENTERTAINMENT, INC. ', '4WALL ENTERTAINMENT, INC.', inplace=True)
     df.replace('alex allen', 'Alex Allen', inplace=True)
     df.replace('Advanced Entertainment Services ', 'Advanced Entertainment Services', inplace=True)
+    df.replace('adrian zerla', 'Adrian Zerla', inplace=True)
     
     
     
