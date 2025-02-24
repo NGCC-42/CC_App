@@ -36,7 +36,7 @@ st.header('')
 
 ### LOAD FILES
 #sod_ss = 'MASTER DATA 2.17.25.xlsx'
-sod_ss = 'SOD 2.24.25.xlsx'
+sod_ss = 'SOD 2.21.25.xlsx'
 
 # Replace with your GitHub raw URL
 #url = "https://raw.githubusercontent.com/NGCC-42/CC_App/SOD_Master.csv"
@@ -92,7 +92,7 @@ def create_dataframe(ss):
 	df = pd.read_excel(ss,
 					  dtype=object,
 					  header=0, 
-                      keep_default_na=True)
+                      keep_default_na=False)
 	return df
 
 
