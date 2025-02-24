@@ -39,13 +39,13 @@ st.header('')
 sod_ss = 'SOD 2.21.25.xlsx'
 
 # Replace with your GitHub raw URL
-url = "https://raw.githubusercontent.com/NGCC-42/CC_App/SOD_Master.csv"
+#url = "https://raw.githubusercontent.com/NGCC-42/CC_App/SOD_Master.csv"
 
 # Read the CSV into a DataFrame
-df = pd.read_csv(url)
+#df = pd.read_csv(url)
 
 # Display the first few rows
-print(df.head())
+#print(df.head())
 
 hist_ss = 'CC Historical Sales 2.7.xlsx'
 
