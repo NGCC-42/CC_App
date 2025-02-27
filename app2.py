@@ -276,7 +276,7 @@ def fix_names(df):
     df.replace('Michael Brammer / Special Event Services', 'Special Event Services (SES)', inplace=True)
     df.replace('Dios Vazquez ', 'Dios Vazquez', inplace=True)
     df.replace('Brilliant Stages Ltd T/A TAIT', 'Brilliant Stages', inplace=True)
-    df.replace('San Clemente High School Attn Matt Reid', 'San Clemente High School', inplace=True)
+    df.replace('San Clemente High School Attn Matt Reid', 'Matthew Reid', inplace=True)
     df.replace('Anita Chandra / ESP Gaming', 'Anita Chandra', inplace=True)
     df.replace('randy hood', 'Randy Hood', inplace=True)
     df.replace('Randy Hood / Hood And Associates / talent', 'Randy Hood', inplace=True)
@@ -376,7 +376,8 @@ def fix_names(df):
     df.replace('Anthony LoBosco', 'Anthony Lobosco', inplace=True)
     df.replace('ANTHONY DAMPLO', 'Anthony Damplo', inplace=True)
     df.replace('matthew reid', 'Matthew Reid', inplace=True)
-    df.replace('San Clemente High School Attn Matt Reid', 'Matthew Reid', inplace=True)
+    df.replace('Matt Reid', 'Matthew Reid', inplace=True)
+    
     
     
     
