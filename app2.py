@@ -357,7 +357,7 @@ def fix_names(df):
     df.replace('rolando mendoza', 'Rolando Mendoza', inplace=True)
     df.replace('Rochester Red Wings / Morrie', 'Morrie Silver', inplace=True)
     df.replace('ROBERT SIMPSON', 'Robert Simpson', inplace=True)
-    df.replace('ER Prouctions (Device programmer)', 'ER Productions', inplace=True)
+    df.replace('ER Productions (Device programmer)', 'ER Productions', inplace=True)
     df.replace('University of Wyoming / Shelley', 'University of Wyoming', inplace=True)
     df.replace('Mario moreno', 'Mario Moreno', inplace=True)
     df.replace('gregory morris', 'Gregory Morris', inplace=True)
