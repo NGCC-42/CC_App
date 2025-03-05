@@ -1778,7 +1778,7 @@ def extract_acc_data(df):
         df_rc = df_year[df_year["item_sku"].str.startswith("CC-RC", na=False)]
         if not df_rc.empty:
             # Base mask for rows related to "CC-RC-2430" (we assume they start with that string)
-            base_mask = df_rc["line_item"].str.startswith(rc_key, na=False)
+            base_mask = df_rc["item_sku"] == rc_key
             grp_base = df_rc.loc[base_mask].groupby("month").agg({
                 "quantity": "sum",
                 "total_line_item_spend": "sum"
