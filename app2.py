@@ -4154,10 +4154,10 @@ def convert_prod_select(prod_select, year):
         'The Button': 'CC-TB-35',
         'Shostarter': 'CC-SS-35',
         'Shomaster': 'CC-SM',
-        '8FT NC': 'CC-HCCMKII-08-NC',
-        '8FT TC': 'CC-HCCMKII-08-TC', 
-        '15FT NC': 'CC-HCCMKII-15-NC',
-        '15FT TC': 'CC-HCCMKII-15-TC'
+        '8FT - No Case': 'CC-HCCMKII-08-NC',
+        '8FT - Travel Case': 'CC-HCCMKII-08-TC', 
+        '15FT - No Case': 'CC-HCCMKII-15-NC',
+        '15FT - Travel Case': 'CC-HCCMKII-15-TC'
     }
     if prod_select in sku_map:
         rev23, rev24 = to_date_product_rev(sku_map[prod_select])
