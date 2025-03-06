@@ -377,7 +377,7 @@ def fix_names(df):
     df.replace('ANTHONY DAMPLO', 'Anthony Damplo', inplace=True)
     df.replace('matthew reid', 'Matthew Reid', inplace=True)
     df.replace('Matt Reid', 'Matthew Reid', inplace=True)
-    
+    df.replace('PROVIDE CO.,LTD.', 'Provide Co., LTD', inplace=True)
     
     
     
