@@ -4113,6 +4113,60 @@ def to_date_product(sku_string):
     return prod_cnt_23, prod_cnt_24
 
 
+def to_date_product_rev(sku_string):
+
+    # Filter rows where the item_sku starts with sku_sting
+    mask_sku = df['item_sku'].str.startswith(sku_string)
+    df_sku = df[mask_sku].copy()
+
+    # Ensure order_date is a datetime and create a date-only column
+    df_sku['order_date'] = pd.to_datetime(df_sku['order_date'], errors='coerce')
+    df_sku['order_date_date'] = df_sku['order_date'].dt.date
+
+    # Convert reference datetime values to dates
+    two_years_ago_date = two_years_ago.date()
+    one_year_ago_date = one_year_ago.date()
+    today_datet = today.date()
+
+    begin_two = beginning_of_year(two_years_ago).date()
+    begin_one = beginning_of_year(one_year_ago).date()
+    begin_today = beginning_of_year(today).date()
+
+    # Build boolean masks for the different time ranges
+    mask_23 = (df_sku['order_date_date'] >= begin_two) & (df_sku['order_date_date'] <= two_years_ago_date)
+    mask_24 = (df_sku['order_date_date'] >= begin_one) & (df_sku['order_date_date'] <= one_year_ago_date)
+
+    # Sum the sales totals for each date range
+    prod_rev23 = df_sku.loc[mask_23, 'total_line_item_spend'].sum()
+    prod_rev24 = df_sku.loc[mask_24, 'total_line_item_spend'].sum()
+    
+
+    return prod_rev23, prod_rev24
+
+def convert_prod_select(prod_select, year):
+
+    # Map product selection to SKU
+    sku_map = {
+        'Pro Jet': 'CC-PROJ',
+        'Micro Jet': 'CC-MJMK',
+        'Quad Jet': 'CC-QJ',
+        'Cryo Clamp': 'CC-CC2',
+        'The Button': 'CC-TB-35',
+        'Shostarter': 'CC-SS-35',
+        'Shomaster': 'CC-SM',
+        '8FT NC': 'CC-HCCMKII-08-NC',
+        '8FT TC': 'CC-HCCMKII-08-TC', 
+        '15FT NC': 'CC-HCCMKII-15-NC',
+        '15FT TC': 'CC-HCCMKII-15-TC'
+    }
+    if prod_select in sku_map:
+        rev23, rev24 = to_date_product_rev(sku_map[prod_select])
+
+        return rev24 if year == 2025 else rev23 if year == 2024 else None
+
+    return None
+
+
 @st.cache_data
 def hist_product_data(product_tag):
 
@@ -4346,8 +4400,11 @@ if task_choice == 'Product Reports':
                 col5, col6, col7 = st.columns(3)
     
                 prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage, wholesale_delta = calculate_product_metrics(annual_product_totals, prod_select, 2, bom_cost_jet)
+
+                # Calculate prior year to-date revenue for selected product
+                prior_td_revenue = convert_prod_select(prod_select, 2025)
     
-                col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[2][prod_select][1]), percent_of_change(annual_product_totals[1][prod_select][0], annual_product_totals[2][prod_select][0]))
+                col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[2][prod_select][1]), percent_of_change(prior_td_revenue, annual_product_totals[2][prod_select][1]))
                 col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
                 col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
                 col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
@@ -4399,11 +4456,14 @@ if task_choice == 'Product Reports':
                 prod_select = ui.tabs(options=['Pro Jet', 'Quad Jet', 'Micro Jet', 'Cryo Clamp'], default_value='Pro Jet', key='Jets')
         
                 prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage, wholesale_delta = calculate_product_metrics(annual_product_totals, prod_select, 1, bom_cost_jet)
+
+                # Calculate prior year to-date revenue for selected product
+                prior_td_revenue = convert_prod_select(prod_select, 2024)
                 
                 ### DISPLAY PRODUCT DETAILS 
                 col5, col6, col7 = st.columns(3)
         
-                col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[1][prod_select][1]), percent_of_change(annual_product_totals[0][prod_select][0], annual_product_totals[1][prod_select][0]))
+                col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[1][prod_select][1]), percent_of_change(prior_td_revenue, annual_product_totals[1][prod_select][1]))
                 col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
                 col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
                 col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
@@ -4751,8 +4811,11 @@ if task_choice == 'Product Reports':
                 col5, col6, col7 = st.columns(3)
     
                 prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage, wholesale_delta = calculate_product_metrics(annual_product_totals, prod_select, 5, bom_cost_control)
+
+                # Calculate prior year to-date revenue for selected product
+                prior_td_revenue = convert_prod_select(prod_select, 2025)
                 
-                col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[5][prod_select][1]), percent_of_change(annual_product_totals[4][prod_select][0], annual_product_totals[5][prod_select][0]))
+                col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[5][prod_select][1]), percent_of_change(prior_td_revenue, annual_product_totals[5][prod_select][1]))
                 col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
                 col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
                 col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
@@ -4799,9 +4862,12 @@ if task_choice == 'Product Reports':
                 col5, col6, col7 = st.columns(3)
     
                 prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last, wholesale_sales, wholesale_percentage, wholesale_delta = calculate_product_metrics(annual_product_totals, prod_select, 4, bom_cost_control)
+
+                # Calculate prior year to-date revenue for selected product
+                prior_td_revenue = convert_prod_select(prod_select, 2024)
     
                 
-                col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[4][prod_select][1]), percent_of_change(annual_product_totals[3][prod_select][0], annual_product_totals[4][prod_select][0]))
+                col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[4][prod_select][1]), percent_of_change(prior_td_revenue, annual_product_totals[4][prod_select][1]))
                 col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
                 col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
                 col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
@@ -5111,9 +5177,12 @@ if task_choice == 'Product Reports':
                 col5, col6, col7 = st.columns(3)
     
                 prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, prod_select, 8, bom_cost_hh)
+
+                # Calculate prior year to-date revenue for selected product
+                prior_td_revenue = convert_prod_select(prod_select, 2025)
                 
                 
-                col5.metric('**Revenue**', '${:,.2f}'.format(int(annual_product_totals[8][prod_select][1])), percent_of_change(annual_product_totals[7][prod_select][0], annual_product_totals[8][prod_select][0]))
+                col5.metric('**Revenue**', '${:,.2f}'.format(int(annual_product_totals[8][prod_select][1])), percent_of_change(prior_td_revenue, annual_product_totals[8][prod_select][1]))
                 col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
                 col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
                 col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
@@ -5170,9 +5239,12 @@ if task_choice == 'Product Reports':
                 col5, col6, col7 = st.columns(3)
     
                 prod_profit, profit_per_unit, prod_profit_last, avg_price, avg_price_last = calculate_product_metrics(annual_product_totals, prod_select, 7, bom_cost_hh)
+
+                # Calculate prior year to-date revenue for selected product
+                prior_td_revenue = convert_prod_select(prod_select, 2024)
                 
                 
-                col5.metric('**Revenue**', '${:,.2f}'.format(int(annual_product_totals[7][prod_select][1])), percent_of_change(annual_product_totals[6][prod_select][0], annual_product_totals[7][prod_select][0]))
+                col5.metric('**Revenue**', '${:,.2f}'.format(int(annual_product_totals[7][prod_select][1])), percent_of_change(prior_td_revenue, annual_product_totals[7][prod_select][1]))
                 col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
                 col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
                 col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
