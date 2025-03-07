@@ -2007,8 +2007,8 @@ def magic_sales(year):
     df['order_date'] = pd.to_datetime(df['order_date'], errors='coerce')
     
     # Debugging: Check if conversion worked
-    print(df[['order_date']].head())  # Should display datetime values
-    print(df['order_date'].dtype)  # Should be 'datetime64[ns]'
+    #print(df[['order_date']].head())  # Should display datetime values
+    #print(df['order_date'].dtype)  # Should be 'datetime64[ns]'
     
     # Now, extract the year safely
     mask_year = df['order_date'].dt.year == int(year)
@@ -2067,7 +2067,7 @@ def magic_sales(year):
     # For each magic product, create a mask (using the line_item column) and aggregate quantity and sales.
     for prod in magic_products:
         # Check if the beginning of line_item matches the product name.
-        mask_prod = mask_year & df["item_sku"].str.contains(prod, na=False)
+        mask_prod = mask & (df["item_sku"] == prod)
         qty_sum   = df.loc[mask_prod, "quantity"].sum()
         spend_sum = df.loc[mask_prod, "total_line_item_spend"].sum()
         magic_products[prod] = [qty_sum, spend_sum]
