@@ -2015,8 +2015,8 @@ def magic_sales(year):
 
     # Build a mask for rows where either 'line_item' or 'item_sku' starts with "Magic" or "MFX"
     mask_magic = (
-        df["line_item"].str.startswith("Magic", na=False) |
-        df["line_item"].str.startswith("MFX", na=False) |
+        #df["line_item"].str.startswith("Magic", na=False) |
+        #df["line_item"].str.startswith("MFX", na=False) |
         df["item_sku"].str.startswith("Magic", na=False) |
         df["item_sku"].str.startswith("MFX", na=False)
     )
@@ -2067,7 +2067,7 @@ def magic_sales(year):
     # For each magic product, create a mask (using the line_item column) and aggregate quantity and sales.
     for prod in magic_products:
         # Check if the beginning of line_item matches the product name.
-        mask_prod = mask & (df["item_sku"] == prod)
+        mask_prod = mask_year & (df["item_sku"] == prod)
         qty_sum   = df.loc[mask_prod, "quantity"].sum()
         spend_sum = df.loc[mask_prod, "total_line_item_spend"].sum()
         magic_products[prod] = [qty_sum, spend_sum]
