@@ -4860,7 +4860,7 @@ if task_choice == 'Product Reports':
                 
                 col5.metric('**Revenue**', '${:,.2f}'.format(annual_product_totals[5][prod_select][1]), percent_of_change(prior_td_revenue, annual_product_totals[5][prod_select][1]))
                 col5.metric('**Profit per Unit**', '${:,.2f}'.format(profit_per_unit), '')
-                col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(to_date_product_profit(prod_td24, prior_td_revenue, bom_cost_cntl[prod_select]), prod_profit))
+                col6.metric('**Profit**', '${:,.2f}'.format(prod_profit), percent_of_change(to_date_product_profit(prod_td24, prior_td_revenue, bom_cost_control[prod_select]), prod_profit))
                 col6.metric('**Wholesale**', '{:.2f}%'.format(wholesale_percentage))
                 col7.metric('**Avg Price**', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
                 col7.metric('**BOM Cost**', '${:,.2f}'.format(bom_cost_control[prod_select]), '')
