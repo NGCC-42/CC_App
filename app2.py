@@ -381,6 +381,8 @@ def fix_names(df):
     df.replace('Gear Club Direct ', 'Gear Club Direct', inplace=True)
     df.replace('Cole bibler ', 'Cole Bibler', inplace=True)
     df.replace('cole bibler ', 'Cole Bibler', inplace=True)
+    df.replace('juan gil', 'Juan Gil', inplace=True)
+    df.replace('juan mora', 'Juan Mora', inplace=True)
     
     
     
