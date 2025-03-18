@@ -2173,7 +2173,7 @@ def display_metrics(sales_dict1, sales_dict2=None, month='All', wvr1=None, wvr2=
         
         if wvr2 == None:
 
-            if data1[5] > 550000:
+            if data1[5] > 1550000:
                 
                 db1.metric('**Website Sales**', '${:,}'.format(int(data1[3])), web_sales)
                 db1.metric('**Website Transactions**', '{:,}'.format(data1[6]), web_trans)
