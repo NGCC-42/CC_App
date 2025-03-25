@@ -386,6 +386,7 @@ def fix_names(df):
     df.replace('LEGACY MARLEY', 'Legacy Marley', inplace=True)
     df.replace('Ben steele', 'Ben Steele', inplace=True)
     df.replace('Benjamin Steele', 'Ben Steele', inplace=True)
+    df.replace('Marisol Padilla Padilla', 'Marisol Padilla', inplace=True)
     
     
     
