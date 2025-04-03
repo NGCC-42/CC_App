@@ -3281,7 +3281,7 @@ if task_choice == 'Dashboard':
                 col7.metric('**Q1 Total Sales**', '${:,}'.format(int(q1_25[0] + q1_25[1])), percent_of_change((q1_24[0] + q1_24[1]), (q1_25[0] + q1_25[1])))
                 col8.metric('**Q1 Fulcrum Sales**', '${:,}'.format(int(q1_25[1])), percent_of_change(q1_24[1], q1_25[1]))
                 
-                col6.metric('**Q2 Web Sales**', '${:,}'.format(int(q2_25[0])), percent_of_change(q2_23[0], q2_24[0]))
+                col6.metric('**Q2 Web Sales**', '${:,}'.format(int(q2_25[0])), percent_of_change(q2_24[0], q2_25[0]))
                 col7.metric('**Q2 Total Sales**', '${:,}'.format(int(q2_25[0] + q2_25[1])), percent_of_change((q2_24[0] + q2_24[1]), (q2_25[0] + q2_25[1])))
                 col8.metric('**Q2 Fulcrum Sales**', '${:,}'.format(int(q2_25[1])), percent_of_change(q2_24[1], q2_25[1]))
                 
