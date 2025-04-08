@@ -1729,7 +1729,7 @@ def extract_acc_data(df):
         'CC-AC-4PM': 9,
         'CC-F-MFDCGAJIC': 14,
         ' CC-AC-CGAJIC-SET': 17,  # note the leading space if that is intentional
-        'CC-AC-CGAJIC-SET - 1: 20,
+        'CC-AC-CGAJIC-SET - 1': 20,
         'CC-CTC-20': 9,
         'CC-CTC-50': 9,
         'CC-AC-TC': 8,
