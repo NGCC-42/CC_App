@@ -390,10 +390,9 @@ def fix_names(df):
     df.replace('Bes Entertainment / Matt Besemer', 'Matt Besemer', inplace=True)
     df.replace('John Wright / Valdosta State University', 'John Wright', inplace=True)
     df.replace('Valdosta University', 'John Wright', inplace=True)
+    df.replace('Deep South Productions ', 'Deep South Productions', inplace=True)
     
-    
-    
-    
+   
     return df
 
 df = fix_names(df)
