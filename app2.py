@@ -388,7 +388,7 @@ def fix_names(df):
     df.replace('Benjamin Steele', 'Ben Steele', inplace=True)
     df.replace('Marisol Padilla Padilla', 'Marisol Padilla', inplace=True)
     df.replace('Bes Entertainment / Matt Besemer', 'Matt Besemer', inplace=True)
-    df.replace('John Wright', 'John Wright / Valdosta State University', inplace=True)
+    df.replace('John Wright / Valdosta State University', 'John Wright', inplace=True)
     
     
     
