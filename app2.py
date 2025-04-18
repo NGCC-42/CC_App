@@ -391,6 +391,7 @@ def fix_names(df):
     df.replace('John Wright / Valdosta State University', 'John Wright', inplace=True)
     df.replace('Valdosta University', 'John Wright', inplace=True)
     df.replace('Deep South Productions ', 'Deep South Productions', inplace=True)
+    df.replace('Jon Ballog', 'Blair Entertainment / Pearl AV', inplace=True)
     
    
     return df
