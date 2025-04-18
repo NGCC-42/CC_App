@@ -254,6 +254,7 @@ def fix_names(df):
     df.replace('JR Torres', 'Jorge Torres', inplace=True)
     df.replace('Saul Dominguez', 'Coco Bongo', inplace=True)
     df.replace('Paul Souza', 'Pyro Spectaculars Industries, Inc.', inplace=True)
+    df.replace('Pyro Spectaculars Industries, Inc. ', 'Pyro Spectaculars Industries, Inc.', inplace=True)
     df.replace('CHRISTOPHER BARTOSIK', 'Christopher Bartosik', inplace=True)
     df.replace('Jon Ballog', 'Blair Entertainment / Pearl AV', inplace=True)
     df.replace('Jack Bermo', 'Jack Bermeo', inplace=True)
