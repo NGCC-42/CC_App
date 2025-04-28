@@ -394,7 +394,7 @@ def fix_names(df):
     df.replace('Deep South Productions ', 'Deep South Productions', inplace=True)
     df.replace('Jon Ballog', 'Blair Entertainment / Pearl AV', inplace=True)
     df.replace('Jon ballog', 'Blair Entertainment / Pearl AV', inplace=True)
-    
+    df.replace('Marisol Padilla Padilla', 'Marisol Padilla', inplace=True)
    
     return df
 
