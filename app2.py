@@ -3831,6 +3831,1027 @@ def display_month_data_prod(product, sales_dict1, sales_dict2=None, type='Unit')
     return None
     
 
+### REVISED PRODUCT REPORTS
+
+@st.cache_data
+def extract_handheld_data(df):
+
+    dict_23 = {}
+    dict_24 = {}
+    hose_count_23 = {}
+    hose_count_24 = {}
+    
+    # CREATE DATA DICTS 
+    for month in months_x:
+        dict_23[month] = {'8FT - No Case': [0,0],
+                     '8FT - Travel Case': [0,0],
+                     '15FT - No Case': [0,0],
+                     '15FT - Travel Case': [0,0]}
+        dict_24[month] = {'8FT - No Case': [0,0],
+                     '8FT - Travel Case': [0,0],
+                     '15FT - No Case': [0,0],
+                     '15FT - Travel Case': [0,0]}
+        
+        hose_count_23[month] = [0,0]
+        hose_count_24[month] = [0,0]
+    
+    idx = 0
+    for line in df.line_item:
+        if df.iloc[idx].order_date.year == 2024:
+            if line[:16] == 'CC-HCCMKII-08-NC':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - No Case'][0] += df.iloc[idx].quantity
+                hose_count_24[num_to_month(df.iloc[idx].order_date.month)][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - No Case'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:16] == 'CC-HCCMKII-08-TC':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - Travel Case'][0] += df.iloc[idx].quantity
+                hose_count_24[num_to_month(df.iloc[idx].order_date.month)][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT - Travel Case'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:16] == 'CC-HCCMKII-15-NC':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT - No Case'][0] += df.iloc[idx].quantity
+                hose_count_24[num_to_month(df.iloc[idx].order_date.month)][1] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT - No Case'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:16] == 'CC-HCCMKII-15-TC':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT - Travel Case'][0] += df.iloc[idx].quantity
+                hose_count_24[num_to_month(df.iloc[idx].order_date.month)][1] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT - Travel Case'][1] += df.iloc[idx].total_line_item_spend
+                
+        elif df.iloc[idx].order_date.year == 2023:
+            if line[:16] == 'CC-HCCMKII-08-NC':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['8FT - No Case'][0] += df.iloc[idx].quantity
+                hose_count_23[num_to_month(df.iloc[idx].order_date.month)][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['8FT - No Case'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:16] == 'CC-HCCMKII-08-TC':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['8FT - Travel Case'][0] += df.iloc[idx].quantity
+                hose_count_23[num_to_month(df.iloc[idx].order_date.month)][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['8FT - Travel Case'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:16] == 'CC-HCCMKII-15-NC':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['15FT - No Case'][0] += df.iloc[idx].quantity
+                hose_count_23[num_to_month(df.iloc[idx].order_date.month)][1] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['15FT - No Case'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:16] == 'CC-HCCMKII-15-TC':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['15FT - Travel Case'][0] += df.iloc[idx].quantity
+                hose_count_23[num_to_month(df.iloc[idx].order_date.month)][1] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['15FT - Travel Case'][1] += df.iloc[idx].total_line_item_spend
+                
+        idx += 1
+    
+    return dict_23, dict_24, hose_count_23, hose_count_24
+
+
+
+@st.cache_data
+def extract_hose_data(df):
+
+    dict_23 = {}
+    dict_24 = {}
+
+    # CREATE DATA DICTS 
+    for month in months_x:
+        dict_23[month] = {'2FT MFD': [0,0], '3.5FT MFD': [0,0], '5FT MFD': [0,0], '5FT STD': [0,0], '5FT DSY': [0,0], '5FT EXT': [0,0], '8FT STD': [0,0], '8FT DSY': [0,0], '8FT EXT': [0,0], '15FT STD': [0,0], '15FT DSY': [0,0], '15FT EXT': [0,0], '25FT STD': [0,0], '25FT DSY': [0,0], '25FT EXT': [0,0], '35FT STD': [0,0], '35FT DSY': [0,0], '35FT EXT': [0,0], '50FT STD': [0,0], '50FT EXT': [0,0], '100FT STD': [0,0], 'CUSTOM': [0,0]}
+        dict_24[month] = {'2FT MFD': [0,0], '3.5FT MFD': [0,0], '5FT MFD': [0,0], '5FT STD': [0,0], '5FT DSY': [0,0], '5FT EXT': [0,0], '8FT STD': [0,0], '8FT DSY': [0,0], '8FT EXT': [0,0], '15FT STD': [0,0], '15FT DSY': [0,0], '15FT EXT': [0,0], '25FT STD': [0,0], '25FT DSY': [0,0], '25FT EXT': [0,0], '35FT STD': [0,0], '35FT DSY': [0,0], '35FT EXT': [0,0], '50FT STD': [0,0], '50FT EXT': [0,0], '100FT STD': [0,0], 'CUSTOM': [0,0]}
+    
+    idx = 0
+    for line in df.line_item:
+        if df.iloc[idx].order_date.year == 2024:
+            if line[:8] == 'CC-CH-02':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['2FT MFD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['2FT MFD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-CH-03':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['3.5FT MFD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['3.5FT MFD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-05-M':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT MFD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT MFD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-05-S':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-05-D':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT DSY'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-05-E':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT EXT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['5FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-08-S':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-08-D':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT DSY'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-08-E':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT EXT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['8FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-15-S':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-15-D':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT DSY'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-15-E':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT EXT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['15FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-25-S':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['25FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['25FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-25-D':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['25FT DSY'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['25FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-25-E':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['25FT EXT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['25FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-35-S':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['35FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['35FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-35-D':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['35FT DSY'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['35FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-35-E':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['35FT EXT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['35FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-50-S':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['50FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['50FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-50-E':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['50FT EXT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['50FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-CH-100':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['100FT STD'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['100FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-CH-XX':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CUSTOM'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CUSTOM'][1] += df.iloc[idx].total_line_item_spend
+                
+        if df.iloc[idx].order_date.year == 2023:
+            if line[:8] == 'CC-CH-02':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['2FT MFD'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['2FT MFD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-CH-03':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['3.5FT MFD'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['3.5FT MFD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-05-M':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['5FT MFD'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['5FT MFD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-05-S':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['5FT STD'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['5FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-05-D':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['5FT DSY'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['5FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-05-E':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['5FT EXT'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['5FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-08-S':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['8FT STD'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['8FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-08-D':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['8FT DSY'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['8FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-08-E':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['8FT EXT'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['8FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-15-S':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['15FT STD'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['15FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-15-D':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['15FT DSY'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['15FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-15-E':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['15FT EXT'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['15FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-25-S':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['25FT STD'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['25FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-25-D':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['25FT DSY'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['25FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-25-E':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['25FT EXT'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['25FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-35-S':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['35FT STD'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['35FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-35-D':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['35FT DSY'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['35FT DSY'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-35-E':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['35FT EXT'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['35FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-50-S':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['50FT STD'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['50FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:10] == 'CC-CH-50-E':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['50FT EXT'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['50FT EXT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-CH-100':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['100FT STD'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['100FT STD'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-CH-XX':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CUSTOM'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CUSTOM'][1] += df.iloc[idx].total_line_item_spend
+                
+        idx += 1
+    
+    return dict_23, dict_24
+
+
+@st.cache_data
+def extract_acc_data(df):
+
+    dict_23 = {}
+    dict_24 = {}
+
+    # CREATE DATA DICTS 
+    for month in months_x:
+        dict_23[month] = {'CC-AC-CCL': [0,0], 'CC-AC-CTS': [0,0], 'CC-F-DCHA': [0,0], 'CC-F-HEA': [0,0], 'CC-AC-RAA': [0,0], 'CC-AC-4PM': [0,0], 'CC-F-MFDCGAJIC': [0,0], ' CC-AC-CGAJIC-SET': [0,0], 'CC-CTC-20': [0,0], 'CC-CTC-50': [0,0], 'CC-AC-TC': [0,0], 'CC-VV-KIT': [0,0], 
+                'CC-RC-2430': [0,0,0,0,0], 'CC-AC-LA2': [0,0]}
+        dict_24[month] = {'CC-AC-CCL': [0,0], 'CC-AC-CTS': [0,0], 'CC-F-DCHA': [0,0], 'CC-F-HEA': [0,0], 'CC-AC-RAA': [0,0], 'CC-AC-4PM': [0,0], 'CC-F-MFDCGAJIC': [0,0], ' CC-AC-CGAJIC-SET': [0,0], 'CC-CTC-20': [0,0], 'CC-CTC-50': [0,0], 'CC-AC-TC': [0,0], 'CC-VV-KIT': [0,0], 
+                'CC-RC-2430': [0,0,0,0,0], 'CC-AC-LA2': [0,0]}
+    
+    idx = 0
+    for line in df.line_item:
+        if df.iloc[idx].order_date.year == 2024:
+            if line[:9] == 'CC-AC-CCL':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CCL'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CCL'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-AC-CTS':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CTS'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CTS'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-F-DCHA':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-F-DCHA'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-F-DCHA'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-F-HEA':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-F-HEA'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-F-HEA'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-AC-RAA':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-RAA'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-RAA'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-AC-4PM':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-4PM'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-4PM'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:14] == 'CC-F-MFDCGAJIC':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-F-MFDCGAJIC'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-F-MFDCGAJIC'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:17] == ' CC-AC-CGAJIC-SET':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)][' CC-AC-CGAJIC-SET'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)][' CC-AC-CGAJIC-SET'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-CTC-20':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-CTC-20'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-CTC-20'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-CTC-50':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-CTC-50'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-CTC-50'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-AC-TC':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-TC'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-TC'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-VV-KIT':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-VV-KIT'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-VV-KIT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-AC-LA2':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-LA2'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-LA2'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:5] == 'CC-RC':
+                if line[:14] == 'CC-RC-2430-TTI':
+                    pass
+                elif line[:14] == 'CC-RC-2430-PJI':
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][2] += df.iloc[idx].quantity
+                elif line[:14] == 'CC-RC-2430-LAI':
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][3] += df.iloc[idx].quantity                    
+                elif line[:14] == 'CC-RC-2430-QJF':
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][4] += df.iloc[idx].quantity
+                else:
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][0] += df.iloc[idx].quantity
+                    dict_24[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][1] += df.iloc[idx].total_line_item_spend
+                    
+
+        
+        if df.iloc[idx].order_date.year == 2023:
+            if line[:9] == 'CC-AC-CCL':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CCL'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CCL'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-AC-CTS':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CTS'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-CTS'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-F-DCHA':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-F-DCHA'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-F-DCHA'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-F-HEA':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-F-HEA'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-F-HEA'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-AC-RAA':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-RAA'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-RAA'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-AC-4PM':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-4PM'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-4PM'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:14] == 'CC-F-MFDCGAJIC':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-F-MFDCGAJIC'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-F-MFDCGAJIC'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:17] == ' CC-AC-CGAJIC-SET':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)][' CC-AC-CGAJIC-SET'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)][' CC-AC-CGAJIC-SET'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-CTC-20':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-CTC-20'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-CTC-20'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-CTC-50':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-CTC-50'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-CTC-50'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-AC-TC':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-TC'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-TC'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-VV-KIT':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-VV-KIT'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-VV-KIT'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:9] == 'CC-AC-LA2':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-LA2'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-AC-LA2'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:5] == 'CC-RC':
+                if line[:14] == 'CC-RC-2430-TTI':
+                    pass
+                elif line[:14] == 'CC-RC-2430-PJI':
+                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][2] += df.iloc[idx].quantity
+                elif line[:14] == 'CC-RC-2430-LAI':
+                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][3] += df.iloc[idx].quantity                    
+                elif line[:14] == 'CC-RC-2430-QJF':
+                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][4] += df.iloc[idx].quantity
+                else:
+                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][0] += df.iloc[idx].quantity
+                    dict_23[num_to_month(df.iloc[idx].order_date.month)]['CC-RC-2430'][1] += df.iloc[idx].total_line_item_spend
+
+                
+        idx += 1
+    
+    return dict_23, dict_24
+
+
+
+@st.cache_data
+def extract_control_data(df):
+
+    dict_23 = {}
+    dict_24 = {}
+
+    # CREATE DATA DICTS 
+    for month in months_x:
+        dict_23[month] = {'The Button': [0,0],
+                     'Shostarter': [0,0],
+                     'Shomaster': [0,0]}
+        dict_24[month] = {'The Button': [0,0],
+                     'Shostarter': [0,0],
+                     'Shomaster': [0,0]}
+    
+    idx = 0
+    for line in df.line_item:
+        if df.iloc[idx].order_date.year == 2024:
+            if line[:7] == 'CC-TB-3':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['The Button'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['The Button'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-SS-35':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:5] == 'CC-SM':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][1] += df.iloc[idx].total_line_item_spend
+
+        elif df.iloc[idx].order_date.year == 2023:
+            if line[:7] == 'CC-TB-3':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['The Button'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['The Button'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:8] == 'CC-SS-35':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Shostarter'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:5] == 'CC-SM':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Shomaster'][1] += df.iloc[idx].total_line_item_spend
+
+                
+        idx += 1
+    
+    return dict_23, dict_24
+    
+
+
+
+@st.cache_data
+def extract_jet_data(df):
+
+    dict_23 = {}
+    dict_24 = {}
+
+    # CREATE DATA DICTS 
+    for month in months_x:
+        dict_23[month] = {'Pro Jet': [0,0],
+                'Quad Jet': [0,0],
+               'Micro Jet': [0,0],
+               'Cryo Clamp': [0,0]}
+        dict_24[month] = {'Pro Jet': [0,0],
+                'Quad Jet': [0,0],
+               'Micro Jet': [0,0],
+               'Cryo Clamp': [0,0]}
+    
+    idx = 0
+    for line in df.line_item:
+        if df.iloc[idx].order_date.year == 2024:
+            if line[:6] == 'CC-PRO':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:5] == 'CC-QJ':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:6] == 'CC-MJM':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:6] == 'CC-CC2':
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][0] += df.iloc[idx].quantity
+                dict_24[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][1] += df.iloc[idx].total_line_item_spend
+        elif df.iloc[idx].order_date.year == 2023:
+            if line[:6] == 'CC-PRO':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Pro Jet'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:5] == 'CC-QJ':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Quad Jet'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:6] == 'CC-MJM':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Micro Jet'][1] += df.iloc[idx].total_line_item_spend
+            elif line[:6] == 'CC-CC2':
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][0] += df.iloc[idx].quantity
+                dict_23[num_to_month(df.iloc[idx].order_date.month)]['Cryo Clamp'][1] += df.iloc[idx].total_line_item_spend
+                
+        idx += 1
+    
+    return dict_23, dict_24
+    
+        
+@st.cache_data
+def collect_product_data(df, prod='All', years=[2023, 2024]):
+
+
+    jet23, jet24 = extract_jet_data(df)
+    control23, control24 = extract_control_data(df)
+    handheld23, handheld24, hh_hose_count_23, hh_hose_count_24 = extract_handheld_data(df)
+    hose23, hose24 = extract_hose_data(df)
+    acc23, acc24 = extract_acc_data(df)
+
+    # INCLUDE HANDHELD HOSES IN COUNTS
+    for key, val in hose23.items():
+        hose23[key]['8FT STD'][0] += hh_hose_count_23[key][0]
+        hose23[key]['15FT STD'][0] += hh_hose_count_23[key][1]
+    for key, val in hose24.items():
+        hose24[key]['8FT STD'][0] += hh_hose_count_24[key][0]
+        hose24[key]['15FT STD'][0] += hh_hose_count_24[key][1]        
+
+    return jet23, jet24, control23, control24, handheld23, handheld24, hose23, hose24, acc23, acc24
+
+@st.cache_data
+def product_annual_totals(prod_dict_list):
+
+    totals = []
+    
+    for year_data in prod_dict_list:
+        temp_dict = {}
+        for month, product in year_data.items():
+            for prod, val in product.items():
+                if prod == 'CC-RC-2430':
+                    temp_dict[prod] = [0,0,0,0,0]
+                else:
+                    temp_dict[prod] = [0,0]
+    
+        
+        for month, product in year_data.items():   
+            for prod, val in product.items():
+                if prod == 'CC-RC-2430':
+                    temp_dict[prod][0] += val[0]
+                    temp_dict[prod][1] += val[1]
+                    temp_dict[prod][2] += val[2]
+                    temp_dict[prod][3] += val[3]
+                    temp_dict[prod][4] += val[4]
+                else:
+                    temp_dict[prod][0] += val[0]
+                    temp_dict[prod][1] += val[1]
+            
+
+        totals.append(temp_dict)
+
+    return totals
+
+### USE METRIC CARDS TO DISPLAY MONTHLY SALES METRICS ###
+def display_month_data_prod(product, sales_dict1, sales_dict2=None, type='Unit'):
+
+    dBoard1 = st.columns(3)
+    dBoard2 = st.columns(3)
+    dBoard3 = st.columns(3)
+    dBoard4 = st.columns(3)
+    idx = 0
+    idx1 = 0
+    idx2 = 0
+    idx3 = 0
+
+    for x in months_x:
+
+        if type == 'Currency':
+
+            var = ''
+            if sales_dict2 == None:
+                description = ''
+                diff = 0
+            else:
+                diff = (sales_dict1[x][product][0]) - (sales_dict2[x][product][0])
+            if diff > 0:
+                var = '+'
+            elif diff < 0:
+                var = '-'
+                
+            if idx < 3:
+                with dBoard1[idx]:
+                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][product][0])), description='{} ${:,} vs. prior year]'.format(var, abs(int(diff))))
+            elif idx >=3 and idx < 6:
+                with dBoard2[idx1]:
+                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][product][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                    idx1 += 1
+            elif idx >= 6 and idx < 9:
+                with dBoard3[idx2]:
+                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][product][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                    idx2 += 1
+            else:
+                with dBoard4[idx3]:
+                    ui.metric_card(title=x, content='${:,}'.format(int(sales_dict1[x][product][0])), description='{} ${:,} vs. prior year'.format(var, abs(int(diff))))
+                    idx3 += 1
+
+        elif type == 'Unit':
+
+            var = ''
+            if sales_dict2 == None:
+                description = ''
+                diff = 0
+            else:   
+                diff = (sales_dict1[x][product][0]) - (sales_dict2[x][product][0])
+            if diff > 0:
+                var = '+'
+            elif diff < 0:
+                var = '-'
+                
+            if idx < 3:
+                with dBoard1[idx]:
+                    ui.metric_card(title=x, content='{:,}'.format(sales_dict1[x][product][0]), description='{} {} vs. prior year'.format(var, abs(diff)))
+            elif idx >=3 and idx < 6:
+                with dBoard2[idx1]:
+                    ui.metric_card(title=x, content='{:,}'.format(sales_dict1[x][product][0]), description='{} {} vs. prior year'.format(var, abs(diff)))
+                    idx1 += 1
+            elif idx >= 6 and idx < 9:
+                with dBoard3[idx2]:
+                    ui.metric_card(title=x, content='{:,}'.format(sales_dict1[x][product][0]), description='{} {} vs. prior year'.format(var, abs(diff)))
+                    idx2 += 1
+            else:
+                with dBoard4[idx3]:
+                    ui.metric_card(title=x, content='{:,}'.format(sales_dict1[x][product][0]), description='{} {} vs. prior year'.format(var, abs(diff)))
+                    idx3 += 1
+
+        idx += 1
+            
+
+    return None
+    
+
+bom_cost_jet = {'Pro Jet': 290.86, 'Micro Jet': 243.57, 'Quad Jet': 630.43, 'Quad Jet WP': 651.80, 'Cryo Clamp': 166.05}
+bom_cost_control = {'The Button': 141.07, 'Shostarter': 339.42, 'Shomaster': 667.12}
+bom_cost_hh = {'8FT - No Case': 143.62, '8FT - Travel Case': 219.06, '15FT - No Case': 153.84, '15FT - Travel Case': 231.01}
+bom_cost_hose = {'2FT MFD': 20.08, '3.5FT MFD': 22.50, '5FT MFD': 24.25, '5FT STD': 31.94, '5FT DSY': 31.84, '5FT EXT': 33.24, '8FT STD': 32.42, '8FT DSY': 34.52, '8FT EXT': 34.82, '15FT STD': 43.55, '15FT DSY': 46.47, '15FT EXT': 46.77, '25FT STD': 59.22, '25FT DSY': 61.87, '25FT EXT': 62.17, '35FT STD': 79.22, '35FT DSY': 81.32, '35FT EXT': 81.62, '50FT STD': 103.57, '50FT EXT': 105.97, '100FT STD': 183.39}
+bom_cost_acc = {'CC-AC-CCL': 29.17, 'CC-AC-CTS': 6.70, 'CC-F-DCHA': 7.15, 'CC-F-HEA': 6.86, 'CC-AC-RAA': 11.94, 'CC-AC-4PM': 48.12, 'CC-F-MFDCGAJIC': 7.83, ' CC-AC-CGAJIC-SET': 5.16, 'CC-CTC-20': 10.92, 'CC-CTC-50': 19.36, 'CC-AC-TC': 89.46, 'CC-VV-KIT': 29.28, 
+                'CC-RC-2430': 847, 'CC-AC-LA2': 248.10}
+
+def format_for_pie_chart(dict, key=0):
+    
+    prods = []
+    vals = []
+    columns = ['Product', 'Totals']
+
+    for prod, val in dict.items():
+        prods.append(prod)
+        vals.append(int(val[key]))
+        
+    df = pd.DataFrame(np.column_stack([prods, vals]), index=[prods], columns=columns)
+
+    return df
+
+def format_for_line_graph(dict1, product, dict2=None, key=0):
+
+    months = []
+    units_sold = []
+    columns = ['Months', 'Units Sold']
+
+    for month, prod in dict1.items():
+        months.append(month)
+        units_sold.append(dict1[month][product][key])
+
+    df = pd.DataFrame(np.column_stack([months, units_sold]), columns=columns)
+
+    return df
+        
+def display_pie_chart_comp(df):
+    col1, col2 = st.columns(2)
+    colors = ["rgb(115, 255, 165)", "rgb(88, 92, 89)", "rgb(7, 105, 7)", "rgb(0, 255, 0"]
+    with col1:
+        saleFig = px.pie(format_for_pie_chart(df), values='Totals', names='Product', title='Units', height=400, width=400)
+        saleFig.update_layout(margin=dict(l=10, r=10, t=20, b=0))
+        saleFig.update_traces(textfont_size=18, marker=dict(colors=colors))
+        st.plotly_chart(saleFig, use_container_width=False)
+    with col2:
+        revFig = px.pie(format_for_pie_chart(df, 1), values='Totals', names='Product', title='Revenue', height=400, width=400)
+        revFig.update_layout(margin=dict(l=10, r=10, t=20, b=0))
+        revFig.update_traces(textfont_size=18, marker=dict(colors=colors))
+        st.plotly_chart(revFig, use_container_width=False)        
+
+    return None
+
+def avg_month_prod(dict):
+    
+    zero_count = 0
+    total_unit = 0
+    total_rev = 0
+
+    unit_avg = 0
+    rev_avg = 0
+    
+    for key, value in dict.items():
+        
+        if value[0] == 0:
+            zero_count += 1
+        else:
+            total += value
+
+    unit_avg = int(total_unit / (len(dict) - zero_count))
+    rev_avg = int(total_rev / (len(dict) - zero_count))
+    
+    return unit_avg, rev_avg
+
+@st.cache_data
+def organize_hose_data(dict):
+    
+    count_mfd = {'2FT MFD': [0, 0], '3.5FT MFD': [0, 0], '5FT MFD': [0, 0]}
+    count_5ft = {'5FT STD': [0, 0], '5FT DSY': [0, 0], '5FT EXT': [0, 0]}
+    count_8ft = {'8FT STD': [0, 0], '8FT DSY': [0, 0], '8FT EXT': [0, 0]}
+    count_15ft = {'15FT STD': [0, 0], '15FT DSY': [0, 0], '15FT EXT': [0, 0]}
+    count_25ft = {'25FT STD': [0, 0], '25FT DSY': [0, 0], '25FT EXT': [0, 0]}
+    count_35ft = {'35FT STD': [0, 0], '35FT DSY': [0, 0], '35FT EXT': [0, 0]}
+    count_50ft = {'50FT STD': [0, 0], '50FT EXT': [0, 0]}
+    count_100ft = [0, 0]
+    
+    for month, prod in dict.items():
+        for hose, val in prod.items():
+
+            if 'MFD' in hose:
+                count_mfd[hose][0] += val[0]
+                count_mfd[hose][1] += val[1]
+            elif hose == '5FT STD' or hose == '5FT DSY' or hose == '5FT EXT':
+                count_5ft[hose][0] += val[0]
+                count_5ft[hose][1] += val[1]
+            elif '8FT' in hose:
+                count_8ft[hose][0] += val[0]
+                count_8ft[hose][1] += val[1]            
+            elif '15FT' in hose:
+                count_15ft[hose][0] += val[0]
+                count_15ft[hose][1] += val[1]   
+            elif '25FT' in hose:
+                count_25ft[hose][0] += val[0]
+                count_25ft[hose][1] += val[1]   
+            elif '35FT' in hose:
+                count_35ft[hose][0] += val[0]
+                count_35ft[hose][1] += val[1]   
+            elif '50FT' in hose:
+                count_50ft[hose][0] += val[0]
+                count_50ft[hose][1] += val[1]  
+            elif '100FT' in hose:
+                count_100ft[0] += val[0]
+                count_100ft[1] += val[1]
+    
+    return [count_mfd, count_5ft, count_8ft, count_15ft, count_25ft, count_35ft, count_50ft, count_100ft]
+
+
+def display_hose_data(hose_details1, hose_details2):
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader('2024')
+        idx = 0
+        for group in hose_details1[:7]:
+            group_units = 0
+            group_rev = 0
+            with st.container(border=True):
+                for hose, vals in group.items():
+                    group_units += vals[0]
+                    group_rev += vals[1]
+                    ui.metric_card(title=hose, content='{} units'.format(vals[0]), description='${:,.2f} in revenue'.format(vals[1]))
+                if idx == 0:
+                    st.markdown('**Manifold Totals: {} - (${:,.2f})**'.format(group_units, group_rev))
+                else:
+                    st.markdown('**{} Totals: {} - (${:,.2f})**'.format(hose[:4], group_units, group_rev))
+                            
+            idx += 1
+        ui.metric_card(title='100FT STD', content='{} units'.format(hose_details1[7][0]), description='${:,.2f} in revenue'.format(hose_details1[7][1]), key='2024')
+        
+    with col2:
+        st.subheader('2023')
+        idx2 = 0
+        for group2 in hose_details2[:7]:
+            group2_units = 0
+            group2_rev = 0
+            with st.container(border=True):
+                for hose2, vals2 in group2.items():
+                    group2_units += vals2[0]
+                    group2_rev += vals2[1]
+                    ui.metric_card(title=hose2, content='{} units'.format(vals2[0]), description='${:,.2f} in revenue'.format(vals2[1]))
+                if idx2 == 0:
+                    st.markdown('**Manifold Totals: {} - (${:,.2f})**'.format(group2_units, group2_rev))
+                else:
+                    st.markdown('**{} Totals: {} - (${:,.2f})**'.format(hose2[:4], group2_units, group2_rev))
+            idx2 += 1
+        ui.metric_card(title='100FT STD', content='{} units'.format(hose_details2[7][0]), description='${:,.2f} in revenue'.format(hose_details2[7][1]), key='2023')
+        
+    return None
+
+if task_choice == 'Product Reports v2':
+
+    st.header('Product Sales')
+    #st.subheader('')
+
+    # PULL ALL PRODUCT SALES BY MONTH (DICTIONARIES)
+    jet23, jet24, control23, control24, handheld23, handheld24, hose23, hose24, acc23, acc24 = collect_product_data(df)
+    hose_detail24 = organize_hose_data(hose24)
+    hose_detail23 = organize_hose_data(hose23)
+
+    
+    # CALCULATE ANNUAL PRODUCT TOTALS
+    annual_product_totals = product_annual_totals([jet23, jet24, control23, control24, handheld23, handheld24, hose23, hose24, acc23, acc24])
+
+    # NAVIGATION TABS
+    prod_cat = ui.tabs(options=['Jets', 'Controllers', 'Handhelds', 'Hoses', 'Accessories'], default_value='Jets', key='Product Categories')
+    year = ui.tabs(options=[2024, 2023], default_value=2024, key='Products Year Select')
+    st.divider()
+    
+    if prod_cat == 'Jets':
+        if year == 2024:
+            
+            total_jet_rev = annual_product_totals[1]['Pro Jet'][1] + annual_product_totals[1]['Quad Jet'][1] + annual_product_totals[1]['Micro Jet'][1] + annual_product_totals[1]['Cryo Clamp'][1]
+
+
+            col1, col2, col3, col4 = st.columns(4)
+    
+            col1.subheader(f':green[Pro Jet]')
+            col1.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[1]['Pro Jet'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[1]['Pro Jet'][0]), annual_product_totals[1]['Pro Jet'][0] - annual_product_totals[0]['Pro Jet'][0])
+            #col1.metric('', '${:,}'.format(annual_product_totals[1]['Pro Jet'][1]), percent_of_change(annual_product_totals[0]['Pro Jet'][0], annual_product_totals[1]['Pro Jet'][0]))
+            col2.subheader(f':green[Quad Jet]')
+            col2.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[1]['Quad Jet'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[1]['Quad Jet'][0]), annual_product_totals[1]['Quad Jet'][0] - annual_product_totals[0]['Quad Jet'][0])
+            #col2.metric('', '${:,}'.format(annual_product_totals[1]['Quad Jet'][1]), percent_of_change(annual_product_totals[0]['Quad Jet'][0], annual_product_totals[1]['Quad Jet'][0]))
+            col3.subheader(f':green[Micro Jet]')
+            col3.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[1]['Micro Jet'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[1]['Micro Jet'][0]), annual_product_totals[1]['Micro Jet'][0] - annual_product_totals[0]['Micro Jet'][0])
+            #col3.metric('', '${:,}'.format(annual_product_totals[1]['Micro Jet'][1]), percent_of_change(annual_product_totals[0]['Micro Jet'][0], annual_product_totals[1]['Micro Jet'][0]))
+            col4.subheader(f':green[Cryo Clamp]')
+            col4.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[1]['Cryo Clamp'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[1]['Cryo Clamp'][0]), annual_product_totals[1]['Cryo Clamp'][0] - annual_product_totals[0]['Cryo Clamp'][0])
+            #col4.metric('', '${:,}'.format(annual_product_totals[1]['Cryo Clamp'][1]), percent_of_change(annual_product_totals[0]['Cryo Clamp'][0], annual_product_totals[1]['Cryo Clamp'][0]))
+    
+            st.divider()
+            display_pie_chart_comp(annual_product_totals[1])
+            #fig1 = px.line(format_for_line_graph(jet24, 'Pro Jet'), x='Months', y='Units Sold')
+            #fig1.show()
+            st.divider()
+            
+            prod_select = ui.tabs(options=['Pro Jet', 'Quad Jet', 'Micro Jet', 'Cryo Clamp'], default_value='Pro Jet', key='Jets')
+    
+    
+            ### DISPLAY PRODUCT DETAILS 
+            col5, col6, col7, col8 = st.columns(4)
+    
+            prod_profit = int((annual_product_totals[1][prod_select][1]) - (annual_product_totals[1][prod_select][0] * bom_cost_jet[prod_select]))
+            prod_profit_last = int((annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select]))
+            avg_price = annual_product_totals[1][prod_select][1] / annual_product_totals[1][prod_select][0]
+            avg_price_last = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
+    
+            col5.metric(f':green[**Revenue**]', '${:,}'.format(int(annual_product_totals[1][prod_select][1])), percent_of_change(annual_product_totals[0][prod_select][0], annual_product_totals[1][prod_select][0]))
+            col6.metric(f':green[**Profit**]', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+            col7.metric(f':green[**Avg Price**]', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))        
+            col8.metric(f':green[**BOM Cost**]', '${:,.2f}'.format(bom_cost_jet[prod_select]), '')
+    
+            
+            display_month_data_prod(prod_select, jet24, jet23)
+            
+            
+        elif year == 2023:
+            
+            total_jet_rev = annual_product_totals[0]['Pro Jet'][1] + annual_product_totals[0]['Quad Jet'][1] + annual_product_totals[0]['Micro Jet'][1] + annual_product_totals[0]['Cryo Clamp'][1]
+            
+            col1, col2, col3, col4 = st.columns(4)
+    
+            col1.subheader(f':green[Pro Jet]')
+            col1.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[0]['Pro Jet'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[0]['Pro Jet'][0]), '')
+            #col1.metric('', '${:,}'.format(annual_product_totals[1]['Pro Jet'][1]), percent_of_change(annual_product_totals[0]['Pro Jet'][0], annual_product_totals[1]['Pro Jet'][0]))
+            col2.subheader(f':green[Quad Jet]')
+            col2.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[0]['Quad Jet'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[0]['Quad Jet'][0]), '')
+            #col2.metric('', '${:,}'.format(annual_product_totals[1]['Quad Jet'][1]), percent_of_change(annual_product_totals[0]['Quad Jet'][0], annual_product_totals[1]['Quad Jet'][0]))
+            col3.subheader(f':green[Micro Jet]')
+            col3.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[0]['Micro Jet'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[0]['Micro Jet'][0]), '')
+            #col3.metric('', '${:,}'.format(annual_product_totals[1]['Micro Jet'][1]), percent_of_change(annual_product_totals[0]['Micro Jet'][0], annual_product_totals[1]['Micro Jet'][0]))
+            col4.subheader(f':green[Cryo Clamp]')
+            col4.metric('{:.2f}% of Jet Rev'.format((annual_product_totals[0]['Cryo Clamp'][1] / total_jet_rev) * 100), '{}'.format(annual_product_totals[0]['Cryo Clamp'][0]), '')
+            #col4.metric('', '${:,}'.format(annual_product_totals[1]['Cryo Clamp'][1]), percent_of_change(annual_product_totals[0]['Cryo Clamp'][0], annual_product_totals[1]['Cryo Clamp'][0]))
+    
+            st.divider()
+            display_pie_chart_comp(annual_product_totals[0])
+            st.divider()
+            
+            prod_select = ui.tabs(options=['Pro Jet', 'Quad Jet', 'Micro Jet', 'Cryo Clamp'], default_value='Pro Jet', key='Jets')
+    
+    
+            ### DISPLAY PRODUCT DETAILS 
+            col5, col6, col7, col8 = st.columns(4)
+    
+            prod_profit = int((annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select]))
+            #prod_profit_last = int((annual_product_totals[0][prod_select][1]) - (annual_product_totals[0][prod_select][0] * bom_cost_jet[prod_select]))
+            avg_price = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
+            #avg_price_last = annual_product_totals[0][prod_select][1] / annual_product_totals[0][prod_select][0]
+    
+    
+            
+            col5.metric(f':green[**Revenue**]', '${:,}'.format(int(annual_product_totals[1][prod_select][1])), '')
+            col6.metric(f':green[**Profit**]', '${:,}'.format(prod_profit), '')
+            col7.metric(f':green[**Avg Price**]', '${:,.2f}'.format(avg_price), '')        
+            col8.metric(f':green[**BOM Cost**]', '${:,.2f}'.format(bom_cost_jet[prod_select]), '')
+    
+            
+            display_month_data_prod(prod_select, jet23)            
+            
+
+    elif prod_cat == 'Controllers':
+        if year == 2024:
+
+            total_cntl_rev = annual_product_totals[3]['The Button'][1] + annual_product_totals[3]['Shostarter'][1] + annual_product_totals[3]['Shomaster'][1]
+            
+            col1, col2, col3 = st.columns(3)
+            
+            col1.subheader(f':green[The Button]')
+            col1.metric('{:.2f}% of Controller Rev'.format((annual_product_totals[3]['The Button'][1] / total_cntl_rev) * 100), '{}'.format(annual_product_totals[3]['The Button'][0]), annual_product_totals[3]['The Button'][0] - annual_product_totals[2]['The Button'][0])
+            col2.subheader(f':green[Shostarter]')
+            col2.metric('{:.2f}% of Controller Rev'.format((annual_product_totals[3]['Shostarter'][1] / total_cntl_rev) * 100), '{}'.format(annual_product_totals[3]['Shostarter'][0]), annual_product_totals[3]['Shostarter'][0] - annual_product_totals[2]['Shostarter'][0])
+            col3.subheader(f':green[Shomaster]')
+            col3.metric('{:.2f}% of Controller Rev'.format((annual_product_totals[3]['Shomaster'][1] / total_cntl_rev) * 100), '{}'.format(annual_product_totals[3]['Shomaster'][0]), annual_product_totals[3]['Shomaster'][0] - annual_product_totals[2]['Shomaster'][0])
+    
+            st.divider()
+            display_pie_chart_comp(annual_product_totals[3])
+            st.divider()
+            
+            prod_select = ui.tabs(options=['The Button', 'Shostarter', 'Shomaster'], default_value='The Button', key='Controllers')
+    
+            ### DISPLAY PRODUCT DETAILS 
+            col5, col6, col7, col8 = st.columns(4)
+    
+            prod_profit = int((annual_product_totals[3][prod_select][1]) - (annual_product_totals[3][prod_select][0] * bom_cost_control[prod_select]))
+            prod_profit_last = int((annual_product_totals[2][prod_select][1]) - (annual_product_totals[2][prod_select][0] * bom_cost_control[prod_select]))
+            avg_price = annual_product_totals[3][prod_select][1] / annual_product_totals[3][prod_select][0]
+            avg_price_last = annual_product_totals[2][prod_select][1] / annual_product_totals[2][prod_select][0]
+            
+            col5.metric(f':green[**Revenue**]', '${:,}'.format(int(annual_product_totals[3][prod_select][1])), percent_of_change(annual_product_totals[2][prod_select][0], annual_product_totals[3][prod_select][0]))
+            col6.metric(f':green[**Profit**]', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+            col7.metric(f':green[**Avg Price**]', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
+            col8.metric(f':green[**BOM Cost**]', '${:,.2f}'.format(bom_cost_control[prod_select]), '')
+    
+            display_month_data_prod(prod_select, control24, control23)
+
+        elif year == 2023:
+
+            total_cntl_rev = annual_product_totals[2]['The Button'][1] + annual_product_totals[2]['Shostarter'][1] + annual_product_totals[2]['Shomaster'][1]
+            
+            col1, col2, col3 = st.columns(3)
+            
+            col1.subheader(f':green[The Button]')
+            col1.metric('{:.2f}% of Controller Rev'.format((annual_product_totals[2]['The Button'][1] / total_cntl_rev) * 100), '{}'.format(annual_product_totals[2]['The Button'][0]), '')
+            col2.subheader(f':green[Shostarter]')
+            col2.metric('{:.2f}% of Controller Rev'.format((annual_product_totals[2]['Shostarter'][1] / total_cntl_rev) * 100), '{}'.format(annual_product_totals[2]['Shostarter'][0]), '')
+            col3.subheader(f':green[Shomaster]')
+            col3.metric('{:.2f}% of Controller Rev'.format((annual_product_totals[2]['Shomaster'][1] / total_cntl_rev) * 100), '{}'.format(annual_product_totals[2]['Shomaster'][0]), '')
+    
+            st.divider()
+            display_pie_chart_comp(annual_product_totals[2])
+            st.divider()
+            
+            prod_select = ui.tabs(options=['The Button', 'Shostarter', 'Shomaster'], default_value='The Button', key='Controllers')
+    
+            ### DISPLAY PRODUCT DETAILS 
+            col5, col6, col7, col8 = st.columns(4)
+    
+            prod_profit = int((annual_product_totals[2][prod_select][1]) - (annual_product_totals[3][prod_select][0] * bom_cost_control[prod_select]))
+            #prod_profit_last = int((annual_product_totals[2][prod_select][1]) - (annual_product_totals[2][prod_select][0] * bom_cost_control[prod_select]))
+            avg_price = annual_product_totals[2][prod_select][1] / annual_product_totals[3][prod_select][0]
+            #avg_price_last = annual_product_totals[2][prod_select][1] / annual_product_totals[2][prod_select][0]
+            
+            col5.metric(f':green[**Revenue**]', '${:,}'.format(int(annual_product_totals[2][prod_select][1])), '')
+            col6.metric(f':green[**Profit**]', '${:,}'.format(prod_profit), '')
+            col7.metric(f':green[**Avg Price**]', '${:,.2f}'.format(avg_price), '')
+            col8.metric(f':green[**BOM Cost**]', '${:,.2f}'.format(bom_cost_control[prod_select]), '')
+    
+            display_month_data_prod(prod_select, control23)
+            
+
+    elif prod_cat == 'Handhelds':
+        if year == 2024:
+
+            total_hh_rev = annual_product_totals[5]['8FT - No Case'][1] + annual_product_totals[5]['8FT - Travel Case'][1] + annual_product_totals[5]['15FT - No Case'][1] + annual_product_totals[5]['15FT - Travel Case'][1]
+            
+            col1, col2, col3, col4 = st.columns(4)
+    
+            col1.subheader(f':green[8FT NC]')
+            col1.metric('{:.2f}% of HH Rev'.format((annual_product_totals[5]['8FT - No Case'][1] / total_hh_rev) * 100), '{}'.format(annual_product_totals[5]['8FT - No Case'][0]), '{}'.format(annual_product_totals[5]['8FT - No Case'][0] - annual_product_totals[4]['8FT - No Case'][0]))
+            col1.metric('', '${:,}'.format(int(annual_product_totals[5]['8FT - No Case'][1])), percent_of_change(annual_product_totals[4]['8FT - No Case'][1], annual_product_totals[5]['8FT - No Case'][1]))
+            col2.subheader(f':green[8FT TC]')
+            col2.metric('{:.2f}% of HH Rev'.format((annual_product_totals[5]['8FT - Travel Case'][1] / total_hh_rev) * 100), '{}'.format(annual_product_totals[5]['8FT - Travel Case'][0]),  '{}'.format(annual_product_totals[5]['8FT - Travel Case'][0] - annual_product_totals[4]['8FT - Travel Case'][0]))
+            col2.metric('', '${:,}'.format(int(annual_product_totals[5]['8FT - Travel Case'][1])), percent_of_change(annual_product_totals[4]['8FT - Travel Case'][1], annual_product_totals[5]['8FT - Travel Case'][1]))
+            col3.subheader(f':green[15FT NC]')
+            col3.metric('{:.2f}% of HH Rev'.format((annual_product_totals[5]['15FT - No Case'][1] / total_hh_rev) * 100), '{}'.format(annual_product_totals[5]['15FT - No Case'][0]),  '{}'.format(annual_product_totals[5]['15FT - No Case'][0] - annual_product_totals[4]['15FT - No Case'][0]))
+            col3.metric('', '${:,}'.format(int(annual_product_totals[5]['15FT - No Case'][1])), percent_of_change(annual_product_totals[4]['15FT - No Case'][1], annual_product_totals[5]['15FT - No Case'][1]))
+            col4.subheader(f':green[15FT TC]')
+            col4.metric('{:.2f}% of HH Rev'.format((annual_product_totals[5]['15FT - Travel Case'][1] / total_hh_rev) * 100), '{}'.format(annual_product_totals[5]['15FT - Travel Case'][0]),  '{}'.format(annual_product_totals[5]['15FT - Travel Case'][0] - annual_product_totals[4]['15FT - Travel Case'][0]))
+            col4.metric('', '${:,}'.format(int(annual_product_totals[5]['15FT - Travel Case'][1])), percent_of_change(annual_product_totals[4]['15FT - Travel Case'][1], annual_product_totals[5]['15FT - Travel Case'][1]))
+        
+            st.divider()
+            display_pie_chart_comp(annual_product_totals[5])
+            st.divider()
+    
+            prod_select = ui.tabs(options=['8FT - No Case', '8FT - Travel Case', '15FT - No Case', '15FT - Travel Case'], default_value='8FT - No Case', key='Handhelds')
+    
+            ### DISPLAY PRODUCT DETAILS 
+            col5, col6, col7, col8 = st.columns(4)
+    
+            prod_profit = int((annual_product_totals[5][prod_select][1]) - (annual_product_totals[5][prod_select][0] * bom_cost_hh[prod_select]))
+            prod_profit_last = int((annual_product_totals[4][prod_select][1]) - (annual_product_totals[4][prod_select][0] * bom_cost_hh[prod_select]))
+            avg_price = annual_product_totals[5][prod_select][1] / annual_product_totals[5][prod_select][0]
+            avg_price_last = annual_product_totals[4][prod_select][1] / annual_product_totals[4][prod_select][0]
+            
+            col5.metric(f':green[**Revenue**]', '${:,}'.format(int(annual_product_totals[5][prod_select][1])), percent_of_change(annual_product_totals[4][prod_select][0], annual_product_totals[5][prod_select][0]))
+            col6.metric(f':green[**Profit**]', '${:,}'.format(prod_profit), percent_of_change(prod_profit_last, prod_profit))
+            col7.metric(f':green[**Avg Price**]', '${:,.2f}'.format(avg_price), percent_of_change(avg_price_last, avg_price))
+            col8.metric(f':green[**BOM Cost**]', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')        
+            
+            
+            display_month_data_prod(prod_select, handheld24, handheld23)
+            
+        elif year == 2023:
+
+            total_hh_rev = annual_product_totals[5]['8FT - No Case'][1] + annual_product_totals[5]['8FT - Travel Case'][1] + annual_product_totals[5]['15FT - No Case'][1] + annual_product_totals[5]['15FT - Travel Case'][1]
+            
+            col1, col2, col3, col4 = st.columns(4)
+    
+            col1.subheader(f':green[8FT NC]')
+            col1.metric('{:.2f}% of HH Rev'.format((annual_product_totals[4]['8FT - No Case'][1] / total_hh_rev) * 100), '{}'.format(annual_product_totals[4]['8FT - No Case'][0]), '')
+            col1.metric('', '${:,}'.format(int(annual_product_totals[4]['8FT - No Case'][1])), '')
+            col2.subheader(f':green[8FT TC]')
+            col2.metric('{:.2f}% of HH Rev'.format((annual_product_totals[4]['8FT - Travel Case'][1] / total_hh_rev) * 100), '{}'.format(annual_product_totals[4]['8FT - Travel Case'][0]),  '')
+            col2.metric('', '${:,}'.format(int(annual_product_totals[4]['8FT - Travel Case'][1])), '')
+            col3.subheader(f':green[15FT NC]')
+            col3.metric('{:.2f}% of HH Rev'.format((annual_product_totals[4]['15FT - No Case'][1] / total_hh_rev) * 100), '{}'.format(annual_product_totals[4]['15FT - No Case'][0]),  '')
+            col3.metric('', '${:,}'.format(int(annual_product_totals[4]['15FT - No Case'][1])), '')
+            col4.subheader(f':green[15FT TC]')
+            col4.metric('{:.2f}% of HH Rev'.format((annual_product_totals[4]['15FT - Travel Case'][1] / total_hh_rev) * 100), '{}'.format(annual_product_totals[4]['15FT - Travel Case'][0]),  '')
+            col4.metric('', '${:,}'.format(int(annual_product_totals[4]['15FT - Travel Case'][1])), '')
+        
+            st.divider()
+            display_pie_chart_comp(annual_product_totals[5])
+            st.divider()
+    
+            prod_select = ui.tabs(options=['8FT - No Case', '8FT - Travel Case', '15FT - No Case', '15FT - Travel Case'], default_value='8FT - No Case', key='Handhelds')
+    
+            ### DISPLAY PRODUCT DETAILS 
+            col5, col6, col7, col8 = st.columns(4)
+    
+            prod_profit = int((annual_product_totals[4][prod_select][1]) - (annual_product_totals[4][prod_select][0] * bom_cost_hh[prod_select]))
+            #prod_profit_last = int((annual_product_totals[4][prod_select][1]) - (annual_product_totals[4][prod_select][0] * bom_cost_hh[prod_select]))
+            avg_price = annual_product_totals[4][prod_select][1] / annual_product_totals[4][prod_select][0]
+            #avg_price_last = annual_product_totals[4][prod_select][1] / annual_product_totals[4][prod_select][0]
+            
+            col5.metric(f':green[**Revenue**]', '${:,}'.format(int(annual_product_totals[4][prod_select][1])), '')
+            col6.metric(f':green[**Profit**]', '${:,}'.format(prod_profit), '')
+            col7.metric(f':green[**Avg Price**]', '${:,.2f}'.format(avg_price), '')
+            col8.metric(f':green[**BOM Cost**]', '${:,.2f}'.format(bom_cost_hh[prod_select]), '')        
+            
+            
+            display_month_data_prod(prod_select, handheld23)
+        
+    elif prod_cat == 'Hoses':
+        display_hose_data(hose_detail24, hose_detail23)
+        
+          
+    elif prod_cat == 'Accessories':
+        col1, col2 = st.columns(2)
+        col1.subheader('2024')
+        col2.subheader('2023')
+        with col1:
+            for item, value in annual_product_totals[-1].items():
+                if item == 'CC-RC-2430':
+                    ui.metric_card(title='{}'.format(item), content='{} (PJ: {}, LA: {}, QJ: {})'.format(value[0], value[2], value[3], value[4]), description='${:,.2f} in Revenue'.format(value[1]))
+                else:
+                    ui.metric_card(title='{}'.format(item), content='{}'.format(value[0]), description='${:,.2f} in Revenue'.format(value[1])) 
+        with col2:
+            for item_last, value_last in annual_product_totals[-2].items():
+                if item_last == 'CC-RC-2430':
+                    ui.metric_card(title='{}'.format(item_last), content='{} (PJ: {}, LA: {})'.format(value_last[0], value_last[2], value_last[3]), description='${:,.2f} in Revenue'.format(value_last[1]))
+                else:
+                    ui.metric_card(title='{}'.format(item_last), content='{}'.format(value_last[0]), description='${:,.2f} in Revenue'.format(value_last[1]))
 
 
 def format_for_pie_chart(dict, key=0):
