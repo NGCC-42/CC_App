@@ -398,6 +398,7 @@ def fix_names(df):
     df.replace('Sean Weaver / David Hays / Boland FX', 'Sean Weaver', inplace=True)
     df.replace('Sean Weaver / Universal Studios Orlando', 'Sean Weaver', inplace=True)
     df.replace('DEYRON BELL', 'Deyron Bell', inplace=True)
+    df.replace('Toucan Productions, Inc.', 'Toucan Productions', inplace=True)
    
     return df
 
