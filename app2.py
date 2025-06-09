@@ -401,6 +401,9 @@ def fix_names(df):
     df.replace('Toucan Productions, Inc.', 'Toucan Productions', inplace=True)
     df.replace('Pro FX Inc', 'Pro FX', inplace=True)
     df.replace('SMG Events / Adam Lucero ', 'SMG Events', inplace=True)
+    df.replace('SMG Events / Adam Lucero', 'SMG Events', inplace=True)
+    df.replace('SMG Events/Adam Lucero ', 'SMG Events', inplace=True)
+    df.replace('SMG Events/Adam Lucero', 'SMG Events', inplace=True)
    
     return df
 
