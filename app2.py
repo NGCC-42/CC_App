@@ -404,6 +404,7 @@ def fix_names(df):
     df.replace('SMG Events / Adam Lucero', 'SMG Events', inplace=True)
     df.replace('SMG Events/Adam Lucero ', 'SMG Events', inplace=True)
     df.replace('SMG Events/Adam Lucero', 'SMG Events', inplace=True)
+    df.replace('MICHAEL GREENBERG', 'Michael Greenberg', inplace=True)
    
     return df
 
