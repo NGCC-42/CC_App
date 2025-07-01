@@ -96,14 +96,14 @@ def create_dataframe(ss):
 	return df
 
 
-#df = create_dataframe(sod_ss)
+df = create_dataframe(sod_ss)
 
-@st.cache_data(ttl=7200)
-def load_excel_from_dropbox():
-    url = "https://www.dropbox.com/scl/fi/3h8l75j0189jgs3xmg7y8/SOD-6.30.25.xlsx?rlkey=9wf6slyjpv9ird6yyx24dvuye&dl=1"
-    return pd.read_excel(url)
+#@st.cache_data(ttl=7200)
+#def load_excel_from_dropbox():
+ #   url = "https://www.dropbox.com/scl/fi/3h8l75j0189jgs3xmg7y8/SOD-6.30.25.xlsx?rlkey=9wf6slyjpv9ird6yyx24dvuye&dl=1"
+  #  return pd.read_excel(url)
 
-df = load_excel_from_dropbox()
+#df = load_excel_from_dropbox()
 
 
 df_hist = pd.read_excel(hist_ss, dtype=object, header=0)
