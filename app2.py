@@ -150,7 +150,7 @@ else:
 ### RENAME DF COLUMNS FOR SIMPLICITY ###
 
 @st.cache_data
-def preprocess_data():
+def preprocess_data(df, df_quotes, df_cogs, df_shipstat_23, df_shipstat_24, df_qb, df_hsd, df_hist):
     df_quotes.rename(columns={
         'Number': 'number',
         'Customer': 'customer',
@@ -255,9 +255,9 @@ def preprocess_data():
     df_cogs['total_price'] = df_cogs['total_price'].astype('float32')
     df_cogs['unit_price'] = df_cogs['unit_price'].astype('float32')
 
-    return None
+    return df, df_quotes, df_cogs, df_shipstat_23, df_shipstat_24, df_qb, df_hsd, df_hist
         
-
+df, df_quotes, df_cogs, df_shipstat_23, df_shipstat_24, df_qb, df_hsd, df_hist = preprocess_data(df, df_quotes, df_cogs, df_shipstat_23, df_shipstat_24, df_qb, df_hsd, df_hist)
 
 ### DEFINE A FUNCTION TO CORRECT NAME DISCRPANCIES IN SOD
 @st.cache_data
