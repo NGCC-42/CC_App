@@ -149,111 +149,114 @@ else:
 
 ### RENAME DF COLUMNS FOR SIMPLICITY ###
 
-df_quotes.rename(columns={
-    'Number': 'number',
-    'Customer': 'customer',
-    'CustomerContact': 'contact',
-    'TotalInPrimaryCurrency': 'total',
-    'CreatedUtc': 'date_created',
-    'Status': 'status',
-    'ClosedDate': 'closed_date'}, 
-    inplace=True)
+@st.cache_data
+def preprocess_data():
+    df_quotes.rename(columns={
+        'Number': 'number',
+        'Customer': 'customer',
+        'CustomerContact': 'contact',
+        'TotalInPrimaryCurrency': 'total',
+        'CreatedUtc': 'date_created',
+        'Status': 'status',
+        'ClosedDate': 'closed_date'}, 
+        inplace=True)
+    
+    
+    quote_cust_list = df_quotes['customer'].unique().tolist()
+    
+    df.rename(columns={
+        'Sales Order': 'sales_order',
+        'Customer': 'customer',
+        'Sales Person': 'channel',
+        'Ordered Date': 'order_date',
+        'Ordered Month': 'order_month',
+        'Sales Order Status': 'status',
+        'Line Item Name': 'item_sku',
+        'Line Item': 'line_item',
+        'Order Quantity': 'quantity',
+        'Total Line Item $': 'total_line_item_spend',
+        'Ordered Year': 'ordered_year'},
+        inplace=True)
+    
+    df.order_date = pd.to_datetime(df.order_date).dt.date
+    df['total_line_item_spend'] = df['total_line_item_spend'].astype('float32')
+    #df['customer'] = df['customer'].str.title()
+    #df_hist['customer'] = df_hist['customer'].str.title()
+    df_hist = df_hist[~df_hist['customer'].str.contains('AMAZON SALES', na=False)]
+    df_hist = df_hist[~df_hist['customer'].str.contains('AMAZON', na=False)]
+    df_hist = df_hist[~df_hist['customer'].str.contains('Amazon', na=False)]
+    
+    df_qb['customer'] = df_qb['customer'].str.title()
+    df_qb = df_qb[~df_qb['customer'].str.contains('Total', na=False)]
+    df_qb = df_qb[~df_qb["order_num"].str.contains("F", na=False)]
+    df_qb = df_qb[~df_qb["order_num"].str.contains("CF", na=False)]
+    df_qb = df_qb[~df_qb["order_num"].str.contains("(I2G)", na=False)]
+    df_qb = df_qb[~df_qb["order_num"].str.contains("ch_", na=False)]
+    df_qb['customer'] = df_qb['customer'].ffill()
+    df_qb.dropna(subset=['date'], inplace=True)
+    df_qb.dropna(subset=['total'], inplace=True)
+    df_qb.reset_index(drop=True, inplace=True)
+    
+    df_hsd.rename(columns={
+        'Sales Order': 'sales_order',
+        'Customer PO': 'po',
+        'Customer': 'customer',
+        'Item Name': 'item',
+        'Item Description': 'description',
+        'Quantity Ordered': 'quantity',
+        'Value Shipped': 'value',
+        'Shipped Date': 'date',
+        'Shipped By': 'channel'},
+         inplace=True)
+    
+    df_shipstat_24.rename(columns={
+                        'Ship Date':'shipdate',
+                        'Recipient':'customer',
+                        'Order #':'order_number',
+                        'Provider':'provider',
+                        'Service':'service',
+                        'Items':'items',
+                        'Paid':'cust_cost',
+                        'oz':'weight',
+                        '+/-':'variance'},
+                        inplace=True)
+    
+    df_shipstat_23.rename(columns={
+                        'Ship Date':'shipdate',
+                        'Recipient':'customer',
+                        'Order #':'order_number',
+                        'Provider':'provider',
+                        'Service':'service',
+                        'Items':'items',
+                        'Paid':'cust_cost',
+                        'oz':'weight',
+                        '+/-':'variance'},
+                        inplace=True)  
+    
+    df_cogs.rename(columns={
+                        'Item Number/Revision':'item',
+                        'Invoice Number':'invoice',
+                        'Status':'status',
+                        'Source':'sales_order',
+                        'Customer':'customer',
+                        'Invoice Issue Date':'issue_date',
+                        'Invoice Paid Date':'paid_date',
+                        'Invoice Quantity':'quantity',
+                        'Material Value':'material_value',
+                        'Labor Value': 'labor_value',
+                        'Outside Processing Value': 'processing_value',
+                        'Machine Value': 'machine_value',
+                        'Total Cost': 'total_cost',
+                        'Total Price': 'total_price',
+                        'Unit Price': 'unit_price'},
+                        inplace=True)  
+    
+    df_cogs['total_cost'] = df_cogs['total_cost'].astype('float32')
+    df_cogs['total_price'] = df_cogs['total_price'].astype('float32')
+    df_cogs['unit_price'] = df_cogs['unit_price'].astype('float32')
 
-
-quote_cust_list = df_quotes['customer'].unique().tolist()
-
-df.rename(columns={
-    'Sales Order': 'sales_order',
-    'Customer': 'customer',
-    'Sales Person': 'channel',
-    'Ordered Date': 'order_date',
-    'Ordered Month': 'order_month',
-    'Sales Order Status': 'status',
-    'Line Item Name': 'item_sku',
-    'Line Item': 'line_item',
-    'Order Quantity': 'quantity',
-    'Total Line Item $': 'total_line_item_spend',
-    'Ordered Year': 'ordered_year'},
-    inplace=True)
-
-df.order_date = pd.to_datetime(df.order_date).dt.date
-df['total_line_item_spend'] = df['total_line_item_spend'].astype('float32')
-#df['customer'] = df['customer'].str.title()
-#df_hist['customer'] = df_hist['customer'].str.title()
-df_hist = df_hist[~df_hist['customer'].str.contains('AMAZON SALES', na=False)]
-df_hist = df_hist[~df_hist['customer'].str.contains('AMAZON', na=False)]
-df_hist = df_hist[~df_hist['customer'].str.contains('Amazon', na=False)]
-
-df_qb['customer'] = df_qb['customer'].str.title()
-df_qb = df_qb[~df_qb['customer'].str.contains('Total', na=False)]
-df_qb = df_qb[~df_qb["order_num"].str.contains("F", na=False)]
-df_qb = df_qb[~df_qb["order_num"].str.contains("CF", na=False)]
-df_qb = df_qb[~df_qb["order_num"].str.contains("(I2G)", na=False)]
-df_qb = df_qb[~df_qb["order_num"].str.contains("ch_", na=False)]
-df_qb['customer'] = df_qb['customer'].ffill()
-df_qb.dropna(subset=['date'], inplace=True)
-df_qb.dropna(subset=['total'], inplace=True)
-df_qb.reset_index(drop=True, inplace=True)
-
-df_hsd.rename(columns={
-    'Sales Order': 'sales_order',
-    'Customer PO': 'po',
-    'Customer': 'customer',
-    'Item Name': 'item',
-    'Item Description': 'description',
-    'Quantity Ordered': 'quantity',
-    'Value Shipped': 'value',
-    'Shipped Date': 'date',
-    'Shipped By': 'channel'},
-     inplace=True)
-
-df_shipstat_24.rename(columns={
-                    'Ship Date':'shipdate',
-                    'Recipient':'customer',
-                    'Order #':'order_number',
-                    'Provider':'provider',
-                    'Service':'service',
-                    'Items':'items',
-                    'Paid':'cust_cost',
-                    'oz':'weight',
-                    '+/-':'variance'},
-                    inplace=True)
-
-df_shipstat_23.rename(columns={
-                    'Ship Date':'shipdate',
-                    'Recipient':'customer',
-                    'Order #':'order_number',
-                    'Provider':'provider',
-                    'Service':'service',
-                    'Items':'items',
-                    'Paid':'cust_cost',
-                    'oz':'weight',
-                    '+/-':'variance'},
-                    inplace=True)  
-
-df_cogs.rename(columns={
-                    'Item Number/Revision':'item',
-                    'Invoice Number':'invoice',
-                    'Status':'status',
-                    'Source':'sales_order',
-                    'Customer':'customer',
-                    'Invoice Issue Date':'issue_date',
-                    'Invoice Paid Date':'paid_date',
-                    'Invoice Quantity':'quantity',
-                    'Material Value':'material_value',
-                    'Labor Value': 'labor_value',
-                    'Outside Processing Value': 'processing_value',
-                    'Machine Value': 'machine_value',
-                    'Total Cost': 'total_cost',
-                    'Total Price': 'total_price',
-                    'Unit Price': 'unit_price'},
-                    inplace=True)  
-
-df_cogs['total_cost'] = df_cogs['total_cost'].astype('float32')
-df_cogs['total_price'] = df_cogs['total_price'].astype('float32')
-df_cogs['unit_price'] = df_cogs['unit_price'].astype('float32')
-
-
+    return None
+        
 
 
 ### DEFINE A FUNCTION TO CORRECT NAME DISCRPANCIES IN SOD
