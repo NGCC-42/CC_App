@@ -110,8 +110,8 @@ def load_parquet_data():
     return pd.read_parquet(url)
 
 #df.columns = df.columns.str.strip()  # remove whitespace
-df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
-df['Cost'] = pd.to_numeric(df['Cost'], errors='coerce')
+#df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+#df['Cost'] = pd.to_numeric(df['Cost'], errors='coerce')
 
 df = load_parquet_data()
 
