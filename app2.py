@@ -96,21 +96,19 @@ def create_dataframe(ss):
 	return df
 
 
-df = create_dataframe(sod_ss)
+#df = create_dataframe(sod_ss)
 
 
 
 
-#@st.cache_data(ttl=7200)
-#def load_parquet_data():
- #   url = "https://www.dropbox.com/scl/fi/ionnq55nf8ydb68ouae31/SOD-7.1.25.parquet?rlkey=yqtrumn76eqn61jdb0w0ohzfq&dl=1"
-  #  return pd.read_parquet(url)
+@st.cache_data(ttl=7200)
+def load_parquet_data():
+    url = "https://www.dropbox.com/scl/fi/ionnq55nf8ydb68ouae31/SOD-7.1.25.parquet?rlkey=yqtrumn76eqn61jdb0w0ohzfq&dl=1"
+    return pd.read_parquet(url)
 
-#df.columns = df.columns.str.strip()  # remove whitespace
-#df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
-#df['Cost'] = pd.to_numeric(df['Cost'], errors='coerce')
 
-#df = load_parquet_data()
+
+df = load_parquet_data()
 
 df_hist = pd.read_excel(hist_ss, dtype=object, header=0)
 df_hist.fillna(0, inplace=True)
@@ -6009,11 +6007,11 @@ if task_choice == 'Customer Details':
         if customer.upper() == text_input.upper():
             
             ### LOCATE AND PULL SPEND TOTALS FOR SELECTED CUSTOMER AND ADD TO LISTS ###
-            if df.iloc[idx].ordered_year == '2023':
+            if df.iloc[idx].ordered_year == 2023:
                 spend_total_2023 += df.iloc[idx].total_line_item_spend
-            elif df.iloc[idx].ordered_year == '2024':
+            elif df.iloc[idx].ordered_year == 2024:
                 spend_total_2024 += df.iloc[idx].total_line_item_spend
-            elif df.iloc[idx].ordered_year == '2025':
+            elif df.iloc[idx].ordered_year == 2025:
                 spend_total_2025 += df.iloc[idx].total_line_item_spend
     
     
