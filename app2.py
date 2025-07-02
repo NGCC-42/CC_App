@@ -3838,18 +3838,18 @@ def display_month_data_prod(product, sales_dict1, sales_dict2=None, type='Unit')
                 
             if idx < 3:
                 with dBoard1[idx]:
-                    ui.metric_card(title=x, content='{:,}'.format(sales_dict1[x][product][0]), description='{} {} vs. prior year'.format(var, abs(diff)))
+                    ui.metric_card(title=x, content='{:,}'.format(int(sales_dict1[x][product][0])), description='{} {} vs. prior year'.format(var, abs(int(diff))))
             elif idx >=3 and idx < 6:
                 with dBoard2[idx1]:
-                    ui.metric_card(title=x, content='{:,}'.format(sales_dict1[x][product][0]), description='{} {} vs. prior year'.format(var, abs(diff)))
+                    ui.metric_card(title=x, content='{:,}'.format(int(sales_dict1[x][product][0])), description='{} {} vs. prior year'.format(var, abs(int(diff))))
                     idx1 += 1
             elif idx >= 6 and idx < 9:
                 with dBoard3[idx2]:
-                    ui.metric_card(title=x, content='{:,}'.format(sales_dict1[x][product][0]), description='{} {} vs. prior year'.format(var, abs(diff)))
+                    ui.metric_card(title=x, content='{:,}'.format(int(sales_dict1[x][product][0])), description='{} {} vs. prior year'.format(var, abs(int(diff))))
                     idx2 += 1
             else:
                 with dBoard4[idx3]:
-                    ui.metric_card(title=x, content='{:,}'.format(sales_dict1[x][product][0]), description='{} {} vs. prior year'.format(var, abs(diff)))
+                    ui.metric_card(title=x, content='{:,}'.format(int(sales_dict1[x][product][0])), description='{} {} vs. prior year'.format(var, abs(int(diff))))
                     idx3 += 1
 
         idx += 1
