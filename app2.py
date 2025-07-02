@@ -96,24 +96,21 @@ def create_dataframe(ss):
 	return df
 
 
-#df = create_dataframe(sod_ss)
+df = create_dataframe(sod_ss)
+
+
+
 
 #@st.cache_data(ttl=7200)
-#def load_excel_from_dropbox():
- #   url = "https://www.dropbox.com/scl/fi/3h8l75j0189jgs3xmg7y8/SOD-6.30.25.xlsx?rlkey=9wf6slyjpv9ird6yyx24dvuye&dl=1"
-  #  return pd.read_excel(url)
-
-#df = load_excel_from_dropbox()
-@st.cache_data(ttl=7200)
-def load_parquet_data():
-    url = "https://www.dropbox.com/scl/fi/ionnq55nf8ydb68ouae31/SOD-7.1.25.parquet?rlkey=yqtrumn76eqn61jdb0w0ohzfq&dl=1"
-    return pd.read_parquet(url)
+#def load_parquet_data():
+ #   url = "https://www.dropbox.com/scl/fi/ionnq55nf8ydb68ouae31/SOD-7.1.25.parquet?rlkey=yqtrumn76eqn61jdb0w0ohzfq&dl=1"
+  #  return pd.read_parquet(url)
 
 #df.columns = df.columns.str.strip()  # remove whitespace
 #df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
 #df['Cost'] = pd.to_numeric(df['Cost'], errors='coerce')
 
-df = load_parquet_data()
+#df = load_parquet_data()
 
 df_hist = pd.read_excel(hist_ss, dtype=object, header=0)
 df_hist.fillna(0, inplace=True)
