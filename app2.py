@@ -109,6 +109,10 @@ def load_parquet_data():
     url = "https://www.dropbox.com/scl/fi/ionnq55nf8ydb68ouae31/SOD-7.1.25.parquet?rlkey=yqtrumn76eqn61jdb0w0ohzfq&dl=1"
     return pd.read_parquet(url)
 
+df.columns = df.columns.str.strip()  # remove whitespace
+df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+df['Cost'] = pd.to_numeric(df['Cost'], errors='coerce')
+
 df = load_parquet_data()
 
 df_hist = pd.read_excel(hist_ss, dtype=object, header=0)
