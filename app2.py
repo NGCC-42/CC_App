@@ -6020,7 +6020,7 @@ if task_choice == 'Customer Details':
             if df.iloc[idx].item_sku[:5] == 'CC-QJ' or df.iloc[idx].item_sku[:5] == 'CC-PR' or df.iloc[idx].item_sku[:5] == 'CC-MJ' or df.iloc[idx].item_sku[:6] == 'CC-CC2':
                 jet_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                     df.iloc[idx].sales_order, 
-                    df.iloc[idx].quantity,
+                    int(df.iloc[idx].quantity),
                     df.iloc[idx].item_sku,
                     df.iloc[idx].line_item))
                 if df.iloc[idx].item_sku[:5] == 'CC-QJ':
@@ -6034,7 +6034,7 @@ if task_choice == 'Customer Details':
             elif df.iloc[idx].item_sku[:5] == 'CC-TB' or df.iloc[idx].item_sku[:5] == 'CC-SS' or df.iloc[idx].item_sku[:5] == 'CC-SM':
                 controller_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                     df.iloc[idx].sales_order, 
-                    df.iloc[idx].quantity,
+                    int(df.iloc[idx].quantity),
                     df.iloc[idx].item_sku,
                     df.iloc[idx].line_item))
                 if df.iloc[idx].item_sku[:5] == 'CC-TB':
@@ -6046,19 +6046,19 @@ if task_choice == 'Customer Details':
             elif df.iloc[idx].item_sku[:5] == 'Magic' or df.iloc[idx].item_sku[:4] == 'MFX-':
                 magic_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                     df.iloc[idx].sales_order, 
-                    df.iloc[idx].quantity,
+                    int(df.iloc[idx].quantity),
                     df.iloc[idx].item_sku,
                     df.iloc[idx].line_item))
             elif df.iloc[idx].item_sku[:5] == 'CC-CH':
                 hose_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                     df.iloc[idx].sales_order, 
-                    df.iloc[idx].quantity,
+                    int(df.iloc[idx].quantity),
                     df.iloc[idx].item_sku,
                     df.iloc[idx].line_item))
             elif df.iloc[idx].item_sku[:5] == 'CC-F-' or df.iloc[idx].item_sku[:5] == 'CC-AC' or df.iloc[idx].item_sku[:5] == 'CC-CT' or df.iloc[idx].item_sku[:5] == 'CC-WA':
                 fittings_accessories_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                     df.iloc[idx].sales_order, 
-                    df.iloc[idx].quantity,
+                    int(df.iloc[idx].quantity),
                     df.iloc[idx].item_sku,
                     df.iloc[idx].line_item))
                 if df.iloc[idx].item_sku[:9] == 'CC-AC-LA2':
@@ -6066,7 +6066,7 @@ if task_choice == 'Customer Details':
             elif df.iloc[idx].item_sku[:6] == 'CC-HCC' or df.iloc[idx].item_sku[:6] == 'Handhe':
                 handheld_list.append('|    {}    |     ( {}x )    {}  --  {}'.format(
                     df.iloc[idx].sales_order, 
-                    df.iloc[idx].quantity,
+                    int(df.iloc[idx].quantity),
                     df.iloc[idx].item_sku,
                     df.iloc[idx].line_item))
                 cust_handheld_mk2_cnt += df.iloc[idx].quantity
@@ -6075,7 +6075,7 @@ if task_choice == 'Customer Details':
             else:
                 misc_list.append('|    {}    |     ( {}x )     {}  --  {}'.format(
                     df.iloc[idx].sales_order, 
-                    df.iloc[idx].quantity,
+                    int(df.iloc[idx].quantity),
                     df.iloc[idx].item_sku,
                     df.iloc[idx].line_item))
                 if df.iloc[idx].item_sku == 'CC-RC-2430':
@@ -6099,9 +6099,9 @@ if task_choice == 'Customer Details':
             match = df_qb.loc[(df_qb['customer'] == text_input) & (df_qb['date'] == sale[1])]
             try:
                 order_num = match['order_num'].iloc[0]
-                handheld_list.append('| {} | {} | ( {}x ) {}'.format(order_num, sale[1], sale[0], hh))
+                handheld_list.append('| {} | {} | ( {}x ) {}'.format(order_num, sale[1], int(sale[0]), hh))
             except:
-                handheld_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], hh))
+                handheld_list.append('| {} | ( {}x ) {}'.format(sale[1], int(sale[0]), hh))
     
     for jet, tot in cust_jet.items():
         jet_totals_cust[jet] += tot[0]
@@ -6109,9 +6109,9 @@ if task_choice == 'Customer Details':
             match = df_qb.loc[(df_qb['customer'] == text_input) & (df_qb['date'] == sale[1])]
             try:
                 order_num = match['order_num'].iloc[0]
-                jet_list.append('| {} | {} | ( {}x ) {}'.format(order_num, sale[1], sale[0], jet))
+                jet_list.append('| {} | {} | ( {}x ) {}'.format(order_num, sale[1], int(sale[0]), jet))
             except:
-                jet_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], jet))
+                jet_list.append('| {} | ( {}x ) {}'.format(sale[1], int(sale[0]), jet))
 
     for cntl, tot in cust_cntl.items():
         controller_totals_cust[cntl] += tot[0]
@@ -6119,18 +6119,18 @@ if task_choice == 'Customer Details':
             match = df_qb.loc[(df_qb['customer'] == text_input) & (df_qb['date'] == sale[1])]
             try:
                 order_num = match['order_num'].iloc[0]
-                controller_list.append('| {} | {} | ( {}x ) {}'.format(order_num, sale[1], sale[0], cntl))
+                controller_list.append('| {} | {} | ( {}x ) {}'.format(order_num, sale[1], int(sale[0]), cntl))
             except:
-                controller_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], cntl))
+                controller_list.append('| {} | ( {}x ) {}'.format(sale[1], int(sale[0]), cntl))
 
     for acc, tot in cust_acc.items():
         for sale in tot[1]:
             match = df_qb.loc[(df_qb['customer'] == text_input) & (df_qb['date'] == sale[1])]
             try:
                 order_num = match['order_num'].iloc[0]
-                fittings_accessories_list.append('| {} | {} | ( {}x ) {}'.format(order_num, sale[1], sale[0], acc))
+                fittings_accessories_list.append('| {} | {} | ( {}x ) {}'.format(order_num, sale[1], int(sale[0]), acc))
             except:
-                fittings_accessories_list.append('| {} | ( {}x ) {}'.format(sale[1], sale[0], acc))
+                fittings_accessories_list.append('| {} | ( {}x ) {}'.format(sale[1], int(sale[0]), acc))
 
     cust_handheld_mk2_cnt += cust_hh['Handheld MKII'][0]
     cust_handheld_mk1_cnt = cust_hh['Handheld MKI'][0]
@@ -6175,24 +6175,24 @@ if task_choice == 'Customer Details':
             with col6.container(border=True):
                 for jet, totl in jet_totals_cust.items():
                     if totl > 0:
-                        st.markdown(' - **{}: {}**'.format(jet, totl))
+                        st.markdown(' - **{}: {}**'.format(jet, int(totl)))
                         
             with col7.container(border=True):
                 for controller, totl in controller_totals_cust.items():
                     if totl > 0:
-                        st.markdown(' - **{}: {}**'.format(controller, totl))
+                        st.markdown(' - **{}: {}**'.format(controller, int(totl)))
                     
             with col8.container(border=True):
                 if cust_LED_mk2_cnt > 0:
-                    st.markdown(' - **LED Attachment II: {}**'.format(cust_LED_mk2_cnt))
+                    st.markdown(' - **LED Attachment II: {}**'.format(int(cust_LED_mk2_cnt)))
                 if cust_LED_mk1_cnt > 0:
-                    st.markdown(' - **LED Attachment I: {}**'.format(cust_LED_mk1_cnt))
+                    st.markdown(' - **LED Attachment I: {}**'.format(int(cust_LED_mk1_cnt)))
                 if cust_RC_cnt > 0:
-                    st.markdown(' - **Road Cases: {}**'.format(cust_RC_cnt))
+                    st.markdown(' - **Road Cases: {}**'.format(int(cust_RC_cnt)))
                 if cust_handheld_mk2_cnt > 0:
-                    st.markdown(' - **Handheld MKII: {}**'.format(cust_handheld_mk2_cnt))
+                    st.markdown(' - **Handheld MKII: {}**'.format(int(cust_handheld_mk2_cnt)))
                 if cust_handheld_mk1_cnt > 0:
-                    st.markdown(' - **Handheld MKI: {}**'.format(cust_handheld_mk1_cnt))
+                    st.markdown(' - **Handheld MKI: {}**'.format(int(cust_handheld_mk1_cnt)))
     
 ### DISPLAY CATEGORIES OF PRODUCTS PURCHASED BY SELECTED CUSTOMER ###
         if len(jet_list) >= 1:
