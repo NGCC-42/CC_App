@@ -422,6 +422,7 @@ def fix_names(df):
     df.replace('MICHAEL GREENBERG', 'Michael Greenberg', inplace=True)
     df.replace('ADAM MORGAN', 'Adam Morgan', inplace=True)
     df.replace('Complete Production Resources ', 'Complete Production Resources', inplace=True)
+    df.replace('Gregory Lomangino', 'Greg Lomangino', inplace=True)
    
     return df
 
