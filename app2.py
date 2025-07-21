@@ -103,7 +103,7 @@ def create_dataframe(ss):
 
 @st.cache_data(ttl=7200)
 def load_parquet_data():
-    url = "https://www.dropbox.com/scl/fi/r8mxfv5nf8psn6culkg76/SOD-7.17.25.parquet?rlkey=2w03sq34o28m997l7g1pf2n2i&dl=1"
+    url = "https://www.dropbox.com/scl/fi/w86n4jh5qqt9zovo69wwn/SOD-7.21.25.parquet?rlkey=dp0ju9lpm955xvvzc4ups4gd1&dl=1"
     return pd.read_parquet(url)
 
 
