@@ -424,6 +424,7 @@ def fix_names(df):
     df.replace('Complete Production Resources ', 'Complete Production Resources', inplace=True)
     df.replace('Gregory Lomangino', 'Greg Lomangino', inplace=True)
     df.replace('James Kerns', 'James Mitchell Kerns', inplace=True)
+    df.replace('Jeff Meuzelaar / Pinnacle Productions', 'Jeff Meuzelaar', inplace=True)
    
     return df
 
