@@ -425,6 +425,11 @@ def fix_names(df):
     df.replace('Gregory Lomangino', 'Greg Lomangino', inplace=True)
     df.replace('James Kerns', 'James Mitchell Kerns', inplace=True)
     df.replace('Jeff Meuzelaar / Pinnacle Productions', 'Jeff Meuzelaar', inplace=True)
+    df.replace('Justin Thomas / J&M Displays', 'Justin Thomas', inplace=True)
+    df.replace('Ernie Valdez Jr.', 'Ernie Valdez', inplace=True)
+    df.replace('warren monnich / Subtronics', 'Warren Monnich', inplace=True)
+    df.replace('warren monnich', 'Warren Monnich', inplace=True)
+    
    
     return df
 
