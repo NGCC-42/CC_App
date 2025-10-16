@@ -431,6 +431,7 @@ def fix_names(df):
     df.replace('warren monnich', 'Warren Monnich', inplace=True)
     df.replace('Jeff Cornell', 'JDL FX', inplace=True)
     df.replace('ESI Production', 'ESI Productions', inplace=True)
+    df.replace('ESI Productions ', 'ESI Productions', inplace=True)
     
    
     return df
