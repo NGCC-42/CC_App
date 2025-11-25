@@ -23,12 +23,14 @@ st.set_page_config(page_title='Club Cannon Database',
 		   initial_sidebar_state='collapsed')
 
 ### SET HEADER IMAGE
-image = Image.open('Images/club-cannon-logo-bbb.png')
+#image = 'club-cannon-logo-bbb.png'
 col1, col2, col3 = st.columns(3)
-col2.image(image, 
+
+col2.image('logo.png', 
         use_container_width=True)
 
 st.header('')
+
 
 #bg_image = mpimg.imread('club-cannon-icon-black.png')
 
