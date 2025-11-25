@@ -62,7 +62,7 @@ shipstat_ss_23 = '2023 SR.xlsx'
 
 #prod_sales = 'Product Sales Data.xlsx'
 
-wholesale_cust = 'wholesale_customers 4.3.25.xlsx'
+wholesale_cust = 'wholesale_cust.xlsx'
 
 cogs_ss = 'COGS 1.29.25a.xlsx'
 
